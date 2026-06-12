@@ -76,6 +76,44 @@
     });
   });
 
+  /* ---------- Theme Selector ---------- */
+  const themeButtons = document.querySelectorAll("[data-theme]");
+
+  function setTheme(theme) {
+    if (theme === "yellow") {
+      bodyEl.classList.add("theme-yellow");
+    } else {
+      bodyEl.classList.remove("theme-yellow");
+    }
+
+    // Toggle active state on dots
+    themeButtons.forEach((btn) => {
+      if (btn.dataset.theme === theme) {
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+      } else {
+        btn.classList.remove("active");
+        btn.setAttribute("aria-pressed", "false");
+      }
+    });
+
+    localStorage.setItem("preferred-theme", theme);
+  }
+
+  // Initialize Theme (check URL search params first, then localStorage)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlTheme = urlParams.get("theme");
+  const savedTheme = localStorage.getItem("preferred-theme");
+  const userTheme = urlTheme || savedTheme || "wine";
+  setTheme(userTheme);
+
+  // Bind Theme Click Events
+  themeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setTheme(btn.dataset.theme);
+    });
+  });
+
   /* ---------- scroll reveals ---------- */
   const io = new IntersectionObserver(
     (entries) => {

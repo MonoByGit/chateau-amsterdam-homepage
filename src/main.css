@@ -613,3 +613,103 @@ body:not(.lang-en) h3.lang-nl {
 }
 .footer-logo { display: block; height: 18px; width: auto; filter: invert(1); opacity: 0.55; }
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- Theme Switcher UI ---------- */
+.theme-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+.theme-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s var(--ease-out), border-color 0.3s, box-shadow 0.3s;
+}
+.theme-dot--wine {
+  background-color: #8d2134;
+}
+.theme-dot--yellow {
+  background-color: #FFCC00;
+}
+.theme-dot:hover {
+  transform: scale(1.2);
+}
+.theme-dot.active {
+  border-color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.8);
+}
+.site-header.is-scrolled .theme-dot.active {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px rgba(23,20,14,0.4);
+}
+.site-header.is-scrolled .theme-dot {
+  border: 1px solid rgba(23,20,14,0.2);
+}
+@media (max-width: 900px) {
+  .theme-selector { display: none; }
+}
+
+/* ---------- Yellow Theme Override (Version 2) ---------- */
+body.theme-yellow {
+  --wine: #FFCC00;
+  --wine-bright: #FFCC00;
+}
+
+/* Yellow selection contrast */
+body.theme-yellow ::selection {
+  background: var(--wine);
+  color: var(--ink);
+}
+
+/* Text color visibility adjustments for yellow background */
+body.theme-yellow .btn--primary {
+  color: var(--ink);
+  border-color: var(--wine);
+}
+body.theme-yellow .btn--primary::before {
+  background: var(--ink);
+}
+body.theme-yellow .btn--primary:hover {
+  color: var(--paper);
+}
+
+body.theme-yellow .marquee {
+  background: var(--wine);
+  color: var(--ink);
+}
+
+/* Paths section hover color adjustments */
+body.theme-yellow .path:hover .go {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: var(--ink);
+}
+body.theme-yellow .path:hover .word {
+  color: var(--wine);
+}
+
+/* Badges readability on light bg */
+body.theme-yellow .wine-card .tag {
+  color: #c49a00;
+}
+
+/* Location card & footer on dark */
+body.theme-yellow .place-inner h2 em,
+body.theme-yellow .place-inner .label,
+body.theme-yellow .place-grid h4,
+body.theme-yellow .footer-cheers em,
+body.theme-yellow .footer-grid h4 {
+  color: var(--wine);
+}
+body.theme-yellow .place-grid .btn--light:hover {
+  background-color: var(--wine);
+  border-color: var(--wine);
+  color: var(--ink);
+}
+
