@@ -1,4 +1,5 @@
 // app/admin/content/[section]/page.tsx
+import Link from "next/link";
 import { getBlocksForSection } from "@/lib/db/content";
 import { ContentForm } from "./content-form";
 
@@ -8,10 +9,13 @@ export default async function ContentSectionPage({ params }: { params: Promise<{
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900">Content: {section}</h1>
-      <p className="mt-1 text-sm text-gray-500">
-        Wijzigingen zijn direct live op de homepage zodra je op Opslaan klikt.
-      </p>
+      <Link href="/admin/content" className="a-link" style={{ fontSize: "0.8125rem" }}>
+        ← Content
+      </Link>
+      <h1 className="a-h1" style={{ marginTop: "0.5rem", textTransform: "capitalize" }}>
+        {section}
+      </h1>
+      <p className="a-subtitle">Wijzigingen zijn direct live op de homepage zodra je op Opslaan klikt.</p>
       <ContentForm section={section} blocks={blocks} />
     </div>
   );

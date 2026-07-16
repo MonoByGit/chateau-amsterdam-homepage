@@ -1,4 +1,5 @@
 // app/admin/reservations/[id]/page.tsx
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getReservation, isValidTransition, type ReservationStatus } from "@/lib/db/reservations";
 import { updateStatus } from "../actions";
@@ -10,7 +11,23 @@ const STATUS_LABELS: Record<ReservationStatus, string> = {
   afgewezen: "Afgewezen",
 };
 
+const STATUS_BADGE_VARIANT: Record<ReservationStatus, string> = {
+  nieuw: "a-badge--info",
+  in_behandeling: "a-badge--warning",
+  bevestigd: "a-badge--success",
+  afgewezen: "a-badge--danger",
+};
+
 const ALL_STATUSES: ReservationStatus[] = ["nieuw", "in_behandeling", "bevestigd", "afgewezen"];
+
+function Row({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="a-card-row" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1.5rem" }}>
+      <span style={{ color: "var(--a-text-2)", fontSize: "0.875rem" }}>{label}</span>
+      <span style={{ color: "var(--a-text)", fontSize: "0.875rem", fontWeight: 500, textAlign: "right" }}>{value}</span>
+    </div>
+  );
+}
 
 export default async function ReservationDetailPage({
   params,
@@ -24,58 +41,48 @@ export default async function ReservationDetailPage({
   const nextStatuses = ALL_STATUSES.filter((s) => isValidTransition(reservation.status, s));
 
   return (
-    <div className="p-8 max-w-2xl">
-      <h1 className="text-2xl font-semibold mb-1">{reservation.contactName}</h1>
-      <p className="text-neutral-500 mb-6">{reservation.email}</p>
+    <div style={{ maxWidth: "36rem" }}>
+      <Link href="/admin/reservations" className="a-link" style={{ fontSize: "0.8125rem" }}>
+        ← Reserveringen
+      </Link>
 
-      <dl className="grid grid-cols-2 gap-y-3 gap-x-6 text-sm mb-8">
-        <dt className="text-neutral-500">Track</dt>
-        <dd>{reservation.track === "standaard" ? "Standaard" : "Zakelijk"}</dd>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.5rem", marginBottom: "0.25rem" }}>
+        <h1 className="a-h1" style={{ fontSize: "1.5rem" }}>
+          {reservation.contactName}
+        </h1>
+        <span className={`a-badge ${STATUS_BADGE_VARIANT[reservation.status]}`}>{STATUS_LABELS[reservation.status]}</span>
+      </div>
+      <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>{reservation.email}</p>
 
-        <dt className="text-neutral-500">Status</dt>
-        <dd>{STATUS_LABELS[reservation.status]}</dd>
+      <div className="a-card">
+        <Row label="Track" value={reservation.track === "standaard" ? "Standaard" : "Zakelijk"} />
+        <Row label="Telefoon" value={reservation.phone ?? "-"} />
+        <Row label="Gezelschapsgrootte" value={reservation.partySize ?? "-"} />
+        <Row label="Groepsgrootte" value={reservation.groupSize ?? "-"} />
+        <Row label="Bedrijf" value={reservation.companyName ?? "-"} />
+        <Row label="Gelegenheid" value={reservation.occasion ?? "-"} />
+        <Row label="Gewenste datum" value={reservation.requestedDate ?? "-"} />
+        <Row label="Gewenste periode" value={reservation.preferredPeriod ?? "-"} />
+        <Row label="Notities" value={reservation.notes ?? "-"} />
+      </div>
 
-        <dt className="text-neutral-500">Telefoon</dt>
-        <dd>{reservation.phone ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Gezelschapsgrootte</dt>
-        <dd>{reservation.partySize ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Groepsgrootte</dt>
-        <dd>{reservation.groupSize ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Bedrijf</dt>
-        <dd>{reservation.companyName ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Gelegenheid</dt>
-        <dd>{reservation.occasion ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Gewenste datum</dt>
-        <dd>{reservation.requestedDate}</dd>
-
-        <dt className="text-neutral-500">Gewenste periode</dt>
-        <dd>{reservation.preferredPeriod ?? "-"}</dd>
-
-        <dt className="text-neutral-500">Notities</dt>
-        <dd>{reservation.notes ?? "-"}</dd>
-      </dl>
-
-      {nextStatuses.length > 0 ? (
-        <div className="flex gap-3">
-          {nextStatuses.map((s) => (
-            <form key={s} action={updateStatus.bind(null, reservation.id, s)}>
-              <button
-                type="submit"
-                className="border border-neutral-900 rounded-full px-4 py-2 text-sm hover:bg-neutral-900 hover:text-white"
-              >
-                {STATUS_LABELS[s]}
-              </button>
-            </form>
-          ))}
-        </div>
-      ) : (
-        <p className="text-neutral-500 text-sm">Deze reservering is afgehandeld — er zijn geen vervolgstappen.</p>
-      )}
+      <div style={{ marginTop: "1.5rem" }}>
+        {nextStatuses.length > 0 ? (
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            {nextStatuses.map((s) => (
+              <form key={s} action={updateStatus.bind(null, reservation.id, s)}>
+                <button type="submit" className="a-btn a-btn--secondary">
+                  {STATUS_LABELS[s]}
+                </button>
+              </form>
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: "0.875rem", color: "var(--a-text-2)" }}>
+            Deze reservering is afgehandeld — er zijn geen vervolgstappen.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

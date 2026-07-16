@@ -7,18 +7,18 @@ export function LoginForm() {
   const [error, formAction, isPending] = useActionState(login, null);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 max-w-sm">
-      <label className="flex flex-col gap-1 text-sm">
-        E-mailadres
-        <input type="email" name="email" required autoComplete="username" className="border border-neutral-400 rounded px-3 py-2" />
+    <form action={formAction} className="a-field" style={{ gap: "1rem" }}>
+      <label className="a-field">
+        <span className="a-label">E-mailadres</span>
+        <input type="email" name="email" required autoComplete="username" className="a-input" />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        Wachtwoord
-        <input type="password" name="password" required autoComplete="current-password" className="border border-neutral-400 rounded px-3 py-2" />
+      <label className="a-field">
+        <span className="a-label">Wachtwoord</span>
+        <input type="password" name="password" required autoComplete="current-password" className="a-input" />
       </label>
-      {error ? <p className="text-red-600 text-sm">{error}</p> : null}
-      <button type="submit" disabled={isPending} className="bg-neutral-900 text-white rounded px-4 py-2 disabled:opacity-50">
-        {isPending ? "Bezig..." : "Inloggen"}
+      {error ? <p className="a-alert a-alert--danger">{error}</p> : null}
+      <button type="submit" disabled={isPending} className="a-btn a-btn--primary" style={{ width: "100%", padding: "0.625rem" }}>
+        {isPending ? "Bezig…" : "Inloggen"}
       </button>
     </form>
   );

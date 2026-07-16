@@ -17,8 +17,20 @@ export function ImagePicker({
   value: string | null;
   onChange: (mediaId: string) => void;
 }) {
+  if (media.length === 0) {
+    return (
+      <p style={{ fontSize: "0.8125rem", color: "var(--a-text-3, #98989d)" }}>
+        Nog geen afbeeldingen. Upload er een via Media.
+      </p>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6" role="listbox" aria-label="Kies een afbeelding">
+    <div
+      role="listbox"
+      aria-label="Kies een afbeelding"
+      style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(84px, 1fr))", gap: "0.625rem" }}
+    >
       {media.map((item) => {
         const selected = item.id === value;
         return (
@@ -28,9 +40,22 @@ export function ImagePicker({
             role="option"
             aria-selected={selected}
             onClick={() => onChange(item.id)}
-            className={`overflow-hidden rounded-md border-2 ${selected ? "border-neutral-900" : "border-transparent"}`}
+            style={{
+              overflow: "hidden",
+              borderRadius: "var(--a-r-sm, 8px)",
+              border: `2px solid ${selected ? "var(--a-accent, #ffcc00)" : "transparent"}`,
+              boxShadow: selected ? "0 0 0 3px var(--a-accent-soft, rgba(255,204,0,0.16))" : "none",
+              padding: 0,
+              lineHeight: 0,
+              cursor: "pointer",
+              transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+            }}
           >
-            <img src={item.url} alt={item.altText} className="aspect-square w-full object-cover" />
+            <img
+              src={item.url}
+              alt={item.altText}
+              style={{ aspectRatio: "1 / 1", width: "100%", objectFit: "cover", display: "block" }}
+            />
           </button>
         );
       })}

@@ -17,122 +17,73 @@ export async function WineForm({ wine, error }: { wine: Wine | null; error?: str
   );
 
   return (
-    <form action={saveWine} className="max-w-2xl space-y-6">
+    <form action={saveWine} style={{ maxWidth: "40rem" }}>
       {wine ? <input type="hidden" name="id" value={wine.id} /> : null}
-      {error ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">{error}</p>
-      ) : null}
+      {error ? <p className="a-alert a-alert--danger" style={{ marginBottom: "1.25rem" }}>{error}</p> : null}
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700" htmlFor="name">
-          Naam
+      <div className="a-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <label className="a-field">
+          <span className="a-label">
+            Naam
+          </span>
+          <input required type="text" id="name" name="name" defaultValue={wine?.name} className="a-input" />
         </label>
-        <input
-          required
-          type="text"
-          id="name"
-          name="name"
-          defaultValue={wine?.name}
-          className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-        />
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700" htmlFor="metaNl">
-            Omschrijving — type/regio (NL)
+        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+          <label className="a-field">
+            <span className="a-label">
+              Omschrijving — type/regio (NL)
+            </span>
+            <input type="text" id="metaNl" name="metaNl" defaultValue={wine?.metaNl} placeholder="Wit · Pfalz, DE" className="a-input" />
           </label>
-          <input
-            type="text"
-            id="metaNl"
-            name="metaNl"
-            defaultValue={wine?.metaNl}
-            placeholder="Wit · Pfalz, DE"
-            className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700" htmlFor="metaEn">
-            Description — type/region (EN)
+          <label className="a-field">
+            <span className="a-label">
+              Description — type/region (EN)
+            </span>
+            <input type="text" id="metaEn" name="metaEn" defaultValue={wine?.metaEn} placeholder="White · Pfalz, DE" className="a-input" />
           </label>
-          <input
-            type="text"
-            id="metaEn"
-            name="metaEn"
-            defaultValue={wine?.metaEn}
-            placeholder="White · Pfalz, DE"
-            className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700" htmlFor="tagNl">
-            Tagline (NL)
+        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+          <label className="a-field">
+            <span className="a-label">
+              Tagline (NL)
+            </span>
+            <input type="text" id="tagNl" name="tagNl" defaultValue={wine?.tagNl} placeholder="de klassieker" className="a-input" />
           </label>
-          <input
-            type="text"
-            id="tagNl"
-            name="tagNl"
-            defaultValue={wine?.tagNl}
-            placeholder="de klassieker"
-            className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700" htmlFor="tagEn">
-            Tagline (EN)
+          <label className="a-field">
+            <span className="a-label">
+              Tagline (EN)
+            </span>
+            <input type="text" id="tagEn" name="tagEn" defaultValue={wine?.tagEn} placeholder="the classic" className="a-input" />
           </label>
-          <input
-            type="text"
-            id="tagEn"
-            name="tagEn"
-            defaultValue={wine?.tagEn}
-            placeholder="the classic"
-            className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
         </div>
-      </div>
 
-      <div>
-        <span className="block text-sm font-medium text-neutral-700">Afbeelding</span>
-        <ImageField media={media} initialValue={wine?.imageId ?? null} />
-      </div>
+        <div className="a-field">
+          <span className="a-label">Afbeelding</span>
+          <ImageField media={media} initialValue={wine?.imageId ?? null} />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700" htmlFor="shopifyHandle">
-          Shopify handle
+        <label className="a-field">
+          <span className="a-label">
+            Shopify handle
+          </span>
+          <input required type="text" id="shopifyHandle" name="shopifyHandle" defaultValue={wine?.shopifyHandle} className="a-input" />
         </label>
-        <input
-          required
-          type="text"
-          id="shopifyHandle"
-          name="shopifyHandle"
-          defaultValue={wine?.shopifyHandle}
-          className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-        />
-      </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="isActive"
-          name="isActive"
-          defaultChecked={wine?.isActive ?? true}
-          className="h-4 w-4"
-        />
-        <label className="text-sm text-neutral-700" htmlFor="isActive">
-          Actief op de website
+        <label className="a-checkbox-row">
+          <input type="checkbox" id="isActive" name="isActive" defaultChecked={wine?.isActive ?? true} className="a-checkbox" />
+          <span className="a-label" style={{ fontWeight: 500 }}>
+            Actief op de website
+          </span>
         </label>
       </div>
 
-      <button
-        type="submit"
-        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700"
-      >
-        Opslaan
-      </button>
+      <div style={{ marginTop: "1.25rem" }}>
+        <button type="submit" className="a-btn a-btn--primary">
+          Opslaan
+        </button>
+      </div>
     </form>
   );
 }

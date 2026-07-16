@@ -9,11 +9,11 @@ const STATUS_LABELS: Record<ReservationStatus, string> = {
   afgewezen: "Afgewezen",
 };
 
-const STATUS_BADGE_CLASSES: Record<ReservationStatus, string> = {
-  nieuw: "bg-blue-100 text-blue-800",
-  in_behandeling: "bg-amber-100 text-amber-800",
-  bevestigd: "bg-green-100 text-green-800",
-  afgewezen: "bg-red-100 text-red-800",
+const STATUS_BADGE_VARIANT: Record<ReservationStatus, string> = {
+  nieuw: "a-badge--info",
+  in_behandeling: "a-badge--warning",
+  bevestigd: "a-badge--success",
+  afgewezen: "a-badge--danger",
 };
 
 const TRACK_LABELS: Record<ReservationTrack, string> = {
@@ -49,76 +49,65 @@ export default async function ReservationsPage({
   const reservationList = await listReservations({ status, track });
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-6">Reserveringen</h1>
+    <div>
+      <h1 className="a-h1">Reserveringen</h1>
 
-      <div className="flex flex-wrap gap-6 mb-6 text-sm">
-        <div className="flex gap-2 items-center">
-          <span className="text-neutral-500">Status:</span>
-          <Link href={filterHref(params, { status: undefined })} className={!status ? "font-semibold underline" : "underline"}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1.25rem", marginBottom: "1.5rem" }}>
+        <div className="a-chip-group">
+          <span className="a-eyebrow" style={{ marginRight: "0.25rem" }}>
+            Status
+          </span>
+          <Link href={filterHref(params, { status: undefined })} className={`a-chip${!status ? " is-active" : ""}`}>
             Alle
           </Link>
           {ALL_STATUSES.map((s) => (
-            <Link
-              key={s}
-              href={filterHref(params, { status: s })}
-              className={status === s ? "font-semibold underline" : "underline"}
-            >
+            <Link key={s} href={filterHref(params, { status: s })} className={`a-chip${status === s ? " is-active" : ""}`}>
               {STATUS_LABELS[s]}
             </Link>
           ))}
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="text-neutral-500">Track:</span>
-          <Link href={filterHref(params, { track: undefined })} className={!track ? "font-semibold underline" : "underline"}>
+        <div className="a-chip-group">
+          <span className="a-eyebrow" style={{ marginRight: "0.25rem" }}>
+            Track
+          </span>
+          <Link href={filterHref(params, { track: undefined })} className={`a-chip${!track ? " is-active" : ""}`}>
             Alle
           </Link>
           {ALL_TRACKS.map((tr) => (
-            <Link
-              key={tr}
-              href={filterHref(params, { track: tr })}
-              className={track === tr ? "font-semibold underline" : "underline"}
-            >
+            <Link key={tr} href={filterHref(params, { track: tr })} className={`a-chip${track === tr ? " is-active" : ""}`}>
               {TRACK_LABELS[tr]}
             </Link>
           ))}
         </div>
       </div>
 
-      {reservationList.length === 0 ? (
-        <p className="text-neutral-500">Geen reserveringen gevonden.</p>
-      ) : (
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="text-left border-b border-neutral-200">
-              <th className="py-2 pr-4">Naam</th>
-              <th className="py-2 pr-4">Track</th>
-              <th className="py-2 pr-4">Gewenste datum</th>
-              <th className="py-2 pr-4">Periode</th>
-              <th className="py-2 pr-4">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservationList.map((r) => (
-              <tr key={r.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                <td className="py-2 pr-4">
-                  <Link href={`/admin/reservations/${r.id}`} className="underline">
-                    {r.contactName}
-                  </Link>
-                </td>
-                <td className="py-2 pr-4">{TRACK_LABELS[r.track]}</td>
-                <td className="py-2 pr-4">{r.requestedDate}</td>
-                <td className="py-2 pr-4">{r.preferredPeriod ?? "-"}</td>
-                <td className="py-2 pr-4">
-                  <span className={`px-2 py-1 rounded-full text-xs ${STATUS_BADGE_CLASSES[r.status]}`}>
-                    {STATUS_LABELS[r.status]}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div className="a-card">
+        {reservationList.length === 0 ? (
+          <p className="a-card-row" style={{ color: "var(--a-text-2)", fontSize: "0.875rem" }}>
+            Geen reserveringen gevonden.
+          </p>
+        ) : (
+          reservationList.map((r) => (
+            <Link
+              key={r.id}
+              href={`/admin/reservations/${r.id}`}
+              className="a-card-row"
+              style={{ display: "flex", alignItems: "center", gap: "1rem", textDecoration: "none" }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="a-label" style={{ color: "var(--a-text)" }}>
+                  {r.contactName}
+                </div>
+                <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
+                  {TRACK_LABELS[r.track]} · {r.requestedDate}
+                  {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
+                </div>
+              </div>
+              <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+            </Link>
+          ))
+        )}
+      </div>
     </div>
   );
 }

@@ -69,18 +69,24 @@ export default async function AvailabilityPage({
   });
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold capitalize">{monthLabel}</h1>
-        <div className="flex gap-4 text-sm">
-          <Link href={`/admin/availability?month=${adjacentMonth(year, month, -1)}`}>&larr; Vorige</Link>
-          <Link href={`/admin/availability?month=${adjacentMonth(year, month, 1)}`}>Volgende &rarr;</Link>
+    <div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+        <h1 className="a-h1" style={{ textTransform: "capitalize" }}>
+          {monthLabel}
+        </h1>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <Link href={`/admin/availability?month=${adjacentMonth(year, month, -1)}`} className="a-btn a-btn--secondary">
+            ← Vorige
+          </Link>
+          <Link href={`/admin/availability?month=${adjacentMonth(year, month, 1)}`} className="a-btn a-btn--secondary">
+            Volgende →
+          </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="a-cal-grid">
         {["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"].map((label) => (
-          <div key={label} className="text-xs font-semibold text-neutral-500 text-center pb-1">
+          <div key={label} className="a-cal-weekday">
             {label}
           </div>
         ))}
@@ -94,25 +100,18 @@ export default async function AvailabilityPage({
           const blockedSet = blockedByDate.get(dateStr) ?? new Set<Daypart>();
 
           return (
-            <div key={dateStr} className="border border-neutral-200 rounded p-2 min-h-[110px] text-xs">
-              <div className="font-semibold mb-1">{day}</div>
-              <div className="flex flex-col gap-1">
-                {DAYPARTS.map((daypart) => {
-                  const blocked = blockedSet.has(daypart);
-                  return (
-                    <form key={daypart} action={toggleAvailability.bind(null, dateStr, daypart, undefined)}>
-                      <button
-                        type="submit"
-                        className={`w-full text-left px-1.5 py-0.5 rounded ${
-                          blocked ? "bg-red-100 text-red-800" : "bg-neutral-100 text-neutral-600"
-                        }`}
-                      >
-                        {DAYPART_LABELS[daypart]}
-                      </button>
-                    </form>
-                  );
-                })}
-              </div>
+            <div key={dateStr} className="a-cal-day">
+              <div className="a-cal-day-num">{day}</div>
+              {DAYPARTS.map((daypart) => {
+                const blocked = blockedSet.has(daypart);
+                return (
+                  <form key={daypart} action={toggleAvailability.bind(null, dateStr, daypart, undefined)}>
+                    <button type="submit" className={`a-cal-toggle${blocked ? " is-blocked" : ""}`}>
+                      {DAYPART_LABELS[daypart]}
+                    </button>
+                  </form>
+                );
+              })}
             </div>
           );
         })}

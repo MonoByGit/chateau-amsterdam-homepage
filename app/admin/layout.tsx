@@ -4,15 +4,8 @@ import { cookies } from "next/headers";
 import { validateSession } from "@/lib/db/sessions";
 import { findUserById } from "@/lib/db/users";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session-cookie";
+import { AdminNav } from "./nav";
 import { logout } from "./actions";
-
-const NAV_ITEMS = [
-  { href: "/admin/content", label: "Content" },
-  { href: "/admin/wines", label: "Wijnen" },
-  { href: "/admin/reservations", label: "Reserveringen" },
-  { href: "/admin/availability", label: "Beschikbaarheid" },
-  { href: "/admin/media", label: "Media" },
-];
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
@@ -23,32 +16,39 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   if (!user) {
     return (
       <html lang="nl">
-        <body className="bg-neutral-50 text-neutral-900">{children}</body>
+        <body>{children}</body>
       </html>
     );
   }
 
   return (
     <html lang="nl">
-      <body className="bg-neutral-50 text-neutral-900">
-        <div className="min-h-screen flex">
-          <nav className="w-56 border-r border-neutral-200 p-4 flex flex-col gap-2">
-            {NAV_ITEMS.map((item) => (
-              <a key={item.href} href={item.href} className="text-sm px-3 py-2 rounded hover:bg-neutral-200">
-                {item.label}
-              </a>
-            ))}
-            <form action={logout} className="mt-auto">
-              <button type="submit" className="text-sm px-3 py-2 rounded hover:bg-neutral-200 w-full text-left">
-                Uitloggen
-              </button>
-            </form>
-          </nav>
-          <div className="flex-1 flex flex-col">
-            <header className="border-b border-neutral-200 px-6 py-3 text-sm text-neutral-500">
-              Ingelogd als {user.email}
+      <body>
+        <div className="a-shell">
+          <aside className="a-sidebar">
+            <div className="a-brand">Chateau Amsterdam</div>
+            <AdminNav />
+            <div className="a-sidebar-footer">
+              <form action={logout}>
+                <button type="submit" className="a-nav-link" style={{ width: "100%", border: "none", background: "none" }}>
+                  <span className="a-nav-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15" />
+                      <path d="M10 8l-4 4 4 4M6 12h12" />
+                    </svg>
+                  </span>
+                  Uitloggen
+                </button>
+              </form>
+            </div>
+          </aside>
+          <div className="a-main">
+            <header className="a-topbar">
+              <span>Ingelogd als {user.email}</span>
             </header>
-            <main className="flex-1 p-6">{children}</main>
+            <main className="a-content" style={{ maxWidth: "none" }}>
+              {children}
+            </main>
           </div>
         </div>
       </body>

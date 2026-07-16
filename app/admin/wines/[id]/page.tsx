@@ -1,4 +1,5 @@
 // app/admin/wines/[id]/page.tsx
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWine } from "@/lib/db/wines";
 import { WineForm } from "../wine-form";
@@ -18,8 +19,13 @@ export default async function EditWinePage({
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-neutral-900">Wijn bewerken</h1>
+    <div>
+      <Link href="/admin/wines" className="a-link" style={{ fontSize: "0.8125rem" }}>
+        ← Wijnen
+      </Link>
+      <h1 className="a-h1" style={{ marginTop: "0.5rem", marginBottom: "1.5rem" }}>
+        Wijn bewerken
+      </h1>
       <WineForm wine={wine} error={error} />
     </div>
   );

@@ -15,40 +15,40 @@ export function ContentForm({ section, blocks }: { section: string; blocks: Bloc
   const [status, formAction, isPending] = useActionState(submitSection.bind(null, section), null);
 
   return (
-    <form action={formAction} className="mt-6 space-y-6">
-      {blocks.map((block) => (
-        <div key={block.fieldKey} className="border-b border-gray-200 pb-4">
-          <label className="block text-sm font-medium text-gray-700">{block.fieldKey}</label>
-          <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">NL</span>
-              <textarea
-                name={`${block.fieldKey}__nl`}
-                defaultValue={block.valueNl}
-                rows={2}
-                className="mt-1 w-full rounded border border-gray-300 p-2 text-sm"
-              />
-            </div>
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">EN</span>
-              <textarea
-                name={`${block.fieldKey}__en`}
-                defaultValue={block.valueEn}
-                rows={2}
-                className="mt-1 w-full rounded border border-gray-300 p-2 text-sm"
-              />
+    <form action={formAction} style={{ marginTop: "1.5rem" }}>
+      <div className="a-card">
+        {blocks.map((block) => (
+          <div key={block.fieldKey} className="a-card-row">
+            <span className="a-eyebrow">{block.fieldKey}</span>
+            <div style={{ marginTop: "0.625rem", display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+              <label className="a-field">
+                <span className="a-label">NL</span>
+                <textarea
+                  name={`${block.fieldKey}__nl`}
+                  defaultValue={block.valueNl}
+                  rows={2}
+                  className="a-textarea"
+                />
+              </label>
+              <label className="a-field">
+                <span className="a-label">EN</span>
+                <textarea
+                  name={`${block.fieldKey}__en`}
+                  defaultValue={block.valueEn}
+                  rows={2}
+                  className="a-textarea"
+                />
+              </label>
             </div>
           </div>
-        </div>
-      ))}
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-      >
-        {isPending ? "Bezig met opslaan…" : "Opslaan"}
-      </button>
-      {status ? <p className="text-sm text-green-600">{status}</p> : null}
+        ))}
+      </div>
+      <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <button type="submit" disabled={isPending} className="a-btn a-btn--primary">
+          {isPending ? "Bezig met opslaan…" : "Opslaan"}
+        </button>
+        {status ? <span className="a-badge a-badge--success">{status}</span> : null}
+      </div>
     </form>
   );
 }
