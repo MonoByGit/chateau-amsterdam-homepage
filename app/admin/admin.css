@@ -1,69 +1,83 @@
 @import "tailwindcss";
 
 /* Chateau Amsterdam — Admin design tokens.
+   Derived directly from the public site's own palette (app/globals.css:
+   ink / chalk paper / yellow — industrial × refined) rather than a
+   separate invented palette, so the admin reads as part of the same
+   product instead of a generic tool bolted on the back.
+
+   Two radii only, matching the public site's own convention exactly:
+   --a-r-sharp (2px, cards/inputs/images — the site uses 2px throughout)
+   --a-r-full (999px, buttons/badges/chips/pills only — the site's .btn
+   and badges are always fully round, never anything in between).
+
    Light values default; dark values override via prefers-color-scheme,
    so the whole admin scales with the OS appearance automatically. */
 :root {
-  --a-bg: #f5f5f7;
-  --a-surface: #ffffff;
-  --a-surface-2: #fbfbfd;
-  --a-border: rgba(0, 0, 0, 0.08);
-  --a-border-strong: rgba(0, 0, 0, 0.14);
-  --a-text: #1d1d1f;
-  --a-text-2: #6e6e73;
-  --a-text-3: #98989d;
+  --a-bg: #f1ece1; /* --paper */
+  --a-surface: #f7f4ec; /* --chalk */
+  --a-surface-2: #e7e0d0; /* --paper-dim, for recessed inputs */
+  --a-border: rgba(23, 20, 14, 0.16); /* --line */
+  --a-border-strong: rgba(23, 20, 14, 0.32);
+  --a-text: #17140e; /* --ink */
+  --a-text-2: rgba(23, 20, 14, 0.62);
+  --a-text-3: rgba(23, 20, 14, 0.42);
   --a-accent: #ffcc00;
-  --a-accent-text: #7a5d00;
-  --a-accent-contrast: #1d1d1f;
-  --a-accent-soft: rgba(255, 204, 0, 0.16);
-  --a-danger: #d70015;
-  --a-danger-soft: rgba(215, 0, 21, 0.08);
-  --a-success: #248a3d;
-  --a-success-soft: rgba(36, 138, 61, 0.1);
-  --a-warning: #a35d00;
-  --a-warning-soft: rgba(163, 93, 0, 0.1);
-  --a-info: #0066cc;
-  --a-info-soft: rgba(0, 102, 204, 0.1);
-  --a-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --a-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06), 0 10px 24px rgba(0, 0, 0, 0.05);
-  --a-sidebar-bg: rgba(246, 246, 248, 0.78);
-  --a-r-sm: 8px;
-  --a-r-md: 12px;
-  --a-r-lg: 18px;
+  --a-accent-text: #7a5d00; /* WCAG AA-safe darkened gold for text on paper */
+  --a-accent-contrast: #17140e;
+  --a-accent-soft: rgba(255, 204, 0, 0.22);
+  --a-danger: #9c3b26;
+  --a-danger-soft: rgba(156, 59, 38, 0.12);
+  --a-success: #3f6b2e;
+  --a-success-soft: rgba(63, 107, 46, 0.12);
+  --a-warning: #b5540f;
+  --a-warning-soft: rgba(181, 84, 15, 0.14);
+  --a-shadow-md: 0 20px 40px -20px rgba(23, 20, 14, 0.35);
+  /* Sidebar/topbar chrome is always the site's dark-ink scrolled-header
+     treatment, in both OS modes — see .site-header.is-scrolled in
+     globals.css. It frames a light-or-dark content canvas either way. */
+  --a-nav-bg: rgba(23, 20, 14, 0.9);
+  --a-nav-text: #f1ece1;
+  --a-nav-text-2: rgba(241, 236, 225, 0.68);
+  --a-nav-border: rgba(241, 236, 225, 0.14);
+  --a-nav-active-bg: rgba(255, 204, 0, 0.22);
+  --a-nav-active-text: #ffcc00;
+  --a-r-sharp: 2px;
   --a-r-full: 999px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --a-bg: #000000;
-    --a-surface: #1c1c1e;
-    --a-surface-2: #242426;
-    --a-border: rgba(255, 255, 255, 0.09);
-    --a-border-strong: rgba(255, 255, 255, 0.16);
-    --a-text: #f5f5f7;
-    --a-text-2: #98989d;
-    --a-text-3: #6e6e73;
-    --a-accent: #ffd60a;
-    --a-accent-text: #ffd60a;
-    --a-accent-contrast: #1d1d1f;
-    --a-accent-soft: rgba(255, 214, 10, 0.18);
-    --a-danger: #ff453a;
-    --a-danger-soft: rgba(255, 69, 58, 0.16);
-    --a-success: #32d74b;
-    --a-success-soft: rgba(50, 215, 75, 0.16);
-    --a-warning: #ff9f0a;
-    --a-warning-soft: rgba(255, 159, 10, 0.16);
-    --a-info: #409cff;
-    --a-info-soft: rgba(64, 156, 255, 0.16);
-    --a-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --a-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35), 0 12px 28px rgba(0, 0, 0, 0.35);
-    --a-sidebar-bg: rgba(23, 23, 25, 0.78);
+    --a-bg: #17140e; /* --ink */
+    --a-surface: #262218; /* --ink-soft */
+    --a-surface-2: #201c13; /* matches --theme-bg-card in dark mode */
+    --a-border: rgba(241, 236, 225, 0.18); /* --line-light */
+    --a-border-strong: rgba(241, 236, 225, 0.3);
+    --a-text: #f1ece1; /* --paper */
+    --a-text-2: rgba(241, 236, 225, 0.65);
+    --a-text-3: rgba(241, 236, 225, 0.42);
+    --a-accent: #ffcc00;
+    --a-accent-text: #ffcc00; /* bright gold reads fine on dark, per globals.css .on-dark logic */
+    --a-accent-contrast: #17140e;
+    --a-accent-soft: rgba(255, 204, 0, 0.22);
+    --a-danger: #d97157;
+    --a-danger-soft: rgba(217, 113, 87, 0.18);
+    --a-success: #7fae64;
+    --a-success-soft: rgba(127, 174, 100, 0.18);
+    --a-warning: #e08a3c;
+    --a-warning-soft: rgba(224, 138, 60, 0.18);
+    --a-shadow-md: 0 20px 40px -20px rgba(0, 0, 0, 0.65);
+    --a-nav-bg: rgba(10, 8, 5, 0.92);
+    --a-nav-text: #f1ece1;
+    --a-nav-text-2: rgba(241, 236, 225, 0.62);
+    --a-nav-border: rgba(241, 236, 225, 0.1);
+    --a-nav-active-bg: rgba(255, 204, 0, 0.2);
+    --a-nav-active-text: #ffcc00;
   }
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+  font-family: var(--font-archivo), Archivo, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--a-bg);
   color: var(--a-text);
   -webkit-font-smoothing: antialiased;
@@ -87,10 +101,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  background: var(--a-sidebar-bg);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border-right: 1px solid var(--a-border);
+  background: var(--a-nav-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-right: 1px solid var(--a-nav-border);
   position: sticky;
   top: 0;
   height: 100vh;
@@ -99,7 +113,7 @@ body {
 .a-brand {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--a-text);
+  color: var(--a-nav-text);
   padding: 0.5rem 0.75rem 1.25rem;
   letter-spacing: -0.01em;
 }
@@ -109,22 +123,22 @@ body {
   align-items: center;
   gap: 0.625rem;
   padding: 0.5rem 0.75rem;
-  border-radius: var(--a-r-sm);
+  border-radius: var(--a-r-sharp);
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--a-text-2);
+  color: var(--a-nav-text-2);
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .a-nav-link:hover {
-  background: var(--a-border);
-  color: var(--a-text);
+  background: rgba(241, 236, 225, 0.08);
+  color: var(--a-nav-text);
 }
 
 .a-nav-link.is-active {
-  background: var(--a-accent-soft);
-  color: var(--a-accent-text);
+  background: var(--a-nav-active-bg);
+  color: var(--a-nav-active-text);
 }
 
 .a-nav-icon {
@@ -137,7 +151,7 @@ body {
 .a-sidebar-footer {
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--a-border);
+  border-top: 1px solid var(--a-nav-border);
 }
 
 .a-main {
@@ -156,12 +170,12 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.875rem 2rem;
-  background: var(--a-sidebar-bg);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border-bottom: 1px solid var(--a-border);
+  background: var(--a-nav-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--a-nav-border);
   font-size: 0.8125rem;
-  color: var(--a-text-3);
+  color: var(--a-nav-text-2);
 }
 
 .a-content {
@@ -193,8 +207,9 @@ body {
 }
 
 .a-eyebrow {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
-  font-weight: 650;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--a-text-3);
@@ -205,8 +220,7 @@ body {
 .a-card {
   background: var(--a-surface);
   border: 1px solid var(--a-border);
-  border-radius: var(--a-r-lg);
-  box-shadow: var(--a-shadow-sm);
+  border-radius: var(--a-r-sharp);
 }
 
 .a-card-row {
@@ -223,16 +237,6 @@ a.a-card-row:hover {
   background: var(--a-border);
 }
 
-.a-card-row:first-child {
-  border-top-left-radius: var(--a-r-lg);
-  border-top-right-radius: var(--a-r-lg);
-}
-
-.a-card-row:last-child {
-  border-bottom-left-radius: var(--a-r-lg);
-  border-bottom-right-radius: var(--a-r-lg);
-}
-
 /* Inputs */
 
 .a-input,
@@ -242,9 +246,10 @@ a.a-card-row:hover {
   border: 1px solid var(--a-border-strong);
   background: var(--a-surface-2);
   color: var(--a-text);
-  border-radius: var(--a-r-sm);
+  border-radius: var(--a-r-sharp);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
+  font-family: inherit;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -285,7 +290,7 @@ a.a-card-row:hover {
   gap: 0.625rem;
 }
 
-/* Buttons */
+/* Buttons — always fully round, matching the site's own .btn exactly */
 
 .a-btn {
   display: inline-flex;
@@ -351,11 +356,11 @@ a.a-card-row:hover {
 
 .a-btn--icon {
   padding: 0.375rem;
-  border-radius: var(--a-r-sm);
+  border-radius: var(--a-r-full);
 }
 
 .a-link {
-  color: var(--a-info);
+  color: var(--a-accent-text);
   text-decoration: none;
   font-weight: 500;
 }
@@ -407,8 +412,9 @@ a.a-card-row:hover {
 }
 
 .a-cal-weekday {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
-  font-weight: 650;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--a-text-3);
@@ -419,7 +425,7 @@ a.a-card-row:hover {
 .a-cal-day {
   background: var(--a-surface);
   border: 1px solid var(--a-border);
-  border-radius: var(--a-r-md);
+  border-radius: var(--a-r-sharp);
   padding: 0.5rem;
   min-height: 6.75rem;
   display: flex;
@@ -428,8 +434,9 @@ a.a-card-row:hover {
 }
 
 .a-cal-day-num {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--a-text-2);
   padding: 0 0.125rem 0.125rem;
 }
@@ -440,7 +447,7 @@ a.a-card-row:hover {
   font-size: 0.6875rem;
   font-weight: 500;
   padding: 0.1875rem 0.375rem;
-  border-radius: 6px;
+  border-radius: var(--a-r-sharp);
   border: none;
   cursor: pointer;
   background: var(--a-border);
@@ -457,7 +464,8 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
-/* Badges */
+/* Badges — reserved for system-set status, not user-entered data (a filter
+   chip is the right component for that instead — see .a-chip above). */
 
 .a-badge {
   display: inline-flex;
@@ -474,8 +482,8 @@ a.a-card-row:hover {
 }
 
 .a-badge--info {
-  background: var(--a-info-soft);
-  color: var(--a-info);
+  background: var(--a-accent-soft);
+  color: var(--a-accent-text);
 }
 
 .a-badge--warning {
@@ -496,7 +504,7 @@ a.a-card-row:hover {
 /* Alerts */
 
 .a-alert {
-  border-radius: var(--a-r-md);
+  border-radius: var(--a-r-sharp);
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   border: 1px solid transparent;
@@ -522,7 +530,7 @@ a.a-card-row:hover {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: radial-gradient(ellipse at top, var(--a-accent-soft), transparent 60%), var(--a-bg);
+  background: var(--a-bg);
 }
 
 .a-login-card {
@@ -534,7 +542,7 @@ a.a-card-row:hover {
 .a-login-mark {
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: var(--a-r-md);
+  border-radius: var(--a-r-sharp);
   background: var(--a-accent);
   color: var(--a-accent-contrast);
   display: flex;

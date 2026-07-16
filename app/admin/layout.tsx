@@ -1,11 +1,18 @@
 import "./admin.css";
 import type { ReactNode } from "react";
+import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { validateSession } from "@/lib/db/sessions";
 import { findUserById } from "@/lib/db/users";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session-cookie";
 import { AdminNav } from "./nav";
 import { logout } from "./actions";
+
+// Same type family as the public site (app/(site)/layout.tsx), loaded
+// separately here because /admin has its own independent root layout —
+// this keeps the admin visually part of the same brand, not a generic tool.
+const archivo = Archivo({ subsets: ["latin"], variable: "--font-archivo" });
+const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
@@ -15,14 +22,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   if (!user) {
     return (
-      <html lang="nl">
+      <html lang="nl" className={`${archivo.variable} ${ibmPlexMono.variable}`}>
         <body>{children}</body>
       </html>
     );
   }
 
   return (
-    <html lang="nl">
+    <html lang="nl" className={`${archivo.variable} ${ibmPlexMono.variable}`}>
       <body>
         <div className="a-shell">
           <aside className="a-sidebar">

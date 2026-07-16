@@ -19,7 +19,7 @@ export function ImagePicker({
 }) {
   if (media.length === 0) {
     return (
-      <p style={{ fontSize: "0.8125rem", color: "var(--a-text-3, #98989d)" }}>
+      <p style={{ fontSize: "0.8125rem", color: "var(--a-text-3, #6b6558)" }}>
         Nog geen afbeeldingen beschikbaar.
       </p>
     );
@@ -42,7 +42,7 @@ export function ImagePicker({
             onClick={() => onChange(item.id)}
             style={{
               overflow: "hidden",
-              borderRadius: "var(--a-r-sm, 8px)",
+              borderRadius: "var(--a-r-sharp, 2px)",
               border: `2px solid ${selected ? "var(--a-accent, #ffcc00)" : "transparent"}`,
               boxShadow: selected ? "0 0 0 3px var(--a-accent-soft, rgba(255,204,0,0.16))" : "none",
               padding: 0,
