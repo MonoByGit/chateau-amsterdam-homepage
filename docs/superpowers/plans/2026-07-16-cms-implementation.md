@@ -135,7 +135,8 @@ Expected: the `postgres` service shows `STATUS` as `Up (healthy)`.
 Runs any pending Drizzle migrations via the node-postgres migrator. Re-runnable — already-applied migrations are tracked by drizzle-kit's own migrations table and skipped.
 
 ```ts
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";

@@ -1,18 +1,20 @@
+// components/site-header.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
 import { useMagnetic } from "@/lib/use-magnetic";
+import type { HeaderContent } from "@/lib/content/defaults";
 
-const NAV_LINKS: Array<{ href: string; nl: string; en: string }> = [
-  { href: "#verhaal", nl: "Het verhaal", en: "Our story" },
-  { href: "#proces", nl: "Het proces", en: "The process" },
-  { href: "#wijnen", nl: "Wijnen", en: "Wines" },
-  { href: "#bedrijven", nl: "Voor bedrijven", en: "For businesses" },
-  { href: "#bezoek", nl: "Bezoek", en: "Visit" },
+const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
+  { href: "#verhaal", fieldKey: "nav_1_label" },
+  { href: "#proces", fieldKey: "nav_2_label" },
+  { href: "#wijnen", fieldKey: "nav_3_label" },
+  { href: "#bedrijven", fieldKey: "nav_4_label" },
+  { href: "#bezoek", fieldKey: "nav_5_label" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ content }: { content: HeaderContent }) {
   const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const magneticRef = useMagnetic();
@@ -35,7 +37,7 @@ export function SiteHeader() {
       <nav className="site-nav" aria-label="Main Navigation">
         {NAV_LINKS.map((link) => (
           <a key={link.href} href={link.href}>
-            {t(link.nl, link.en)}
+            {t(content[link.fieldKey].nl, content[link.fieldKey].en)}
           </a>
         ))}
 
@@ -62,7 +64,7 @@ export function SiteHeader() {
         </div>
 
         <a className="nav-cta" ref={magneticRef as React.RefObject<HTMLAnchorElement>} href="#paden">
-          {t("Boek een tasting", "Book a tasting")}
+          {t(content.cta_label.nl, content.cta_label.en)}
         </a>
       </nav>
     </header>

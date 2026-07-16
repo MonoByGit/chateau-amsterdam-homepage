@@ -8,22 +8,38 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1088.0",
+    "@aws-sdk/s3-request-presigner": "^3.1088.0",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.10",
+    "pg": "^8.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.6.0",
+    "@tailwindcss/postcss": "^4.3.2",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "vitest": "^2.1.0",
     "@vitejs/plugin-react": "^4.3.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/jest-dom": "^6.6.0",
-    "jsdom": "^25.0.0"
+    "aws-sdk-client-mock": "^4.1.0",
+    "dotenv": "^16",
+    "drizzle-kit": "^0.31.10",
+    "jsdom": "^25.0.0",
+    "postcss": "^8",
+    "tailwindcss": "^4.3.2",
+    "tsx": "^4",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
   }
 }

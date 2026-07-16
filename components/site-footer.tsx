@@ -1,8 +1,10 @@
+// components/site-footer.tsx
 "use client";
 
 import { useLanguage } from "@/lib/language";
+import type { FooterContent } from "@/lib/content/defaults";
 
-export function SiteFooter() {
+export function SiteFooter({ content }: { content: FooterContent }) {
   const { t } = useLanguage();
 
   return (
@@ -14,23 +16,18 @@ export function SiteFooter() {
       <div className="footer-grid">
         <div>
           <h4>Chateau Amsterdam</h4>
-          <p className="footer-note">
-            {t(
-              "Urban winery aan het IJ. Druiven uit heel Europa, wijn uit Noord, sinds 2017.",
-              "Urban winery on the IJ. Grapes from all over Europe, wine from Amsterdam-Noord, since 2017."
-            )}
-          </p>
+          <p className="footer-note">{t(content.footer_note.nl, content.footer_note.en)}</p>
         </div>
         <div>
-          <h4>{t("Ontdek", "Discover")}</h4>
-          <a href="#verhaal">{t("Het verhaal", "Our story")}</a>
-          <a href="#proces">{t("Het proces", "The process")}</a>
-          <a href="#wijnen">{t("De collectie", "The collection")}</a>
+          <h4>{t(content.discover_heading.nl, content.discover_heading.en)}</h4>
+          <a href="#verhaal">{t(content.discover_link_1.nl, content.discover_link_1.en)}</a>
+          <a href="#proces">{t(content.discover_link_2.nl, content.discover_link_2.en)}</a>
+          <a href="#wijnen">{t(content.discover_link_3.nl, content.discover_link_3.en)}</a>
         </div>
         <div>
-          <h4>{t("Doen", "Do")}</h4>
+          <h4>{t(content.do_heading.nl, content.do_heading.en)}</h4>
           <a href="#paden">Tours &amp; tastings</a>
-          <a href="#bedrijven">{t("Voor bedrijven", "For businesses")}</a>
+          <a href="#bedrijven">{t(content.do_link_2.nl, content.do_link_2.en)}</a>
           <a href="#wijnen">Webshop</a>
         </div>
         <div>

@@ -1,11 +1,13 @@
+// components/wines-preview.tsx
 "use client";
 
 import { useCallback } from "react";
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useMagnetic } from "@/lib/use-magnetic";
+import type { WinesContent } from "@/lib/content/defaults";
 
-const WINES: Array<{
+export type WineCardData = {
   n: string;
   meta: string;
   name: string;
@@ -15,15 +17,9 @@ const WINES: Array<{
   img: string;
   alt: string;
   delay: number;
-}> = [
-  { n: "N°01", meta: "Wit · Pfalz, DE", name: "Riesling", nlTag: "de klassieker", enTag: "the classic", price: "€ 16,50", img: "/assets/wine-1.png", alt: "Riesling White Wine Bottle Packshot", delay: 0 },
-  { n: "N°02", meta: "Wit · blend, DE × ES", name: "Riesling × Moscatel", nlTag: "kan alleen in Noord", enTag: "only in North", price: "€ 18,-", img: "/assets/wine-2.png", alt: "Riesling Moscatel Blend White Wine Bottle Packshot", delay: 0.08 },
-  { n: "N°03", meta: "Rood · Bourgogne-stijl", name: "Pinot Noir", nlTag: "op eik gerijpt", enTag: "aged in oak", price: "€ 19,50", img: "/assets/wine-3.png", alt: "Pinot Noir Red Wine Bottle Packshot", delay: 0.16 },
-  { n: "N°04", meta: "Oranje · skin contact", name: "Amber Blend", nlTag: "voor de avonturiers", enTag: "for the adventurers", price: "€ 17,50", img: "/assets/wine-4.png", alt: "Amber Blend Orange Wine Bottle Packshot", delay: 0.24 },
-  { n: "N°05", meta: "Sprankel · zero waste", name: "Piquette d'Amsterdam", nlTag: "tweede leven van de schil", enTag: "second life of the grape skin", price: "€ 12,50", img: "/assets/wine-5.png", alt: "Piquette d'Amsterdam Sparkling Wine Bottle Packshot", delay: 0.32 },
-];
+};
 
-function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "en" }) {
+function WineCard({ wine, lang }: { wine: WineCardData; lang: "nl" | "en" }) {
   const reveal = useReveal(wine.delay);
   return (
     <article ref={reveal.ref as React.RefObject<HTMLElement>} className={`wine-card rv${reveal.isVisible ? " in" : ""}`}>
@@ -41,7 +37,7 @@ function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "
   );
 }
 
-export function WinesPreview() {
+export function WinesPreview({ content, wines }: { content: WinesContent; wines: WineCardData[] }) {
   const { lang, t } = useLanguage();
   const heading1 = useReveal();
   const heading2 = useReveal(0.12);
@@ -64,26 +60,26 @@ export function WinesPreview() {
       <div className="wines-head">
         <div>
           <div className="label rv in">
-            {t("De collectie", "The collection")} <span className="en">· made in Noord</span>
+            {t(content.label.nl, content.label.en)} <span className="en">· made in Noord</span>
           </div>
           <h2>
             <span ref={heading1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading1.isVisible ? " in" : ""}`}>
-              <span>{t("Van klassiek", "From classic")}</span>
+              <span>{t(content.heading_line1.nl, content.heading_line1.en)}</span>
             </span>
             <span ref={heading2.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading2.isVisible ? " in" : ""}`}>
               <span>
-                {t("tot ", "to ")}
-                <em>{t("eigenwijs.", "rebellious.")}</em>
+                {t(content.heading_line2_lead.nl, content.heading_line2_lead.en)}
+                <em>{t(content.heading_line2_em.nl, content.heading_line2_em.en)}</em>
               </span>
             </span>
           </h2>
         </div>
         <a ref={setCtaRef} className={`btn rv${cta.isVisible ? " in" : ""}`} href="#wijnen">
-          {t("Shop alle wijnen", "Shop all wines")} <span className="arr">→</span>
+          {t(content.cta_label.nl, content.cta_label.en)} <span className="arr">→</span>
         </a>
       </div>
       <div className="wine-row">
-        {WINES.map((wine) => (
+        {wines.map((wine) => (
           <WineCard key={wine.n} wine={wine} lang={lang} />
         ))}
       </div>
