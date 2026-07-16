@@ -2,6 +2,7 @@
 import { listMedia } from "@/lib/db/media";
 import { getObjectUrl } from "@/lib/storage/s3";
 import { uploadMedia } from "./actions";
+import { UploadDropzone } from "./upload-dropzone";
 
 export default async function MediaPage({
   searchParams,
@@ -18,41 +19,31 @@ export default async function MediaPage({
     <div>
       <h1 className="a-h1">Media</h1>
       <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>
-        Upload afbeeldingen voor gebruik bij wijnen.
+        Alle geüploade foto&apos;s. Bij een wijn kun je meestal direct uploaden — deze pagina is er voor het
+        overzicht, of voor een foto die je nog niet bij een wijn hebt gekozen.
       </p>
 
       {error ? <p className="a-alert a-alert--danger" style={{ marginBottom: "1.25rem" }}>{error}</p> : null}
 
-      <form
-        action={uploadMedia}
-        encType="multipart/form-data"
-        className="a-card"
-        style={{ padding: "1.25rem", display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "1rem" }}
-      >
-        <label className="a-field" style={{ flex: "1 1 12rem" }}>
-          <span className="a-label">
-            Afbeelding
-          </span>
-          <input required type="file" id="file" name="file" accept="image/jpeg,image/png,image/webp" style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }} />
-        </label>
-        <label className="a-field" style={{ flex: "1 1 10rem" }}>
-          <span className="a-label">
-            Alt-tekst (NL)
-          </span>
-          <input type="text" id="altTextNl" name="altTextNl" className="a-input" />
-        </label>
-        <label className="a-field" style={{ flex: "1 1 10rem" }}>
-          <span className="a-label">
-            Alt-tekst (EN)
-          </span>
-          <input type="text" id="altTextEn" name="altTextEn" className="a-input" />
-        </label>
-        <button type="submit" className="a-btn a-btn--primary">
+      <form action={uploadMedia} encType="multipart/form-data" className="a-card" style={{ padding: "1.5rem", maxWidth: "28rem" }}>
+        <UploadDropzone />
+        <div style={{ display: "grid", gap: "1rem", marginTop: "1.25rem" }}>
+          <label className="a-field">
+            <span className="a-label">Alt-tekst (NL)</span>
+            <span className="a-hint">Korte omschrijving voor schermlezers, bijv. &ldquo;Riesling fles&rdquo;.</span>
+            <input type="text" id="altTextNl" name="altTextNl" className="a-input" />
+          </label>
+          <label className="a-field">
+            <span className="a-label">Alt-tekst (EN)</span>
+            <input type="text" id="altTextEn" name="altTextEn" className="a-input" />
+          </label>
+        </div>
+        <button type="submit" className="a-btn a-btn--primary" style={{ marginTop: "1.25rem" }}>
           Uploaden
         </button>
       </form>
 
-      <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
+      <div style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
         {itemsWithUrls.map((item) => (
           <figure key={item.id} className="a-card" style={{ overflow: "hidden", margin: 0 }}>
             <img src={item.url} alt={item.altTextNl || item.filename} style={{ aspectRatio: "1 / 1", width: "100%", objectFit: "cover", display: "block" }} />

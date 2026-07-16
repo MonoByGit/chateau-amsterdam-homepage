@@ -41,7 +41,7 @@ export default async function ReservationDetailPage({
   const nextStatuses = ALL_STATUSES.filter((s) => isValidTransition(reservation.status, s));
 
   return (
-    <div style={{ maxWidth: "36rem" }}>
+    <div style={{ maxWidth: "40rem", margin: "0 auto" }}>
       <Link href="/admin/reservations" className="a-link" style={{ fontSize: "0.8125rem" }}>
         ← Reserveringen
       </Link>

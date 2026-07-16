@@ -33,7 +33,7 @@ export function WineFormWizard({
   const stepIndex = STEPS.findIndex((s) => s.key === step);
 
   return (
-    <form action={saveWine} style={{ maxWidth: "40rem" }}>
+    <form action={saveWine} style={{ maxWidth: "40rem", margin: "0 auto" }}>
       {wine ? <input type="hidden" name="id" value={wine.id} /> : null}
       {error ? (
         <p className="a-alert a-alert--danger" style={{ marginBottom: "1.25rem" }}>

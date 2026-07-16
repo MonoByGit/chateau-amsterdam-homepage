@@ -56,7 +56,12 @@ export default async function ReservationsPage({
 
   return (
     <div>
-      <h1 className="a-h1">Reserveringen</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <h1 className="a-h1">Reserveringen</h1>
+        <Link href="/admin/reservations/geschiedenis" className="a-link" style={{ fontSize: "0.8125rem" }}>
+          Geschiedenis →
+        </Link>
+      </div>
 
       <div className="a-filter-bar" style={{ marginTop: "1.25rem", marginBottom: "1.5rem" }}>
         <div className="a-filter-row">

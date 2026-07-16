@@ -6,12 +6,14 @@ import Link from "next/link";
 import type { Wine } from "@/lib/db/wines";
 import { deleteWine, reorderWinesTo } from "./actions";
 
-export function WinesList({ wines: initialWines }: { wines: Wine[] }) {
+type WineWithImage = Wine & { imageUrl: string | null; imageAlt: string };
+
+export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
   const [wines, setWines] = useState(initialWines);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
-  function commitOrder(next: Wine[]) {
+  function commitOrder(next: WineWithImage[]) {
     setWines(next);
     startTransition(() => {
       reorderWinesTo(next.map((w) => w.id));
@@ -92,6 +94,12 @@ export function WinesList({ wines: initialWines }: { wines: Wine[] }) {
             </svg>
           </button>
 
+          {wine.imageUrl ? (
+            <img src={wine.imageUrl} alt={wine.imageAlt} className="a-thumb" />
+          ) : (
+            <div className="a-thumb a-thumb--empty" aria-hidden="true" />
+          )}
+
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="a-label">{wine.name}</div>
             <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
@@ -104,7 +112,7 @@ export function WinesList({ wines: initialWines }: { wines: Wine[] }) {
             {wine.isActive ? "Actief" : "Inactief"}
           </span>
 
-          <div style={{ display: "flex", gap: "1rem" }}>
+          <div className="a-row-actions">
             <Link href={`/admin/wines/${wine.id}`} className="a-link" style={{ fontSize: "0.8125rem" }}>
               Bewerken
             </Link>

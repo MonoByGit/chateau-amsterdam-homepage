@@ -1,10 +1,24 @@
 // app/admin/wines/page.tsx
 import Link from "next/link";
 import { listWines } from "@/lib/db/wines";
+import { listMedia } from "@/lib/db/media";
+import { getObjectUrl } from "@/lib/storage/s3";
 import { WinesList } from "./wines-list";
 
 export default async function WinesListPage() {
-  const wines = await listWines({});
+  const [wines, mediaRows] = await Promise.all([listWines({}), listMedia()]);
+  const mediaById = new Map(mediaRows.map((m) => [m.id, m]));
+
+  const winesWithImages = await Promise.all(
+    wines.map(async (wine) => {
+      const image = wine.imageId ? mediaById.get(wine.imageId) : null;
+      return {
+        ...wine,
+        imageUrl: image ? await getObjectUrl(image.storageKey) : null,
+        imageAlt: image?.altTextNl || wine.name,
+      };
+    })
+  );
 
   return (
     <div>
@@ -17,7 +31,7 @@ export default async function WinesListPage() {
       <p className="a-subtitle">Sleep aan de handgreep om de volgorde op de site aan te passen.</p>
 
       <div style={{ marginTop: "1.5rem" }}>
-        <WinesList wines={wines} />
+        <WinesList wines={winesWithImages} />
       </div>
     </div>
   );

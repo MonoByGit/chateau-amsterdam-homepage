@@ -83,7 +83,7 @@ export default async function AvailabilityPage({
         <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.75rem", color: "var(--a-text-2)" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
-              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-border)", display: "inline-block" }} />
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-success-soft)", border: "1px solid var(--a-success)", display: "inline-block" }} />
               Beschikbaar
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
