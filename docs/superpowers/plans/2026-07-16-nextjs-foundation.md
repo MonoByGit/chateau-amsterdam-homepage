@@ -43,7 +43,7 @@ chateau-homepage/
 └── package.json
 ```
 
-The old `index.html`, `src/main.js`, `src/main.css`, `vite.config.js` are deleted at the end of Task 1 once the Next.js scaffold builds — everything in this plan replaces them section by section, so nothing is lost mid-port.
+The old `vite.config.js` is removed in Task 1. `src/main.css` is removed in Task 2 once its content is ported to `app/globals.css`. `src/main.js` and `index.html` stay in place until Task 10, once every component they'd otherwise conflict with exists — deleting them earlier would leave nothing deployable mid-port.
 
 ---
 
@@ -1987,7 +1987,7 @@ git commit -m "feat: port homepage sections to React components"
 - Create: `app/layout.tsx`
 - Create: `app/page.tsx`
 - Modify: move `public/assets/*`, `public/icons.svg`, `public/favicon.svg` (already in `public/`, no change needed — Next.js serves `public/` at the root automatically, same as the current setup)
-- Delete: `index.html`
+- Delete: `index.html`, `src/main.js`
 
 - [ ] **Step 1: Write `app/layout.tsx`**
 
@@ -2113,8 +2113,10 @@ export default function HomePage() {
 - [ ] **Step 4: Delete the old entry point**
 
 ```bash
-rm index.html
+rm index.html src/main.js
 ```
+
+`src/main.js` is fully superseded by this point — every behavior it implemented (language toggle, reveals, parallax, magnetic buttons, counters, header scroll state) was ported to the hooks and components in Tasks 3–9, and nothing in the Next.js app references it.
 
 - [ ] **Step 5: Confirm assets are already in place**
 
