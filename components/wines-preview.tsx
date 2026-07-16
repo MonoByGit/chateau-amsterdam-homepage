@@ -7,9 +7,7 @@ import { useReveal } from "@/lib/use-reveal";
 import { useMagnetic } from "@/lib/use-magnetic";
 import type { WinesContent } from "@/lib/content/defaults";
 
-// Unchanged — owned by a different chunk (Shopify integration). Do not edit
-// as part of this task.
-const WINES: Array<{
+export type WineCardData = {
   n: string;
   meta: string;
   name: string;
@@ -19,16 +17,9 @@ const WINES: Array<{
   img: string;
   alt: string;
   delay: number;
-}> = [
-  { n: "N°01", meta: "Wit · Pfalz, DE", name: "Riesling", nlTag: "de klassieker", enTag: "the classic", price: "€ 16,50", img: "/assets/wine-1.png", alt: "Riesling White Wine Bottle Packshot", delay: 0 },
-  { n: "N°02", meta: "Wit · blend, DE × ES", name: "Riesling × Moscatel", nlTag: "kan alleen in Noord", enTag: "only in North", price: "€ 18,-", img: "/assets/wine-2.png", alt: "Riesling Moscatel Blend White Wine Bottle Packshot", delay: 0.08 },
-  { n: "N°03", meta: "Rood · Bourgogne-stijl", name: "Pinot Noir", nlTag: "op eik gerijpt", enTag: "aged in oak", price: "€ 19,50", img: "/assets/wine-3.png", alt: "Pinot Noir Red Wine Bottle Packshot", delay: 0.16 },
-  { n: "N°04", meta: "Oranje · skin contact", name: "Amber Blend", nlTag: "voor de avonturiers", enTag: "for the adventurers", price: "€ 17,50", img: "/assets/wine-4.png", alt: "Amber Blend Orange Wine Bottle Packshot", delay: 0.24 },
-  { n: "N°05", meta: "Sprankel · zero waste", name: "Piquette d'Amsterdam", nlTag: "tweede leven van de schil", enTag: "second life of the grape skin", price: "€ 12,50", img: "/assets/wine-5.png", alt: "Piquette d'Amsterdam Sparkling Wine Bottle Packshot", delay: 0.32 },
-];
+};
 
-// Unchanged — owned by a different chunk.
-function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "en" }) {
+function WineCard({ wine, lang }: { wine: WineCardData; lang: "nl" | "en" }) {
   const reveal = useReveal(wine.delay);
   return (
     <article ref={reveal.ref as React.RefObject<HTMLElement>} className={`wine-card rv${reveal.isVisible ? " in" : ""}`}>
@@ -46,7 +37,7 @@ function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "
   );
 }
 
-export function WinesPreview({ content }: { content: WinesContent }) {
+export function WinesPreview({ content, wines }: { content: WinesContent; wines: WineCardData[] }) {
   const { lang, t } = useLanguage();
   const heading1 = useReveal();
   const heading2 = useReveal(0.12);
@@ -88,7 +79,7 @@ export function WinesPreview({ content }: { content: WinesContent }) {
         </a>
       </div>
       <div className="wine-row">
-        {WINES.map((wine) => (
+        {wines.map((wine) => (
           <WineCard key={wine.n} wine={wine} lang={lang} />
         ))}
       </div>
