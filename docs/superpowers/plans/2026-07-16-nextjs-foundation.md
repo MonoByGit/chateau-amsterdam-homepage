@@ -276,12 +276,25 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; border: 0; background: none; cursor: pointer; color: inherit; }
 
-/* ---------- background pattern ---------- */
+/* ---------- background pattern (tweakable) ---------- */
 .bg-pattern {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   opacity: var(--pattern-o, 0.04);
+}
+body[data-pattern="raster"] .bg-pattern {
+  background-image:
+    linear-gradient(var(--theme-pattern-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--theme-pattern-color) 1px, transparent 1px);
+  background-size: 88px 88px;
+}
+body[data-pattern="stippen"] .bg-pattern {
+  background-image: radial-gradient(var(--theme-pattern-color) 1.1px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+body[data-pattern="arcering"] .bg-pattern {
   background-image: repeating-linear-gradient(45deg, var(--theme-pattern-color) 0 1px, transparent 1px 48px);
 }
+body[data-pattern="uit"] .bg-pattern { display: none; }
 
 /* ---------- grain ---------- */
 .grain {
@@ -432,6 +445,7 @@ button { font: inherit; border: 0; background: none; cursor: pointer; color: inh
   margin-top: clamp(28px, 5vh, 64px); position: relative;
 }
 .hero-title .row { display: flex; justify-content: center; align-items: baseline; gap: 0.35em; }
+.hero-title .row:nth-child(2) { justify-content: center; }
 
 .hero-script {
   position: absolute; z-index: 3; left: 50%; top: 50%;
@@ -474,6 +488,7 @@ button { font: inherit; border: 0; background: none; cursor: pointer; color: inh
   position: relative; z-index: 2; background: var(--theme-accent); color: var(--ink);
   overflow: hidden; white-space: nowrap; margin: 0 calc(-1 * var(--gutter));
   padding: 13px 0; user-select: none;
+  transition: background-color 0.4s var(--ease-out), color 0.4s;
 }
 .marquee-track { display: inline-flex; gap: 0; animation: marquee 30s linear infinite; }
 .marquee span {
@@ -550,7 +565,7 @@ button { font: inherit; border: 0; background: none; cursor: pointer; color: inh
 /* ============================================================
    PATHS — Taste / Pour / Drink
    ============================================================ */
-.paths { position: relative; z-index: 2; background: var(--theme-bg-dim); padding: clamp(90px, 14vh, 170px) 0 clamp(70px, 10vh, 130px); }
+.paths { position: relative; z-index: 2; background: var(--theme-bg-dim); padding: clamp(90px, 14vh, 170px) 0 clamp(70px, 10vh, 130px); transition: background-color 0.4s var(--ease-out); }
 .paths .label { padding: 0 var(--gutter); }
 .paths-intro { padding: 0 var(--gutter); margin-top: 30px; margin-bottom: clamp(40px, 7vh, 80px); display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; }
 .paths-intro h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: clamp(38px, 5.4vw, 90px); line-height: 0.94; }
@@ -607,7 +622,7 @@ button { font: inherit; border: 0; background: none; cursor: pointer; color: inh
   flex: 0 0 clamp(240px, 24vw, 320px); scroll-snap-align: start;
   background: var(--theme-bg-card); border: 1px solid var(--theme-border);
   z-index: 2; padding: 26px 26px 30px; position: relative;
-  transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+  transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out), background-color 0.4s var(--ease-out), border-color 0.4s;
 }
 .wine-card:hover { transform: translateY(-10px) rotate(-1deg); box-shadow: 0 30px 60px -30px rgba(23,20,14,0.35); }
 @media (prefers-color-scheme: dark) { .wine-card:hover { box-shadow: 0 30px 60px -30px rgba(0,0,0,0.65); } }
@@ -618,6 +633,8 @@ button { font: inherit; border: 0; background: none; cursor: pointer; color: inh
 .wine-card .tag { font-family: var(--font-serif); font-style: italic; color: var(--accent-badge); font-size: 17px; margin-top: 4px; }
 @media (prefers-color-scheme: dark) { .wine-card .tag { color: var(--theme-accent); } }
 .wine-card .price { font-family: var(--font-mono); font-size: 13px; margin-top: 14px; color: var(--theme-fg-muted); }
+
+.wines-foot { padding: 10px var(--gutter) 0; display: flex; gap: 14px; }
 
 /* ============================================================
    DE PLEK
