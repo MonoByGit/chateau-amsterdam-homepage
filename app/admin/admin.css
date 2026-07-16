@@ -756,9 +756,34 @@ a.a-card-row:hover {
 .a-row-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.375rem;
   padding-left: 1rem;
   border-left: 1px solid var(--a-border);
+}
+
+.a-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--a-r-sharp);
+  border: none;
+  background: none;
+  color: var(--a-text-2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.a-icon-btn:hover {
+  background: var(--a-border);
+  color: var(--a-text);
+}
+
+.a-icon-btn--danger:hover {
+  background: var(--a-danger-soft);
+  color: var(--a-danger);
 }
 
 /* Filter bar */
@@ -821,51 +846,136 @@ a.a-card-row:hover {
   color: var(--a-accent-text);
 }
 
-/* Small screens — a basic, not-broken layout. This admin is used almost
-   exclusively on desktop, so this isn't a full mobile redesign, just
-   enough that a phone doesn't render an unusably squeezed sidebar. */
+/* Mobile top bar + slide-down drawer — hidden on desktop, where the
+   sidebar (above) is the nav. Below 768px this replaces the sidebar
+   entirely instead of trying to squeeze it into a wrapping strip. */
+
+.a-mobile-bar {
+  display: none;
+}
 
 @media (max-width: 768px) {
+  .a-sidebar,
+  .a-topbar {
+    display: none;
+  }
+
   .a-shell {
     flex-direction: column;
   }
 
-  .a-sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-    flex-direction: row;
-    flex-wrap: wrap;
+  .a-mobile-bar {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 0.875rem 1.25rem;
+    background: var(--a-nav-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--a-nav-border);
+  }
+
+  .a-mobile-brand {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--a-nav-text);
+    letter-spacing: -0.01em;
+  }
+
+  .a-mobile-toggle {
+    background: none;
+    border: none;
+    color: var(--a-nav-text);
+    padding: 0.375rem;
+    cursor: pointer;
+    display: flex;
+  }
+
+  .a-mobile-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    top: 3.375rem;
+    z-index: 19;
+    background: rgba(23, 20, 14, 0.5);
+  }
+
+  .a-mobile-drawer {
+    background: var(--a-nav-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--a-nav-border);
     padding: 0.75rem;
-    gap: 0.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: calc(100vh - 3.375rem);
+    overflow-y: auto;
   }
 
-  .a-brand {
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-  }
-
-  .a-nav-section-label {
-    display: none;
+  .a-mobile-drawer-user {
+    font-size: 0.75rem;
+    color: var(--a-nav-text-2);
+    padding: 0.5rem 0.75rem 0.75rem;
   }
 
   .a-nav-link {
-    padding: 0.375rem 0.625rem;
-  }
-
-  .a-sidebar-footer {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-    margin-left: auto;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9375rem;
   }
 
   .a-content {
     padding: 1.25rem;
   }
+}
 
-  .a-topbar {
-    padding: 0.75rem 1.25rem;
-  }
+/* Lightbox */
+
+.a-lightbox-trigger {
+  transition: opacity 0.15s ease;
+}
+
+.a-lightbox-trigger:hover {
+  opacity: 0.85;
+}
+
+.a-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(23, 20, 14, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: zoom-out;
+}
+
+.a-lightbox-image {
+  max-width: min(90vw, 720px);
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--a-r-sharp);
+  cursor: default;
+  box-shadow: var(--a-shadow-md);
+}
+
+.a-lightbox-close {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: #f1ece1;
+  background: rgba(241, 236, 225, 0.12);
+  border: none;
+  border-radius: var(--a-r-full);
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+}
+
+.a-lightbox-close:hover {
+  background: rgba(241, 236, 225, 0.22);
 }

@@ -45,6 +45,7 @@ export async function saveWine(formData: FormData): Promise<void> {
   }
 
   revalidatePath("/admin/wines");
+  revalidatePath("/admin");
   revalidatePath("/");
   redirect("/admin/wines");
 }
@@ -81,6 +82,7 @@ export async function deleteWine(formData: FormData): Promise<void> {
   const id = String(formData.get("id"));
   await deleteWineRow(id);
   revalidatePath("/admin/wines");
+  revalidatePath("/admin");
   revalidatePath("/");
 }
 

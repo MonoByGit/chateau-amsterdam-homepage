@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
-type NavItem = { href: string; label: string; icon: ReactNode };
+export type NavItem = { href: string; label: string; icon: ReactNode };
 
 // Ordered by how often a small team actually opens each section, not by
 // concept — reservations and availability change daily, wines occasionally,
 // homepage copy rarely. Landing on the least-used section first was itself
 // part of the problem.
-const PRIMARY_ITEMS: NavItem[] = [
+export const PRIMARY_ITEMS: NavItem[] = [
   {
     href: "/admin",
     label: "Overzicht",
@@ -71,7 +71,7 @@ const PRIMARY_ITEMS: NavItem[] = [
 // a photo for a wine (which now has its own inline upload). Kept as a
 // secondary, lower-priority link for the rare case of browsing everything
 // that's been uploaded, not promoted alongside the daily-use sections.
-const SECONDARY_ITEMS: NavItem[] = [
+export const SECONDARY_ITEMS: NavItem[] = [
   {
     href: "/admin/media",
     label: "Media",
@@ -85,14 +85,14 @@ const SECONDARY_ITEMS: NavItem[] = [
   },
 ];
 
-function isActive(pathname: string | null, href: string): boolean {
+export function isActive(pathname: string | null, href: string): boolean {
   if (href === "/admin") return pathname === "/admin";
   return pathname === href || pathname?.startsWith(`${href}/`) || false;
 }
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+export function NavLink({ item, active, onClick }: { item: NavItem; active: boolean; onClick?: () => void }) {
   return (
-    <Link href={item.href} className={`a-nav-link${active ? " is-active" : ""}`}>
+    <Link href={item.href} className={`a-nav-link${active ? " is-active" : ""}`} onClick={onClick}>
       <span className="a-nav-icon">{item.icon}</span>
       {item.label}
     </Link>

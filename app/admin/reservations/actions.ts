@@ -8,4 +8,5 @@ export async function updateStatus(id: string, status: ReservationStatus): Promi
   await updateReservationStatus(id, status);
   revalidatePath("/admin/reservations");
   revalidatePath(`/admin/reservations/${id}`);
+  revalidatePath("/admin");
 }

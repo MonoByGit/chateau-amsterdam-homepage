@@ -6,6 +6,7 @@ import { validateSession } from "@/lib/db/sessions";
 import { findUserById } from "@/lib/db/users";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session-cookie";
 import { AdminNav } from "./nav";
+import { MobileNav } from "./mobile-nav";
 import { logout } from "./actions";
 
 // Same type family as the public site (app/(site)/layout.tsx), loaded
@@ -31,6 +32,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   return (
     <html lang="nl" className={`${archivo.variable} ${ibmPlexMono.variable}`}>
       <body>
+        <MobileNav userEmail={user.email} />
         <div className="a-shell">
           <aside className="a-sidebar">
             <div className="a-brand">Chateau Amsterdam</div>

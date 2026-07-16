@@ -1,6 +1,7 @@
 // app/admin/media/page.tsx
 import { listMedia } from "@/lib/db/media";
 import { getObjectUrl } from "@/lib/storage/s3";
+import { LightboxImage } from "@/components/admin/lightbox";
 import { uploadMedia } from "./actions";
 import { UploadDropzone } from "./upload-dropzone";
 
@@ -46,7 +47,11 @@ export default async function MediaPage({
       <div style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
         {itemsWithUrls.map((item) => (
           <figure key={item.id} className="a-card" style={{ overflow: "hidden", margin: 0 }}>
-            <img src={item.url} alt={item.altTextNl || item.filename} style={{ aspectRatio: "1 / 1", width: "100%", objectFit: "cover", display: "block" }} />
+            <LightboxImage
+              src={item.url}
+              alt={item.altTextNl || item.filename}
+              style={{ aspectRatio: "1 / 1", width: "100%", objectFit: "cover", display: "block" }}
+            />
             <figcaption style={{ padding: "0.5rem 0.625rem", fontSize: "0.75rem", color: "var(--a-text-2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {item.filename}
             </figcaption>

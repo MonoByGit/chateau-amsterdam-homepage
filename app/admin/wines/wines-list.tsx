@@ -4,6 +4,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import type { Wine } from "@/lib/db/wines";
+import { LightboxImage } from "@/components/admin/lightbox";
 import { deleteWine, reorderWinesTo } from "./actions";
 
 type WineWithImage = Wine & { imageUrl: string | null; imageAlt: string };
@@ -95,7 +96,7 @@ export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
           </button>
 
           {wine.imageUrl ? (
-            <img src={wine.imageUrl} alt={wine.imageAlt} className="a-thumb" />
+            <LightboxImage src={wine.imageUrl} alt={wine.imageAlt} className="a-thumb" />
           ) : (
             <div className="a-thumb a-thumb--empty" aria-hidden="true" />
           )}
@@ -113,13 +114,17 @@ export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
           </span>
 
           <div className="a-row-actions">
-            <Link href={`/admin/wines/${wine.id}`} className="a-link" style={{ fontSize: "0.8125rem" }}>
-              Bewerken
+            <Link href={`/admin/wines/${wine.id}`} className="a-icon-btn" aria-label={`${wine.name} bewerken`} title="Bewerken">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
             </Link>
             <form action={deleteWine}>
               <input type="hidden" name="id" value={wine.id} />
-              <button type="submit" className="a-btn a-btn--danger" style={{ padding: "0.125rem 0", fontSize: "0.8125rem" }}>
-                Verwijderen
+              <button type="submit" className="a-icon-btn a-icon-btn--danger" aria-label={`${wine.name} verwijderen`} title="Verwijderen">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-8 0 1 12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-12" />
+                </svg>
               </button>
             </form>
           </div>
