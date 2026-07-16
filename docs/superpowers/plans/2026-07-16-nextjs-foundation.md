@@ -2376,6 +2376,15 @@ git commit -m "fix: visual QA corrections after Next.js port"
 
 (Skip this step if Step 2 found nothing to fix.)
 
+**Verification results (2026-07-16):** `npm run dev` and a from-scratch `npm run build && PORT=3001 npm run start` both succeeded; the production server responded `200` and served real page content (verified via `curl`). Visual comparison against `https://chateau-amsterdam-homepage-production.up.railway.app/` confirmed:
+- Header, nav, language toggle, and hero all match the reference exactly, including the yellow "de urban winery" script accent.
+- The specific reported bug — the "Our Story" section staying bordeaux — is fixed: `getComputedStyle` on `.manifest .label`, `.manifest-title .alt`, `.place-inner .label`, `.footer-cheers em`, `.footer-grid h4`, and `.btn--primary`'s background all resolve to `rgb(255, 204, 0)` (`#FFCC00`), with `.wine-card .tag` correctly resolving to the darker `rgb(196, 154, 0)` (`#C49A00`) badge variant — confirmed in both NL and EN.
+- Language toggle (NL → EN) correctly updates `document.documentElement.lang`, nav/CTA/hero/footer copy, and persists.
+- Mobile viewport (375×812) layout — including a large empty gap below the hero's script tagline — matches the live reference's own mobile layout pixel-for-pixel in structure; this is a pre-existing characteristic of `min-height: 100svh` on `.hero`, not a regression introduced by the port.
+- One session-specific tooling limitation: this session's Browser-pane screenshot capture reliably went blank for any scrolled viewport state (reproduced across gesture scroll, JS `scrollTo`, and keyboard `Page_Down`, across multiple tabs), while remaining fully reliable at `scrollY = 0` immediately after a fresh navigation. Compensated by verifying scrolled sections via `getComputedStyle`/`get_page_text`/DOM queries instead of pixel screenshots — arguably a more precise check for a color-value bug than eyeballing a screenshot would have been, but worth knowing about if a future session hits the same blank-screenshot symptom.
+
+No visual mismatches required a code fix at this stage (Step 4 skipped).
+
 ---
 
 ## Self-review notes
