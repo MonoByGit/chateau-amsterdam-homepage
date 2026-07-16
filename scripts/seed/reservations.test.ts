@@ -29,4 +29,12 @@ describe("seedReservations", () => {
     expect(zakelijk.some((r) => r.status === "nieuw")).toBe(true);
     expect(zakelijk.some((r) => r.status === "in_behandeling")).toBe(true);
   });
+
+  it("is idempotent: running it twice does not duplicate the sample reservations", async () => {
+    await seedReservations();
+    await seedReservations();
+
+    const all = await listReservations();
+    expect(all).toHaveLength(4);
+  });
 });
