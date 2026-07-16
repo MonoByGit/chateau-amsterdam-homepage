@@ -1011,6 +1011,7 @@ These reproduce continuous scroll/mouse-driven effects that are inherently about
 **Files:**
 - Create: `lib/use-parallax.ts`
 - Create: `lib/use-magnetic.ts`
+- Test: `lib/use-magnetic.test.tsx` (covers only the discrete branching/cleanup logic below — not the continuous mousemove physics, which stays untested for the same jsdom-can't-do-real-layout reason as the rest of this task)
 
 - [ ] **Step 1: Write `lib/use-parallax.ts`**
 
@@ -1029,6 +1030,7 @@ export function useParallax(speed = 0.1) {
     if (reduced) return;
 
     let ticking = false;
+    let rafId: number | undefined;
 
     function apply() {
       if (!el) return;
@@ -1046,13 +1048,16 @@ export function useParallax(speed = 0.1) {
     function onScroll() {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(apply);
+        rafId = requestAnimationFrame(apply);
       }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     apply();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+    };
   }, [speed]);
 
   return ref;
@@ -1076,6 +1081,8 @@ export function useMagnetic(strength = 0.3) {
     const hoverCapable = window.matchMedia("(hover: hover)").matches;
     if (reduced || !hoverCapable) return;
 
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
     function onMouseMove(e: MouseEvent) {
       if (!el) return;
       const r = el.getBoundingClientRect();
@@ -1088,7 +1095,7 @@ export function useMagnetic(strength = 0.3) {
       if (!el) return;
       el.style.transition = "translate 0.6s cubic-bezier(0.19,1,0.22,1)";
       el.style.translate = "0px 0px";
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         if (el) el.style.transition = "";
       }, 600);
     }
@@ -1098,6 +1105,7 @@ export function useMagnetic(strength = 0.3) {
     return () => {
       el.removeEventListener("mousemove", onMouseMove);
       el.removeEventListener("mouseleave", onMouseLeave);
+      if (timeout) clearTimeout(timeout);
     };
   }, [strength]);
 
@@ -1105,12 +1113,111 @@ export function useMagnetic(strength = 0.3) {
 }
 ```
 
-- [ ] **Step 3: Verify the project still typechecks**
+Note: both hooks hoist their pending timer/frame handle (`timeout`, `rafId`) to effect scope and clear them in the real `useEffect` cleanup — the same fix Task 4 needed for `useReveal`. Code review of an earlier draft of this task caught the identical bug shape reappearing here (a `mouseleave`-triggered `setTimeout` that was never tracked or cleared), which is why it's written correctly above rather than left as a trap for whoever reads this later.
+
+- [ ] **Step 3: Write `lib/use-magnetic.test.tsx`**
+
+Covers the branching/cleanup logic that IS meaningfully testable in jsdom (unlike the continuous mousemove math): reduced-motion gating, hover-capability gating, and the timeout-cleanup regression.
+
+```tsx
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { useMagnetic } from "./use-magnetic";
+
+function Probe({ strength = 0.3 }: { strength?: number }) {
+  const ref = useMagnetic(strength);
+  return (
+    <button ref={ref as React.RefObject<HTMLButtonElement>} data-testid="target">
+      CTA
+    </button>
+  );
+}
+
+function stubMatchMedia({ reducedMotion, hover }: { reducedMotion: boolean; hover: boolean }) {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("prefers-reduced-motion") ? reducedMotion : hover,
+      media: query,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }))
+  );
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  vi.useRealTimers();
+});
+
+describe("useMagnetic", () => {
+  it("does not attach mousemove/mouseleave listeners when prefers-reduced-motion is set", () => {
+    stubMatchMedia({ reducedMotion: true, hover: true });
+    const addSpy = vi.spyOn(Element.prototype, "addEventListener");
+
+    render(<Probe />);
+    const el = screen.getByTestId("target");
+    const eventsOnEl = addSpy.mock.calls
+      .filter((_, i) => addSpy.mock.contexts[i] === el)
+      .map((call) => call[0]);
+
+    expect(eventsOnEl).not.toContain("mousemove");
+    expect(eventsOnEl).not.toContain("mouseleave");
+  });
+
+  it("does not attach mousemove/mouseleave listeners when hover is not supported", () => {
+    stubMatchMedia({ reducedMotion: false, hover: false });
+    const addSpy = vi.spyOn(Element.prototype, "addEventListener");
+
+    render(<Probe />);
+    const el = screen.getByTestId("target");
+    const eventsOnEl = addSpy.mock.calls
+      .filter((_, i) => addSpy.mock.contexts[i] === el)
+      .map((call) => call[0]);
+
+    expect(eventsOnEl).not.toContain("mousemove");
+    expect(eventsOnEl).not.toContain("mouseleave");
+  });
+
+  it("clears the pending transition-reset timeout on unmount instead of leaving it dangling", () => {
+    stubMatchMedia({ reducedMotion: false, hover: true });
+    vi.useFakeTimers();
+
+    const { unmount } = render(<Probe />);
+    const el = screen.getByTestId("target");
+
+    fireEvent.mouseLeave(el);
+
+    // The transition-reset setTimeout scheduled in onMouseLeave should be
+    // the only pending timer at this point.
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+
+    // Effect cleanup must clear it — nothing left pending after unmount.
+    // This is the regression case for the bug where the timeout was
+    // scheduled inside onMouseLeave but never hoisted to effect scope,
+    // so cleanup could never clear it (same bug shape as use-reveal.ts).
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+```
+
+Note: the spy on `addEventListener` must be created *before* `render()`, and on `Element.prototype` (not the element instance, which doesn't exist yet) — spying on the element after render would silently miss every call made during the effect that runs on mount, making the "not called" assertions vacuously true regardless of whether the hook actually behaves correctly.
+
+- [ ] **Step 4: Verify the project still typechecks and tests pass**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+Run: `npx vitest run`
+Expected: all test files pass, including the new `lib/use-magnetic.test.tsx` (3 tests).
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add -A
