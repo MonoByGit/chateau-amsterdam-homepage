@@ -16,7 +16,7 @@ This plan assumes the following Railway resources already exist and are wired to
 
 - **Postgres** (`ghcr.io/railwayapp-templates/postgres-ssl:18`), with `DATABASE_URL` (private) and `DATABASE_PUBLIC_URL` (public proxy) set as variables on the app service.
 - **S3-compatible bucket** `chateau-media` (region `ams`), with `AWS_ENDPOINT_URL`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_S3_BUCKET_NAME`, `AWS_DEFAULT_REGION` set as variables on the app service.
-- **`.env.local`** (gitignored) already contains local-dev equivalents: `DATABASE_URL` pointing at a docker-compose Postgres (`postgresql://postgres:postgres@localhost:5432/chateau_dev`) and the same bucket credentials (the bucket is shared between local dev and production — only the database differs). `.env.local.example` (committed) documents the required keys with blank values.
+- **`.env.local`** (gitignored) already contains local-dev equivalents: `DATABASE_URL` pointing at a docker-compose Postgres (`postgresql://postgres:postgres@localhost:5433/chateau_dev` — host port `5433`, not the default `5432`, to avoid clashing with any other local Postgres install already using that port) and the same bucket credentials (the bucket is shared between local dev and production — only the database differs). `.env.local.example` (committed) documents the required keys with blank values.
 
 ---
 
@@ -105,13 +105,20 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: chateau_dev
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - chateau_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chateau_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
 
 volumes:
   chateau_pg_data:
 ```
+
+Bound to `127.0.0.1` only (not all interfaces) since this container uses default `postgres/postgres` credentials — no reason to expose it beyond localhost. Host port `5433` (not the standard `5432`) to avoid clashing with any other local Postgres install already using the default port on the development machine; only the host-side port differs; the container's own internal port stays `5432`.
 
 - [ ] **Step 5: Start local Postgres**
 
@@ -119,9 +126,9 @@ Run: `docker compose up -d postgres`
 Expected: image pulls (first run only) and the container starts.
 
 Run: `docker compose ps`
-Expected: the `postgres` service shows `STATUS` as `Up` (or `Up (healthy)`).
+Expected: the `postgres` service shows `STATUS` as `Up (healthy)`.
 
-`.env.local` already has `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/chateau_dev` pointing at this container — no env file changes needed here.
+`.env.local` already has `DATABASE_URL=postgresql://postgres:postgres@localhost:5433/chateau_dev` pointing at this container — no env file changes needed here.
 
 - [ ] **Step 6: Write `scripts/migrate.ts`**
 
@@ -281,8 +288,11 @@ export const availabilityBlocks = pgTable("availability_blocks", {
 
 - [ ] **Step 2: Write `drizzle.config.ts`**
 
+Same `.env.local` loading as `scripts/migrate.ts` (Task 1) — not the bare `dotenv/config` default, which reads a plain `.env` file that doesn't exist in this repo.
+
 ```ts
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
@@ -1465,14 +1475,17 @@ describe("upsertBlock + getBlocksForSection", () => {
   });
 
   it("records updatedBy when provided", async () => {
-    await upsertBlock(TEST_PAGE, "hero", "heading", "NL", "EN", "studio@monobydusty.com");
+    // content_blocks.updated_by is a UUID FK to users.id, not free text —
+    // seed a real user and assert against its id rather than an email string.
+    const editor = await createUser("content-editor@chateau.amsterdam", "hashed-password");
+    await upsertBlock(TEST_PAGE, "hero", "heading", "NL", "EN", editor.id);
 
     const [row] = await db
       .select({ updatedBy: contentBlocks.updatedBy })
       .from(contentBlocks)
       .where(eq(contentBlocks.page, TEST_PAGE));
 
-    expect(row.updatedBy).toBe("studio@monobydusty.com");
+    expect(row.updatedBy).toBe(editor.id);
   });
 });
 
@@ -3447,7 +3460,7 @@ git commit -m "feat: wire WinesPreview heading and CTA to CMS content"
 
 A thin wrapper around `@aws-sdk/client-s3` so every other task talks to object storage through two functions instead of the SDK directly. Real network calls to the bucket aren't a unit test; the S3 client is mocked with `aws-sdk-client-mock`, and real upload/fetch behavior is verified manually in Task 20's browser-verification step.
 
-**Assumption (flagged, not silently guessed):** `virtual-host` URL style means the bucket name is prepended as a subdomain of the endpoint host — `https://{bucket}.{endpoint-host}/{key}` — matching classic AWS virtual-hosted–style URLs (`https://bucket.s3.amazonaws.com/key`) and how S3-compatible providers configured with `forcePathStyle: false` construct object URLs. This is the standard shape for that config flag, but Railway's specific bucket add-on hasn't been confirmed to resolve DNS for a `{bucket}.{host}` subdomain — Task 20's manual verification step is where this gets confirmed against the real bucket; if the real upload isn't reachable at that URL, come back and adjust `getPublicUrl` to whatever shape does work (e.g. path-style `https://{host}/{bucket}/{key}`) before Task 24 wires it into the public homepage.
+**Correction confirmed against the real bucket (this is not the original draft's assumption — that assumption was wrong):** the original plan assumed a plain `getPublicUrl(key): string` would work once the virtual-host URL shape was right. Confirmed empirically instead: this Railway S3-compatible bucket has no public-read option at all — neither a `public-read` object ACL on `PutObjectCommand` nor an unauthenticated GET reaches the object; both return `AccessDenied`. The actual, verified fix is `getObjectUrl(key): Promise<string>`, an async function returning a presigned GET URL (`@aws-sdk/s3-request-presigner`, `expiresIn: 86400`). Every call site below and in Tasks 21/23/24 uses `getObjectUrl` (awaited), not `getPublicUrl`.
 
 **Files:**
 - Create: `lib/storage/s3.ts`
