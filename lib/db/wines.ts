@@ -1,6 +1,6 @@
 import { asc, eq, sql } from "drizzle-orm";
 import { db } from "./client";
-import { wines } from "./schema";
+import { media, wines } from "./schema";
 
 export type Wine = typeof wines.$inferSelect;
 
@@ -56,4 +56,34 @@ export async function reorderWines(orderedIds: string[]): Promise<void> {
       await tx.update(wines).set({ sortOrder: index }).where(eq(wines.id, id));
     }
   });
+}
+
+export type WineWithImage = Wine & {
+  imageStorageKey: string | null;
+  imageAltNl: string | null;
+  imageAltEn: string | null;
+};
+
+export async function getWinesForHomepage(): Promise<WineWithImage[]> {
+  return db
+    .select({
+      id: wines.id,
+      name: wines.name,
+      metaNl: wines.metaNl,
+      metaEn: wines.metaEn,
+      tagNl: wines.tagNl,
+      tagEn: wines.tagEn,
+      imageId: wines.imageId,
+      shopifyHandle: wines.shopifyHandle,
+      sortOrder: wines.sortOrder,
+      isActive: wines.isActive,
+      updatedAt: wines.updatedAt,
+      imageStorageKey: media.storageKey,
+      imageAltNl: media.altTextNl,
+      imageAltEn: media.altTextEn,
+    })
+    .from(wines)
+    .leftJoin(media, eq(wines.imageId, media.id))
+    .where(eq(wines.isActive, true))
+    .orderBy(asc(wines.sortOrder));
 }

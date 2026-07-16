@@ -1,8 +1,18 @@
 // lib/db/wines.test.ts
 import { afterEach, describe, expect, it } from "vitest";
 import { db } from "./client";
-import { wines } from "./schema";
-import { createWine, deleteWine, getWine, listWines, reorderWines, updateWine, type WineInput } from "./wines";
+import { media, wines } from "./schema";
+import { createMedia } from "./media";
+import {
+  createWine,
+  deleteWine,
+  getWine,
+  getWinesForHomepage,
+  listWines,
+  reorderWines,
+  updateWine,
+  type WineInput,
+} from "./wines";
 
 function wineInput(overrides: Partial<WineInput> = {}): WineInput {
   return {
@@ -77,5 +87,36 @@ describe("wines repository", () => {
     const rows = await listWines({});
     expect(rows.map((w) => w.id)).toEqual([c.id, a.id, b.id]);
     expect(rows.map((w) => w.sortOrder)).toEqual([0, 1, 2]);
+  });
+});
+
+describe("getWinesForHomepage", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+    await db.delete(media);
+  });
+
+  it("joins the linked media row and excludes inactive wines", async () => {
+    const image = await createMedia({
+      storageKey: "media/riesling.jpg",
+      filename: "riesling.jpg",
+      altTextNl: "Riesling fles",
+      altTextEn: "Riesling bottle",
+      uploadedBy: null,
+    });
+    const active = await createWine(wineInput({ name: "Actief", imageId: image.id, isActive: true }));
+    await createWine(wineInput({ name: "Inactief", isActive: false }));
+
+    const rows = await getWinesForHomepage();
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0].id).toBe(active.id);
+    expect(rows[0].imageStorageKey).toBe("media/riesling.jpg");
+    expect(rows[0].imageAltNl).toBe("Riesling fles");
+  });
+
+  it("returns an empty array when there are no active wines", async () => {
+    await createWine(wineInput({ isActive: false }));
+    expect(await getWinesForHomepage()).toEqual([]);
   });
 });
