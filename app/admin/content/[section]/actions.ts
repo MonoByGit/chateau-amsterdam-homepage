@@ -6,7 +6,7 @@ import { upsertBlock } from "@/lib/db/content";
 
 /**
  * Form fields are named `${fieldKey}__nl` / `${fieldKey}__en` by
- * content-form.tsx — grouping by that suffix here recovers the set of
+ * content-form.tsx, grouping by that suffix here recovers the set of
  * field_keys submitted without the page needing a separate hidden field
  * enumerating them.
  */

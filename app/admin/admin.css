@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
-/* Chateau Amsterdam — Admin design tokens.
+/* Chateau Amsterdam, Admin design tokens.
    Derived directly from the public site's own palette (app/globals.css:
-   ink / chalk paper / yellow — industrial × refined) rather than a
+   ink / chalk paper / yellow, industrial x refined) rather than a
    separate invented palette, so the admin reads as part of the same
    product instead of a generic tool bolted on the back.
 
    Two radii only, matching the public site's own convention exactly:
-   --a-r-sharp (2px, cards/inputs/images — the site uses 2px throughout)
-   --a-r-full (999px, buttons/badges/chips/pills only — the site's .btn
+   --a-r-sharp (2px, cards/inputs/images, the site uses 2px throughout)
+   --a-r-full (999px, buttons/badges/chips/pills only, the site's .btn
    and badges are always fully round, never anything in between).
 
    Light values default; dark values override via prefers-color-scheme,
@@ -34,7 +34,7 @@
   --a-warning-soft: rgba(181, 84, 15, 0.14);
   --a-shadow-md: 0 20px 40px -20px rgba(23, 20, 14, 0.35);
   /* Sidebar/topbar chrome is always the site's dark-ink scrolled-header
-     treatment, in both OS modes — see .site-header.is-scrolled in
+     treatment, in both OS modes, see .site-header.is-scrolled in
      globals.css. It frames a light-or-dark content canvas either way. */
   --a-nav-bg: rgba(23, 20, 14, 0.9);
   --a-nav-text: #f1ece1;
@@ -189,10 +189,15 @@ body {
   color: var(--a-nav-text-2);
 }
 
+/* One shared width for every page, list or form. Previously some pages
+   opted into "maxWidth: none" (full-bleed) while others set their own
+   narrower width, which read as inconsistent, some pages centered,
+   some full-width, some narrow for no clear reason. Now every page just
+   uses this. */
 .a-content {
   flex: 1;
   padding: 2rem;
-  max-width: 56rem;
+  max-width: 64rem;
   width: 100%;
 }
 
@@ -301,7 +306,7 @@ a.a-card-row:hover {
   gap: 0.625rem;
 }
 
-/* Buttons — always fully round, matching the site's own .btn exactly */
+/* Buttons, always fully round, matching the site's own .btn exactly */
 
 .a-btn {
   display: inline-flex;
@@ -475,8 +480,8 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
-/* Badges — reserved for system-set status, not user-entered data (a filter
-   chip is the right component for that instead — see .a-chip above). */
+/* Badges, reserved for system-set status, not user-entered data (a filter
+   chip is the right component for that instead, see .a-chip above). */
 
 .a-badge {
   display: inline-flex;
@@ -531,6 +536,14 @@ a.a-card-row:hover {
   background: var(--a-success-soft);
   color: var(--a-success);
   border-color: color-mix(in srgb, var(--a-success) 25%, transparent);
+}
+
+/* Media page gallery grid */
+
+.a-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
 }
 
 /* Upload dropzone */
@@ -750,7 +763,7 @@ a.a-card-row:hover {
   background: var(--a-surface-2);
 }
 
-/* Row actions — separated from a preceding status badge with a divider,
+/* Row actions, separated from a preceding status badge with a divider,
    so the badge doesn't read as a third clickable action alongside them. */
 
 .a-row-actions {
@@ -846,7 +859,7 @@ a.a-card-row:hover {
   color: var(--a-accent-text);
 }
 
-/* Mobile top bar + slide-down drawer — hidden on desktop, where the
+/* Mobile top bar + slide-down drawer, hidden on desktop, where the
    sidebar (above) is the nav. Below 768px this replaces the sidebar
    entirely instead of trying to squeeze it into a wrapping strip. */
 
@@ -978,4 +991,47 @@ a.a-card-row:hover {
 
 .a-lightbox-close:hover {
   background: rgba(241, 236, 225, 0.22);
+}
+
+/* Modal */
+
+.a-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(23, 20, 14, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.a-modal {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-r-sharp);
+  box-shadow: var(--a-shadow-md);
+  width: 100%;
+  max-width: 26rem;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.a-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--a-border);
+}
+
+.a-modal-title {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: var(--a-text);
+}
+
+.a-modal-body {
+  padding: 1.25rem;
 }

@@ -56,7 +56,7 @@ export default async function ReservationsHistoryPage() {
         Geschiedenis
       </h1>
       <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>
-        Aantal reserveringen per maand, ingedeeld naar track en status — op basis van het moment van aanvraag.
+        Aantal reserveringen per maand, ingedeeld naar track en status, op basis van het moment van aanvraag.
       </p>
 
       {months.length === 0 ? (

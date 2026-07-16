@@ -15,7 +15,7 @@ const STEPS = [
 
 type StepKey = (typeof STEPS)[number]["key"];
 
-// A single <form> the whole time — steps only toggle which section is
+// A single <form> the whole time, steps only toggle which section is
 // visible (via CSS display, not conditional unmounting), so every field
 // stays in the DOM and its value is still included when the final step
 // submits. This gives the "upload a photo, then fill in details, then
@@ -33,7 +33,7 @@ export function WineFormWizard({
   const stepIndex = STEPS.findIndex((s) => s.key === step);
 
   return (
-    <form action={saveWine} style={{ maxWidth: "40rem", margin: "0 auto" }}>
+    <form action={saveWine} style={{ maxWidth: "48rem" }}>
       {wine ? <input type="hidden" name="id" value={wine.id} /> : null}
       {error ? (
         <p className="a-alert a-alert--danger" style={{ marginBottom: "1.25rem" }}>
@@ -74,13 +74,13 @@ export function WineFormWizard({
             <label className="a-field">
               <span className="a-label">Type &amp; regio (NL)</span>
               <span className="a-hint">
-                Korte typering — verschijnt naast het flesnummer op de site, geen volledige beschrijving.
+                Korte typering, verschijnt naast het flesnummer op de site, geen volledige beschrijving.
               </span>
               <input type="text" id="metaNl" name="metaNl" defaultValue={wine?.metaNl} placeholder="Wit · Pfalz, DE" className="a-input" />
             </label>
             <label className="a-field">
               <span className="a-label">Type &amp; region (EN)</span>
-              <span className="a-hint">Short label — same spot on the site, not a full description.</span>
+              <span className="a-hint">Short label, same spot on the site, not a full description.</span>
               <input type="text" id="metaEn" name="metaEn" defaultValue={wine?.metaEn} placeholder="White · Pfalz, DE" className="a-input" />
             </label>
           </div>

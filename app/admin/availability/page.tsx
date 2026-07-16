@@ -73,7 +73,7 @@ export default async function AvailabilityPage({
       <h1 className="a-h1">Beschikbaarheid</h1>
       <p className="a-subtitle">
         Standaard is elk dagdeel beschikbaar voor reserveringen. Klik op een dagdeel om het te blokkeren
-        (bijvoorbeeld bij een personeelsuitje of sluiting) — klik nogmaals om de blokkade op te heffen.
+        (bijvoorbeeld bij een personeelsuitje of sluiting), klik nogmaals om de blokkade op te heffen.
       </p>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "1.5rem 0" }}>

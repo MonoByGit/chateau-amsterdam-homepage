@@ -33,3 +33,7 @@ export async function listMedia(): Promise<Media[]> {
 export async function deleteMedia(id: string): Promise<void> {
   await db.delete(media).where(eq(media.id, id));
 }
+
+export async function updateMedia(id: string, input: { altTextNl: string; altTextEn: string }): Promise<void> {
+  await db.update(media).set(input).where(eq(media.id, id));
+}

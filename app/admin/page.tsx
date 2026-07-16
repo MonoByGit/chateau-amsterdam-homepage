@@ -80,7 +80,7 @@ export default async function DashboardPage() {
         {openReservations.length === 0 ? (
           <div className="a-card">
             <p className="a-card-row" style={{ color: "var(--a-text-2)", fontSize: "0.875rem" }}>
-              Geen openstaande reserveringen — helemaal bij.
+              Geen openstaande reserveringen, helemaal bij.
             </p>
           </div>
         ) : (
@@ -114,6 +114,9 @@ export default async function DashboardPage() {
 
       <div className="a-dashboard-section">
         <h2>Binnenkort geblokkeerd</h2>
+        <p className="a-subtitle" style={{ marginTop: 0, marginBottom: "0.75rem" }}>
+          Alleen blokkades vanaf vandaag, oudere blokkades staan hier niet.
+        </p>
         {upcomingBlocks.length === 0 ? (
           <div className="a-card">
             <p className="a-card-row" style={{ color: "var(--a-text-2)", fontSize: "0.875rem" }}>
@@ -142,7 +145,7 @@ export default async function DashboardPage() {
       <div className="a-dashboard-section">
         <h2>Bezoekersstatistieken</h2>
         <div className="a-placeholder-card">
-          Analytics via Umami zijn nog niet gekoppeld — dit verschijnt hier zodra dat is ingericht (gepland voor
+          Analytics via Umami zijn nog niet gekoppeld, dit verschijnt hier zodra dat is ingericht (gepland voor
           een latere fase).
         </div>
       </div>

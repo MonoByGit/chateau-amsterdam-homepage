@@ -41,7 +41,7 @@ export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
     if (to !== -1) moveTo(draggingId, to);
   }
 
-  // Native HTML5 drag-and-drop isn't operable by keyboard or screen reader —
+  // Native HTML5 drag-and-drop isn't operable by keyboard or screen reader,
   // arrow keys on the handle move the row by one position using the same
   // reorder action, so reordering doesn't depend on being able to drag.
   function handleHandleKeyDown(e: React.KeyboardEvent, id: string) {
@@ -81,7 +81,7 @@ export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
           <button
             type="button"
             className="a-drag-handle"
-            aria-label={`Verplaats ${wine.name} — pijltjestoetsen om te herordenen`}
+            aria-label={`Verplaats ${wine.name}, gebruik de pijltjestoetsen om te herordenen`}
             title="Sleep, of gebruik de pijltjestoetsen, om te herordenen"
             onKeyDown={(e) => handleHandleKeyDown(e, wine.id)}
           >

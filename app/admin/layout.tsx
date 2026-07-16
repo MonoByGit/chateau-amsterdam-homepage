@@ -10,8 +10,8 @@ import { MobileNav } from "./mobile-nav";
 import { logout } from "./actions";
 
 // Same type family as the public site (app/(site)/layout.tsx), loaded
-// separately here because /admin has its own independent root layout —
-// this keeps the admin visually part of the same brand, not a generic tool.
+// separately here because /admin has its own independent root layout,
+// which keeps the admin visually part of the same brand, not a generic tool.
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-archivo" });
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
 
@@ -55,7 +55,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <header className="a-topbar">
               <span>Ingelogd als {user.email}</span>
             </header>
-            <main className="a-content" style={{ maxWidth: "none" }}>
+            <main className="a-content">
               {children}
             </main>
           </div>

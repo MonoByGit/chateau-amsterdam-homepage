@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAllSections } from "@/lib/db/content";
 
 // Ordered top-to-bottom as the sections actually appear on the homepage,
-// not database/insertion order — so "which one do I need" matches what
+// not database/insertion order, so "which one do I need" matches what
 // you'd scroll past on the live site.
 const SECTION_ORDER = ["header", "hero", "marquee", "manifest", "process", "paths", "wines", "place", "footer"];
 
