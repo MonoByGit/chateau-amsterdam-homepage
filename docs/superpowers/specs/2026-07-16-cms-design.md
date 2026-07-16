@@ -66,7 +66,7 @@ availability_blocks  id, date, daypart (ochtend|middag|avond|hele_dag), reason, 
 
 **Availability calendar (`/admin/availability`)** — month-grid, click a date (optionally a specific daypart) to toggle blocked/unblocked, backed by `availability_blocks`. Explicit blocked entries, not a recurrence-rule engine — simpler for a 4-person team marking real absences, and matches the original incident (one specific unflagged date) that motivated this feature.
 
-**Media library (`/admin/media`)** — upload (drag/drop or file picker) straight to the Railway bucket via Server Action, storing key/filename/alt text in `media`; consumed by both the content editor's image fields and the wines image picker.
+**Media library (`/admin/media`)** — upload (drag/drop or file picker) straight to the Railway bucket via Server Action, storing key/filename/alt text in `media`; consumed by the wines image picker. The content editor covers text only in this phase — today's section images (hero photo, process step photos, place photo) are approved brand photography that changes rarely, so they stay static assets rather than gaining a media-backed image field; that can be added later if a real need shows up.
 
 ## Testing
 
