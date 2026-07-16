@@ -26,41 +26,38 @@ export async function WineForm({ wine, error }: { wine: Wine | null; error?: str
           <span className="a-label">
             Naam
           </span>
-          <input required type="text" id="name" name="name" defaultValue={wine?.name} className="a-input" />
+          <input required type="text" id="name" name="name" defaultValue={wine?.name} className="a-input" placeholder="Riesling" />
         </label>
 
         <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
           <label className="a-field">
-            <span className="a-label">
-              Omschrijving — type/regio (NL)
-            </span>
+            <span className="a-label">Type &amp; regio (NL)</span>
+            <span className="a-hint">Korte typering — verschijnt naast het flesnummer op de site, geen volledige beschrijving.</span>
             <input type="text" id="metaNl" name="metaNl" defaultValue={wine?.metaNl} placeholder="Wit · Pfalz, DE" className="a-input" />
           </label>
           <label className="a-field">
-            <span className="a-label">
-              Description — type/region (EN)
-            </span>
+            <span className="a-label">Type &amp; region (EN)</span>
+            <span className="a-hint">Short label — same spot on the site, not a full description.</span>
             <input type="text" id="metaEn" name="metaEn" defaultValue={wine?.metaEn} placeholder="White · Pfalz, DE" className="a-input" />
           </label>
         </div>
 
         <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
           <label className="a-field">
-            <span className="a-label">
-              Tagline (NL)
-            </span>
+            <span className="a-label">Tagline (NL)</span>
+            <span className="a-hint">Korte, pakkende zin onder de wijnnaam.</span>
             <input type="text" id="tagNl" name="tagNl" defaultValue={wine?.tagNl} placeholder="de klassieker" className="a-input" />
           </label>
           <label className="a-field">
-            <span className="a-label">
-              Tagline (EN)
-            </span>
+            <span className="a-label">Tagline (EN)</span>
+            <span className="a-hint">Short, punchy line under the wine name.</span>
             <input type="text" id="tagEn" name="tagEn" defaultValue={wine?.tagEn} placeholder="the classic" className="a-input" />
           </label>
         </div>
 
         <div className="a-field">
           <span className="a-label">Afbeelding</span>
+          <span className="a-hint">Kies een bestaande foto, of upload er direct een nieuwe.</span>
           <ImageField media={media} initialValue={wine?.imageId ?? null} />
         </div>
 

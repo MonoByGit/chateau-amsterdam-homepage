@@ -20,7 +20,7 @@ export function ImagePicker({
   if (media.length === 0) {
     return (
       <p style={{ fontSize: "0.8125rem", color: "var(--a-text-3, #98989d)" }}>
-        Nog geen afbeeldingen. Upload er een via Media.
+        Nog geen afbeeldingen beschikbaar.
       </p>
     );
   }

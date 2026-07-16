@@ -267,6 +267,12 @@ a.a-card-row:hover {
   gap: 0.375rem;
 }
 
+.a-hint {
+  font-size: 0.75rem;
+  color: var(--a-text-3);
+  margin-top: -0.125rem;
+}
+
 .a-checkbox {
   width: 1.125rem;
   height: 1.125rem;
