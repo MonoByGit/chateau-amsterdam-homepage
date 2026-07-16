@@ -2306,7 +2306,7 @@ Expected: the same asset filenames referenced throughout (`chateau-logo.png`, `h
 - [ ] **Step 6: Run the full test suite**
 
 Run: `npx vitest run`
-Expected: all tests from Tasks 3, 4, and 6 pass (11 tests total).
+Expected: all tests pass — 19 tests across 4 files (`lib/language.test.tsx`, `lib/use-reveal.test.tsx`, `lib/use-magnetic.test.tsx`, `components/counter.test.tsx`), reflecting the tests added across Tasks 3–6.
 
 - [ ] **Step 7: Typecheck and build**
 
@@ -2322,6 +2322,13 @@ Expected: build succeeds, prints a route summary including `/`.
 git add -A
 git commit -m "feat: wire up root layout and homepage, remove old Vite entry point"
 ```
+
+Addenda found while executing this task (the point where the whole app first actually builds, so several latent issues from earlier tasks surfaced here):
+
+- `next.config.js` (from Task 1) used CommonJS `module.exports`, but `package.json` has `"type": "module"` — Node treated the file as ESM and `npm run build` failed with `module is not defined`. Fixed to `export default nextConfig;`.
+- `tsconfig.json`'s `jsx: "preserve"` (from Task 1) gets forcibly rewritten to `jsx: "react-jsx"` by Next.js itself on every build/dev run in this installed version — a mandatory config Next enforces, not an optional choice. Inert in effect (`noEmit: true` means `tsc` never does the real JSX transform; Next's own build pipeline does that), just worth knowing this isn't something to "fix back."
+- `metadataBase` was missing from `app/layout.tsx`'s `metadata` export. Without it, Next.js resolves relative OG/Twitter image URLs against a `http://localhost:3000` fallback **at build time**, meaning production social-share previews (Slack, WhatsApp, LinkedIn, X, iMessage) would silently point at a dead localhost URL. Fixed by setting `metadataBase: new URL("https://chateau.amsterdam")`, matching the domain already hardcoded in the JSON-LD structured data.
+- The `--pattern-o` CSS custom-property style cast was tightened from `{ ["--pattern-o" as any]: 0.04 }` (casts the object key, silently bypassing type-checking on anything else added to that object later) to `{ "--pattern-o": 0.04 } as React.CSSProperties` (casts the whole object once).
 
 ---
 
