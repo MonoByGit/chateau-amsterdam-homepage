@@ -1,30 +1,49 @@
+// components/manifest.tsx
 "use client";
 
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { Counter } from "./counter";
+import type { ManifestContent } from "@/lib/content/defaults";
 
-const STATS: Array<{ target: number; format?: "dots"; suffix?: string; nl: string; en: string; delay: number }> = [
-  { target: 91, nl: "Decanter-punten voor wijn uit Noord", en: "Decanter points for wine from North", delay: 0 },
-  { target: 1500, format: "dots", suffix: " m²", nl: "Machinefabriek aan het IJ", en: "Machine factory on the IJ", delay: 0.1 },
-  { target: 5, nl: "Landen waar onze druiven groeien", en: "Countries where our grapes grow", delay: 0.2 },
-  { target: 200000, format: "dots", suffix: "+", nl: "Flessen per jaar, gemaakt in Noord", en: "Bottles per year, made in North", delay: 0.3 },
+const STAT_META: Array<{
+  valueKey: keyof ManifestContent;
+  descKey: keyof ManifestContent;
+  format?: "dots";
+  suffix?: string;
+  delay: number;
+}> = [
+  { valueKey: "stat_1_value", descKey: "stat_1_desc", delay: 0 },
+  { valueKey: "stat_2_value", descKey: "stat_2_desc", format: "dots", suffix: " m²", delay: 0.1 },
+  { valueKey: "stat_3_value", descKey: "stat_3_desc", delay: 0.2 },
+  { valueKey: "stat_4_value", descKey: "stat_4_desc", format: "dots", suffix: "+", delay: 0.3 },
 ];
 
-function Stat({ stat, lang }: { stat: (typeof STATS)[number]; lang: "nl" | "en" }) {
-  const reveal = useReveal(stat.delay);
+function Stat({
+  meta,
+  content,
+  lang,
+}: {
+  meta: (typeof STAT_META)[number];
+  content: ManifestContent;
+  lang: "nl" | "en";
+}) {
+  const reveal = useReveal(meta.delay);
+  const target = Number(content[meta.valueKey].nl);
+  const desc = lang === "nl" ? content[meta.descKey].nl : content[meta.descKey].en;
+
   return (
     <div ref={reveal.ref as React.RefObject<HTMLDivElement>} className={`stat rv${reveal.isVisible ? " in" : ""}`}>
       <div className="num">
-        <Counter target={stat.target} format={stat.format} />
-        {stat.suffix ? <sub>{stat.suffix}</sub> : null}
+        <Counter target={target} format={meta.format} />
+        {meta.suffix ? <sub>{meta.suffix}</sub> : null}
       </div>
-      <div className="desc">{lang === "nl" ? stat.nl : stat.en}</div>
+      <div className="desc">{desc}</div>
     </div>
   );
 }
 
-export function Manifest() {
+export function Manifest({ content }: { content: ManifestContent }) {
   const { lang, t } = useLanguage();
   const label = useReveal();
   const title1 = useReveal();
@@ -34,41 +53,29 @@ export function Manifest() {
   return (
     <section className="manifest on-dark" id="verhaal">
       <div ref={label.ref as React.RefObject<HTMLDivElement>} className={`label rv${label.isVisible ? " in" : ""}`}>
-        {t("Het verhaal", "Our story")} <span className="en">· no vineyard, still wine</span>
+        {t(content.label.nl, content.label.en)} <span className="en">· no vineyard, still wine</span>
       </div>
       <h2 className="manifest-title">
         <span ref={title1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${title1.isVisible ? " in" : ""}`}>
-          <span>{t("Geen wijngaard.", "No vineyard.")}</span>
+          <span>{t(content.heading_line1.nl, content.heading_line1.en)}</span>
         </span>
         <span ref={title2.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${title2.isVisible ? " in" : ""}`}>
-          <span className="alt">{t("Wel wijn.", "Still wine.")}</span>
+          <span className="alt">{t(content.heading_line2.nl, content.heading_line2.en)}</span>
         </span>
       </h2>
       <div className="manifest-body">
         <div></div>
         <div className="rule">
           <p ref={body.ref as React.RefObject<HTMLParagraphElement>} className={`rv${body.isVisible ? " in" : ""}`}>
-            {lang === "nl" ? (
-              <>
-                Sinds 2017 reizen druiven van families en boeren uit heel Europa gekoeld naar Amsterdam-Noord. In een
-                oude machinefabriek aan het IJ, tussen <strong>stalen tanks, betonnen eieren, amforen en eikenhouten
-                vaten</strong>, worden ze wijn. Omdat we de stad als wijngaard hebben, zijn we vrijer dan elke
-                klassieke producent. Riesling die Moscatel ontmoet? Hier kan het.
-              </>
-            ) : (
-              <>
-                Since 2017, grapes from families and farmers all over Europe travel chilled to Amsterdam-Noord. In an
-                old machine factory on the IJ, between <strong>steel tanks, concrete eggs, amphorae, and oak
-                barrels</strong>, they become wine. Because we have the city as our vineyard, we are freer than any
-                classic producer. Riesling meeting Moscatel? Here it&apos;s possible.
-              </>
-            )}
+            {lang === "nl" ? content.body_lead.nl : content.body_lead.en}
+            <strong>{lang === "nl" ? content.body_strong.nl : content.body_strong.en}</strong>
+            {lang === "nl" ? content.body_tail.nl : content.body_tail.en}
           </p>
         </div>
       </div>
       <div className="stats">
-        {STATS.map((stat) => (
-          <Stat key={stat.nl} stat={stat} lang={lang} />
+        {STAT_META.map((meta) => (
+          <Stat key={meta.valueKey} meta={meta} content={content} lang={lang} />
         ))}
       </div>
     </section>
