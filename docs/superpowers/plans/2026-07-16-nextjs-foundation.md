@@ -837,7 +837,7 @@ Replaces the `IntersectionObserver` + `.rv`/`.rv-line` logic in `main.js`. Retur
 ```tsx
 // lib/use-reveal.test.tsx
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { useReveal } from "./use-reveal";
 
 function Probe({ delay = 0 }: { delay?: number }) {
@@ -874,26 +874,63 @@ describe("useReveal", () => {
 
   it("becomes visible immediately when intersecting with no delay", () => {
     render(<Probe delay={0} />);
-    observedCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    act(() => {
+      observedCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    });
     expect(screen.getByTestId("target").textContent).toBe("visible");
   });
 
   it("waits for the given delay before becoming visible", () => {
     vi.useFakeTimers();
     render(<Probe delay={0.2} />);
-    observedCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    act(() => {
+      observedCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    });
     expect(screen.getByTestId("target").textContent).toBe("hidden");
-    vi.advanceTimersByTime(200);
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
     expect(screen.getByTestId("target").textContent).toBe("visible");
   });
 
   it("does not become visible when not intersecting", () => {
     render(<Probe />);
-    observedCallback([{ isIntersecting: false } as IntersectionObserverEntry], {} as IntersectionObserver);
+    act(() => {
+      observedCallback([{ isIntersecting: false } as IntersectionObserverEntry], {} as IntersectionObserver);
+    });
     expect(screen.getByTestId("target").textContent).toBe("hidden");
+  });
+
+  it("clears the pending timeout on unmount instead of leaving it dangling", () => {
+    vi.useFakeTimers();
+    const { unmount } = render(<Probe delay={0.5} />);
+
+    act(() => {
+      observedCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    });
+
+    // The delayed reveal's setTimeout should be the only pending timer.
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+
+    // Effect cleanup must clear it — nothing left pending after unmount.
+    expect(vi.getTimerCount()).toBe(0);
+
+    // Advancing timers past the delay must not throw or try to update
+    // the unmounted component (regression case for the bug where the
+    // cleanup was mistakenly returned from inside the IntersectionObserver
+    // callback instead of from the effect itself, so it never actually ran).
+    expect(() => {
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+    }).not.toThrow();
   });
 });
 ```
+
+Note: the manual `observedCallback(...)` invocations and `vi.advanceTimersByTime(...)` calls are wrapped in `act(...)` from `@testing-library/react`. Calling the observer callback directly (not through `fireEvent` or any React-recognized event system) means React doesn't know a state update is coming; without `act()`, the assertion on `textContent` runs before React's concurrent scheduler has flushed the update to the DOM, so the test would flakily read the pre-update value and print an "not wrapped in act(...)" warning. `act()` is the correct fix on the test side — no synchronous-flush trick (e.g. `flushSync`) is needed in the hook itself, since a real browser's IntersectionObserver firing and updating the DOM on the next tick is imperceptible to the user.
 
 - [ ] **Step 2: Run test to verify it fails**
 
@@ -915,31 +952,48 @@ export function useReveal(delay = 0) {
     const el = ref.current;
     if (!el) return;
 
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const timeout = setTimeout(() => setIsVisible(true), delay * 1000);
+            if (delay > 0) {
+              timeout = setTimeout(() => setIsVisible(true), delay * 1000);
+            } else {
+              setIsVisible(true);
+            }
             observer.unobserve(el);
-            return () => clearTimeout(timeout);
+            return;
           }
         }
       },
+      // Thresholds copied from the legacy src/main.js scroll-reveal logic —
+      // not arbitrary, do not "clean up": 0.18 intersection ratio and a
+      // -6% bottom rootMargin trigger the reveal slightly before an element
+      // is fully in view, and `delay` is expressed in seconds (matching the
+      // stagger delays main.js read off `data-delay` attributes).
       { threshold: 0.18, rootMargin: "0px 0px -6% 0px" }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (timeout) clearTimeout(timeout);
+    };
   }, [delay]);
 
   return { ref, isVisible };
 }
 ```
 
+Note: the original sample here had a real bug, caught during implementation — `IntersectionObserverCallback` doesn't treat a per-entry `return () => clearTimeout(timeout)` as an effect cleanup (that's only meaningful for `useEffect`'s own return value), so the pending timer was never actually cleared. The fix hoists `timeout` to the effect scope, clearing it in the real `useEffect` cleanup (see the code above). A separate concern — `setIsVisible` from inside the observer callback not reliably committing before an assertion when the callback is invoked manually in tests — is a test-side issue, not a hook-side one: wrapping the manual `observedCallback(...)` calls in `act(...)` (see Step 1's test code) is the correct fix, since a real IntersectionObserver in the browser updates the DOM on the next tick regardless. An earlier iteration of this hook mistakenly reached for `flushSync` to paper over the missing `act()` wrapping; that was reverted as unnecessary once the test was fixed properly.
+```
+
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `npx vitest run lib/use-reveal.test.tsx`
-Expected: PASS, 4 tests.
+Expected: PASS, 5 tests, no "not wrapped in act(...)" warnings.
 
 - [ ] **Step 5: Commit**
 
