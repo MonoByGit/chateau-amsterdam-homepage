@@ -40,7 +40,7 @@ sessions             id, user_id, token_hash, expires_at, created_at
 
 content_blocks       id, page, section, field_key, value_nl, value_en, updated_at, updated_by
 
-wines                id, name, marketing_copy_nl, marketing_copy_en, story_blurb_nl, story_blurb_en,
+wines                id, name, meta_nl, meta_en, tag_nl, tag_en,
                      image_id (fk → media), shopify_handle, sort_order, is_active, updated_at
 
 media                id, storage_key, filename, alt_text_nl, alt_text_en, uploaded_by, created_at
@@ -60,7 +60,7 @@ availability_blocks  id, date, daypart (ochtend|middag|avond|hele_dag), reason, 
 
 **Content editor (`/admin/content`)** — one editable form per existing homepage section (Header, Hero, Marquee, Manifest/Story, Process, Paths, Wines intro, Place, Footer), each a set of NL/EN field pairs backed by `content_blocks`, saved via a Server Action. A one-time seed script extracts today's hardcoded strings into initial rows so the cutover is a non-event. Each public component's local text constants are replaced by props fed from a server-side `getContent(page, section)` call in `app/page.tsx`; if a row is missing, the field falls back to its current hardcoded default rather than rendering blank.
 
-**Wines admin (`/admin/wines`)** — list, add/edit/remove, drag-to-reorder. Each entry: marketing copy + story blurb (NL/EN), image (from media library), Shopify product handle (plain text, validated non-empty but not verified against Shopify yet), active toggle. `WinesPreview` reads active wines from Postgres instead of the hardcoded `WINES` array; price stays a static placeholder until the Shopify phase.
+**Wines admin (`/admin/wines`)** — list, add/edit/remove, drag-to-reorder. Each entry: a short type/region description and a short tagline (both NL/EN, matching exactly what today's homepage card shows — no separate long-form "marketing description" field, since a full wine detail page is out of scope this phase and an unused field would just sit empty), image (from media library), Shopify product handle (plain text, validated non-empty but not verified against Shopify yet), active toggle. `WinesPreview` reads active wines from Postgres instead of the hardcoded `WINES` array; price stays a static placeholder until the Shopify phase.
 
 **Reservations inbox (`/admin/reservations`)** — list filterable by status/track, detail view, status transitions (nieuw → in behandeling → bevestigd/afgewezen) via Server Action. A seed script creates sample requests (both tracks) so the inbox is demonstrable before the public form exists in a later phase.
 
