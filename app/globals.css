@@ -15,9 +15,9 @@
   --line: rgba(23, 20, 14, 0.16);
   --line-light: rgba(241, 236, 225, 0.18);
 
-  --font-display: "Archivo", sans-serif;
-  --font-serif: "Instrument Serif", serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-display: var(--font-archivo), sans-serif;
+  --font-serif: var(--font-instrument-serif), serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
 
   --ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-inout: cubic-bezier(0.77, 0, 0.175, 1);
