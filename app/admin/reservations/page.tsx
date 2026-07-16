@@ -1,6 +1,12 @@
 // app/admin/reservations/page.tsx
 import Link from "next/link";
-import { listReservations, type ReservationStatus, type ReservationTrack } from "@/lib/db/reservations";
+import {
+  isValidTransition,
+  listReservations,
+  type ReservationStatus,
+  type ReservationTrack,
+} from "@/lib/db/reservations";
+import { updateStatus } from "./actions";
 
 const STATUS_LABELS: Record<ReservationStatus, string> = {
   nieuw: "Nieuw",
@@ -52,32 +58,36 @@ export default async function ReservationsPage({
     <div>
       <h1 className="a-h1">Reserveringen</h1>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1.25rem", marginBottom: "1.5rem" }}>
-        <div className="a-chip-group">
+      <div className="a-filter-bar" style={{ marginTop: "1.25rem", marginBottom: "1.5rem" }}>
+        <div className="a-filter-row">
           <span className="a-eyebrow" style={{ marginRight: "0.25rem" }}>
             Status
           </span>
-          <Link href={filterHref(params, { status: undefined })} className={`a-chip${!status ? " is-active" : ""}`}>
-            Alle
-          </Link>
-          {ALL_STATUSES.map((s) => (
-            <Link key={s} href={filterHref(params, { status: s })} className={`a-chip${status === s ? " is-active" : ""}`}>
-              {STATUS_LABELS[s]}
+          <div className="a-chip-group">
+            <Link href={filterHref(params, { status: undefined })} className={`a-chip${!status ? " is-active" : ""}`}>
+              Alle
             </Link>
-          ))}
+            {ALL_STATUSES.map((s) => (
+              <Link key={s} href={filterHref(params, { status: s })} className={`a-chip${status === s ? " is-active" : ""}`}>
+                {STATUS_LABELS[s]}
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="a-chip-group">
+        <div className="a-filter-row">
           <span className="a-eyebrow" style={{ marginRight: "0.25rem" }}>
             Track
           </span>
-          <Link href={filterHref(params, { track: undefined })} className={`a-chip${!track ? " is-active" : ""}`}>
-            Alle
-          </Link>
-          {ALL_TRACKS.map((tr) => (
-            <Link key={tr} href={filterHref(params, { track: tr })} className={`a-chip${track === tr ? " is-active" : ""}`}>
-              {TRACK_LABELS[tr]}
+          <div className="a-chip-group">
+            <Link href={filterHref(params, { track: undefined })} className={`a-chip${!track ? " is-active" : ""}`}>
+              Alle
             </Link>
-          ))}
+            {ALL_TRACKS.map((tr) => (
+              <Link key={tr} href={filterHref(params, { track: tr })} className={`a-chip${track === tr ? " is-active" : ""}`}>
+                {TRACK_LABELS[tr]}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -87,25 +97,34 @@ export default async function ReservationsPage({
             Geen reserveringen gevonden.
           </p>
         ) : (
-          reservationList.map((r) => (
-            <Link
-              key={r.id}
-              href={`/admin/reservations/${r.id}`}
-              className="a-card-row"
-              style={{ display: "flex", alignItems: "center", gap: "1rem", textDecoration: "none" }}
-            >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="a-label" style={{ color: "var(--a-text)" }}>
-                  {r.contactName}
-                </div>
-                <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                  {TRACK_LABELS[r.track]} · {r.requestedDate}
-                  {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
-                </div>
+          reservationList.map((r) => {
+            const nextStatuses = ALL_STATUSES.filter((s) => isValidTransition(r.status, s));
+            return (
+              <div key={r.id} className="a-card-row" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <Link href={`/admin/reservations/${r.id}`} style={{ flex: 1, minWidth: 0, textDecoration: "none" }}>
+                  <div className="a-label" style={{ color: "var(--a-text)" }}>
+                    {r.contactName}
+                  </div>
+                  <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
+                    {TRACK_LABELS[r.track]} · {r.requestedDate}
+                    {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
+                  </div>
+                </Link>
+                <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+                {nextStatuses.length > 0 ? (
+                  <div className="a-inline-actions">
+                    {nextStatuses.map((s) => (
+                      <form key={s} action={updateStatus.bind(null, r.id, s)}>
+                        <button type="submit" className="a-btn a-btn--secondary a-btn--sm">
+                          {STATUS_LABELS[s]}
+                        </button>
+                      </form>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-              <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
-            </Link>
-          ))
+            );
+          })
         )}
       </div>
     </div>

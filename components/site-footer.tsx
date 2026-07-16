@@ -8,7 +8,7 @@ export function SiteFooter({ content }: { content: FooterContent }) {
   const { t } = useLanguage();
 
   return (
-    <footer className="site-footer on-dark">
+    <footer className="site-footer on-dark" id="footer">
       <div className="footer-cheers">
         Proost
         <em>santé, cheers, salud</em>

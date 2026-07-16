@@ -13,7 +13,6 @@ import {
 import { getObjectUrl } from "@/lib/storage/s3";
 import { uploadMediaFile } from "@/lib/storage/upload-media";
 import { validateWineInput, type WineFormInput } from "@/lib/validation/wine-input";
-import { computeReorderedIds } from "@/lib/wines/reorder";
 import type { PickerMediaItem } from "@/components/admin/image-picker";
 
 function readWineForm(formData: FormData): WineFormInput {
@@ -85,16 +84,8 @@ export async function deleteWine(formData: FormData): Promise<void> {
   revalidatePath("/");
 }
 
-export async function reorderWines(
-  orderedIds: string[],
-  id: string,
-  direction: "up" | "down"
-): Promise<void> {
-  const next = computeReorderedIds(orderedIds, id, direction);
-  if (!next) {
-    return;
-  }
-  await reorderWinesRow(next);
+export async function reorderWinesTo(newOrderedIds: string[]): Promise<void> {
+  await reorderWinesRow(newOrderedIds);
   revalidatePath("/admin/wines");
   revalidatePath("/");
 }

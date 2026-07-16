@@ -38,5 +38,5 @@ export async function login(_prevState: string | null, formData: FormData): Prom
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE_NAME, token, sessionCookieOptions());
 
-  redirect("/admin/content");
+  redirect("/admin");
 }

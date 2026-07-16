@@ -29,7 +29,7 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   }, []);
 
   return (
-    <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
+    <header className={`site-header${isScrolled ? " is-scrolled" : ""}`} id="header">
       <a className="brand" href="#top">
         <img className="brand-logo" src="/assets/chateau-logo.png" alt="Chateau Amsterdam Logo" />
         <small>Urban&nbsp;Winery&nbsp;·&nbsp;aan&nbsp;het&nbsp;IJ</small>

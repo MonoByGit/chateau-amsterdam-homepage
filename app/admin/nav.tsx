@@ -4,25 +4,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
-const NAV_ITEMS: Array<{ href: string; label: string; icon: ReactNode }> = [
+type NavItem = { href: string; label: string; icon: ReactNode };
+
+// Ordered by how often a small team actually opens each section, not by
+// concept — reservations and availability change daily, wines occasionally,
+// homepage copy rarely. Landing on the least-used section first was itself
+// part of the problem.
+const PRIMARY_ITEMS: NavItem[] = [
   {
-    href: "/admin/content",
-    label: "Content",
+    href: "/admin",
+    label: "Overzicht",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 3h9l4 4v14H6z" />
-        <path d="M15 3v4h4" />
-        <path d="M9 12h6M9 16h6" />
-      </svg>
-    ),
-  },
-  {
-    href: "/admin/wines",
-    label: "Wijnen",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 3h8l-1.2 8.2a3.6 3.6 0 0 1-3.6 3.1v0a3.6 3.6 0 0 1-3.6-3.1L8 3z" />
-        <path d="M12 14.3V21M8.5 21h7" />
+        <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.2" />
+        <rect x="13" y="3.5" width="7.5" height="7.5" rx="1.2" />
+        <rect x="3.5" y="13" width="7.5" height="7.5" rx="1.2" />
+        <rect x="13" y="13" width="7.5" height="7.5" rx="1.2" />
       </svg>
     ),
   },
@@ -48,6 +45,34 @@ const NAV_ITEMS: Array<{ href: string; label: string; icon: ReactNode }> = [
     ),
   },
   {
+    href: "/admin/wines",
+    label: "Wijnen",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 3h8l-1.2 8.2a3.6 3.6 0 0 1-3.6 3.1v0a3.6 3.6 0 0 1-3.6-3.1L8 3z" />
+        <path d="M12 14.3V21M8.5 21h7" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/content",
+    label: "Content",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 3h9l4 4v14H6z" />
+        <path d="M15 3v4h4" />
+        <path d="M9 12h6M9 16h6" />
+      </svg>
+    ),
+  },
+];
+
+// Media isn't a task teams open on its own — it's only ever used to supply
+// a photo for a wine (which now has its own inline upload). Kept as a
+// secondary, lower-priority link for the rare case of browsing everything
+// that's been uploaded, not promoted alongside the daily-use sections.
+const SECONDARY_ITEMS: NavItem[] = [
+  {
     href: "/admin/media",
     label: "Media",
     icon: (
@@ -60,20 +85,32 @@ const NAV_ITEMS: Array<{ href: string; label: string; icon: ReactNode }> = [
   },
 ];
 
+function isActive(pathname: string | null, href: string): boolean {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname === href || pathname?.startsWith(`${href}/`) || false;
+}
+
+function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+  return (
+    <Link href={item.href} className={`a-nav-link${active ? " is-active" : ""}`}>
+      <span className="a-nav-icon">{item.icon}</span>
+      {item.label}
+    </Link>
+  );
+}
+
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
     <>
-      {NAV_ITEMS.map((item) => {
-        const active = pathname === item.href || pathname?.startsWith(`${item.href}/`);
-        return (
-          <Link key={item.href} href={item.href} className={`a-nav-link${active ? " is-active" : ""}`}>
-            <span className="a-nav-icon">{item.icon}</span>
-            {item.label}
-          </Link>
-        );
-      })}
+      {PRIMARY_ITEMS.map((item) => (
+        <NavLink key={item.href} item={item} active={isActive(pathname, item.href)} />
+      ))}
+      <div className="a-nav-section-label">Overig</div>
+      {SECONDARY_ITEMS.map((item) => (
+        <NavLink key={item.href} item={item} active={isActive(pathname, item.href)} />
+      ))}
     </>
   );
 }

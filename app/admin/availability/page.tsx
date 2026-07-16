@@ -6,9 +6,9 @@ import { toggleAvailability } from "./actions";
 const DAYPARTS: Daypart[] = ["ochtend", "middag", "avond", "hele_dag"];
 
 const DAYPART_LABELS: Record<Daypart, string> = {
-  ochtend: "Ochtend",
-  middag: "Middag",
-  avond: "Avond",
+  ochtend: "Ochtend · 9-12u",
+  middag: "Middag · 12-17u",
+  avond: "Avond · 17-22u",
   hele_dag: "Hele dag",
 };
 
@@ -70,17 +70,35 @@ export default async function AvailabilityPage({
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
-        <h1 className="a-h1" style={{ textTransform: "capitalize" }}>
+      <h1 className="a-h1">Beschikbaarheid</h1>
+      <p className="a-subtitle">
+        Standaard is elk dagdeel beschikbaar voor reserveringen. Klik op een dagdeel om het te blokkeren
+        (bijvoorbeeld bij een personeelsuitje of sluiting) — klik nogmaals om de blokkade op te heffen.
+      </p>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "1.5rem 0" }}>
+        <h2 className="a-h1" style={{ fontSize: "1.25rem", textTransform: "capitalize" }}>
           {monthLabel}
-        </h1>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <Link href={`/admin/availability?month=${adjacentMonth(year, month, -1)}`} className="a-btn a-btn--secondary">
-            ← Vorige
-          </Link>
-          <Link href={`/admin/availability?month=${adjacentMonth(year, month, 1)}`} className="a-btn a-btn--secondary">
-            Volgende →
-          </Link>
+        </h2>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.75rem", color: "var(--a-text-2)" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-border)", display: "inline-block" }} />
+              Beschikbaar
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-danger-soft)", border: "1px solid var(--a-danger)", display: "inline-block" }} />
+              Geblokkeerd
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <Link href={`/admin/availability?month=${adjacentMonth(year, month, -1)}`} className="a-btn a-btn--secondary">
+              ← Vorige
+            </Link>
+            <Link href={`/admin/availability?month=${adjacentMonth(year, month, 1)}`} className="a-btn a-btn--secondary">
+              Volgende →
+            </Link>
+          </div>
         </div>
       </div>
 
