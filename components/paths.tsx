@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
+import { useMagnetic } from "@/lib/use-magnetic";
 
 const PATHS: Array<{
   idx: string;
@@ -55,6 +56,7 @@ const PATHS: Array<{
 
 function PathRow({ path, lang }: { path: (typeof PATHS)[number]; lang: "nl" | "en" }) {
   const reveal = useReveal();
+  const goMagnetic = useMagnetic();
 
   function handleRowClick(e: React.MouseEvent<HTMLDivElement>) {
     if ((e.target as HTMLElement).closest("a")) return;
@@ -81,7 +83,7 @@ function PathRow({ path, lang }: { path: (typeof PATHS)[number]; lang: "nl" | "e
       <div className="thumb">
         <img src={path.img} alt={path.alt} className="path-thumb-img" />
       </div>
-      <a className="go" href={path.href} aria-label={path.ariaLabel}>
+      <a className="go" ref={goMagnetic as React.RefObject<HTMLAnchorElement>} href={path.href} aria-label={path.ariaLabel}>
         →
       </a>
     </div>

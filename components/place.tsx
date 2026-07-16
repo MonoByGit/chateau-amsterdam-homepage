@@ -3,6 +3,7 @@
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useParallax } from "@/lib/use-parallax";
+import { useMagnetic } from "@/lib/use-magnetic";
 
 export function Place() {
   const { t } = useLanguage();
@@ -14,6 +15,7 @@ export function Place() {
   const hours = useReveal(0.1);
   const route = useReveal(0.2);
   const cta = useReveal(0.3);
+  const ctaMagnetic = useMagnetic();
 
   return (
     <section className="place on-dark" id="bezoek">
@@ -63,7 +65,7 @@ export function Place() {
             </p>
           </div>
           <div ref={cta.ref as React.RefObject<HTMLDivElement>} className={`rv${cta.isVisible ? " in" : ""}`}>
-            <a className="btn btn--light" href="#bezoek">
+            <a className="btn btn--light" ref={ctaMagnetic as React.RefObject<HTMLAnchorElement>} href="#bezoek">
               {t("Plan je bezoek", "Plan your visit")} <span className="arr">→</span>
             </a>
           </div>

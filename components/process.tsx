@@ -49,7 +49,7 @@ function Step({ step, lang }: { step: (typeof STEPS)[number]; lang: "nl" | "en" 
       <div className="idx">{step.idx}</div>
       <div>
         <h3>
-          {lang === "nl" ? step.nlTitle : step.enTitle} <small>{lang === "nl" ? step.enTitle : step.nlTitle}</small>
+          {step.nlTitle} <small>{step.enTitle}</small>
         </h3>
         <p>{lang === "nl" ? step.nlBody : step.enBody}</p>
       </div>

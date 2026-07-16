@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
+import { useMagnetic } from "@/lib/use-magnetic";
 
 const WINES: Array<{
   n: string;
@@ -44,6 +45,15 @@ export function WinesPreview() {
   const heading1 = useReveal();
   const heading2 = useReveal(0.12);
   const cta = useReveal(0.2);
+  const ctaMagnetic = useMagnetic();
+  // The "Shop alle wijnen" link already carries the useReveal ref directly
+  // (unlike the other magnetic targets, whose reveal refs sit on a
+  // surrounding container). Compose both refs on the same node instead of
+  // dropping either effect.
+  function setCtaRef(node: HTMLAnchorElement | null) {
+    cta.ref.current = node;
+    ctaMagnetic.current = node;
+  }
 
   return (
     <section className="wines" id="wijnen">
@@ -64,7 +74,7 @@ export function WinesPreview() {
             </span>
           </h2>
         </div>
-        <a ref={cta.ref as React.RefObject<HTMLAnchorElement>} className={`btn rv${cta.isVisible ? " in" : ""}`} href="#wijnen">
+        <a ref={setCtaRef} className={`btn rv${cta.isVisible ? " in" : ""}`} href="#wijnen">
           {t("Shop alle wijnen", "Shop all wines")} <span className="arr">→</span>
         </a>
       </div>

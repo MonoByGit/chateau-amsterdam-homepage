@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
+import { useMagnetic } from "@/lib/use-magnetic";
 
 const NAV_LINKS: Array<{ href: string; nl: string; en: string }> = [
   { href: "#verhaal", nl: "Het verhaal", en: "Our story" },
@@ -14,6 +15,7 @@ const NAV_LINKS: Array<{ href: string; nl: string; en: string }> = [
 export function SiteHeader() {
   const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
+  const magneticRef = useMagnetic();
 
   useEffect(() => {
     function onScroll() {
@@ -59,7 +61,7 @@ export function SiteHeader() {
           </button>
         </div>
 
-        <a className="nav-cta" href="#paden">
+        <a className="nav-cta" ref={magneticRef as React.RefObject<HTMLAnchorElement>} href="#paden">
           {t("Boek een tasting", "Book a tasting")}
         </a>
       </nav>

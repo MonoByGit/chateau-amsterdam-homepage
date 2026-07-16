@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useParallax } from "@/lib/use-parallax";
+import { useMagnetic } from "@/lib/use-magnetic";
 
 const MARQUEE_ITEMS: Array<{ nl: string; en: string } | string> = [
   { nl: "Eerste urban winery van Nederland", en: "First urban winery in the Netherlands" },
@@ -30,6 +31,8 @@ export function Hero() {
   const introReveal = useReveal(0.55);
   const ctaReveal = useReveal(0.7);
   const mediaReveal = useReveal(0.45);
+  const primaryCtaMagnetic = useMagnetic();
+  const secondaryCtaMagnetic = useMagnetic();
 
   useEffect(() => {
     const timeout = setTimeout(() => setLoaded(true), 200);
@@ -76,10 +79,10 @@ export function Hero() {
             )}
           </p>
           <div ref={ctaReveal.ref as React.RefObject<HTMLDivElement>} className={`hero-ctas rv${ctaReveal.isVisible ? " in" : ""}`}>
-            <a className="btn btn--primary" href="#paden">
+            <a className="btn btn--primary" ref={primaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="#paden">
               {t("Boek een tasting", "Book a tasting")} <span className="arr">→</span>
             </a>
-            <a className="btn" href="#bedrijven">
+            <a className="btn" ref={secondaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="#bedrijven">
               {t("Voor bedrijven", "For businesses")} <span className="arr">→</span>
             </a>
           </div>
