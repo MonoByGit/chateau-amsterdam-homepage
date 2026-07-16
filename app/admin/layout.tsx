@@ -20,6 +20,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const session = token ? await validateSession(token) : null;
   const user = session ? await findUserById(session.userId) : null;
 
+  if (!user) {
+    return (
+      <html lang="nl">
+        <body className="bg-neutral-50 text-neutral-900">{children}</body>
+      </html>
+    );
+  }
+
   return (
     <html lang="nl">
       <body className="bg-neutral-50 text-neutral-900">
@@ -38,7 +46,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           </nav>
           <div className="flex-1 flex flex-col">
             <header className="border-b border-neutral-200 px-6 py-3 text-sm text-neutral-500">
-              {user ? `Ingelogd als ${user.email}` : null}
+              Ingelogd als {user.email}
             </header>
             <main className="flex-1 p-6">{children}</main>
           </div>
