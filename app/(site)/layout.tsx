@@ -3,7 +3,7 @@ import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import "./globals.css";
+import "../globals.css";
 
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-archivo" });
 const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-instrument-serif" });
