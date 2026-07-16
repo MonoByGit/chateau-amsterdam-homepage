@@ -5,7 +5,7 @@ import { useReveal } from "./use-reveal";
 function Probe({ delay = 0 }: { delay?: number }) {
   const { ref, isVisible } = useReveal(delay);
   return (
-    <div ref={ref} data-testid="target">
+    <div ref={ref as React.RefObject<HTMLDivElement>} data-testid="target">
       {isVisible ? "visible" : "hidden"}
     </div>
   );
