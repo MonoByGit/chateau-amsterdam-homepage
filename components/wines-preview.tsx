@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useMagnetic } from "@/lib/use-magnetic";
@@ -50,10 +51,13 @@ export function WinesPreview() {
   // (unlike the other magnetic targets, whose reveal refs sit on a
   // surrounding container). Compose both refs on the same node instead of
   // dropping either effect.
-  function setCtaRef(node: HTMLAnchorElement | null) {
-    cta.ref.current = node;
-    ctaMagnetic.current = node;
-  }
+  const setCtaRef = useCallback(
+    (node: HTMLAnchorElement | null) => {
+      cta.ref.current = node;
+      ctaMagnetic.current = node;
+    },
+    [cta.ref, ctaMagnetic]
+  );
 
   return (
     <section className="wines" id="wijnen">
