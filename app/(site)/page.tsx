@@ -19,6 +19,15 @@ import { getObjectUrl } from "@/lib/storage/s3";
 
 const WINE_PRICE_PLACEHOLDER = "vanaf shop.chateau.amsterdam";
 
+// Forces this route to render per-request instead of being statically
+// prerendered at build time. Without this, `next build` tries to execute
+// getContent()/getWinesForHomepage() during the build step to produce
+// static HTML — but Railway's build environment can't reach the private
+// `postgres.railway.internal` hostname (only the deployed runtime can),
+// so the build fails. Per-request rendering also means CMS content edits
+// show up immediately without needing a redeploy.
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const heroContent = await getContent("home", "hero", HERO_DEFAULTS);
   const marqueeContent = await getContent("home", "marquee", MARQUEE_DEFAULTS);
