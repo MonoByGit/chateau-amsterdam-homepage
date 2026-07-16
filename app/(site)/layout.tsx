@@ -3,6 +3,8 @@ import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { getContent } from "@/lib/content/get-content";
+import { HEADER_DEFAULTS } from "@/lib/content/defaults";
 import "../globals.css";
 
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-archivo" });
@@ -53,7 +55,9 @@ const structuredData = {
   sameAs: ["https://www.instagram.com/chateauamsterdam/", "https://www.linkedin.com/company/chateau-amsterdam/"],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const headerContent = await getContent("home", "header", HEADER_DEFAULTS);
+
   return (
     <html lang="nl" className={`${archivo.variable} ${instrumentSerif.variable} ${ibmPlexMono.variable}`}>
       <head>
@@ -63,7 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <div className="grain" />
           <div className="bg-pattern" />
-          <SiteHeader />
+          <SiteHeader content={headerContent} />
           <main id="main-content">{children}</main>
           <SiteFooter />
         </LanguageProvider>
