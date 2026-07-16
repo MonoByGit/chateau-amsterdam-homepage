@@ -12,6 +12,8 @@ export function useMagnetic(strength = 0.3) {
     const hoverCapable = window.matchMedia("(hover: hover)").matches;
     if (reduced || !hoverCapable) return;
 
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
     function onMouseMove(e: MouseEvent) {
       if (!el) return;
       const r = el.getBoundingClientRect();
@@ -24,7 +26,7 @@ export function useMagnetic(strength = 0.3) {
       if (!el) return;
       el.style.transition = "translate 0.6s cubic-bezier(0.19,1,0.22,1)";
       el.style.translate = "0px 0px";
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         if (el) el.style.transition = "";
       }, 600);
     }
@@ -34,6 +36,7 @@ export function useMagnetic(strength = 0.3) {
     return () => {
       el.removeEventListener("mousemove", onMouseMove);
       el.removeEventListener("mouseleave", onMouseLeave);
+      if (timeout) clearTimeout(timeout);
     };
   }, [strength]);
 

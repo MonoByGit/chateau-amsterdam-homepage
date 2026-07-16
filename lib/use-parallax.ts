@@ -12,6 +12,7 @@ export function useParallax(speed = 0.1) {
     if (reduced) return;
 
     let ticking = false;
+    let rafId: number | undefined;
 
     function apply() {
       if (!el) return;
@@ -29,13 +30,16 @@ export function useParallax(speed = 0.1) {
     function onScroll() {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(apply);
+        rafId = requestAnimationFrame(apply);
       }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     apply();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+    };
   }, [speed]);
 
   return ref;
