@@ -10,6 +10,7 @@ const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", st
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://chateau.amsterdam"),
   title: "Chateau Amsterdam · Urban Winery Amsterdam-Noord",
   description:
     "Eerste urban winery van Nederland, gevestigd in Amsterdam-Noord. Druiven uit heel Europa, gemaakt aan het IJ. Boek een tasting of proeverij tussen de stalen tanks.",
@@ -58,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </head>
-      <body data-pattern="arcering" style={{ ["--pattern-o" as any]: 0.04 }}>
+      <body data-pattern="arcering" style={{ "--pattern-o": 0.04 } as React.CSSProperties}>
         <LanguageProvider>
           <div className="grain" />
           <div className="bg-pattern" />
