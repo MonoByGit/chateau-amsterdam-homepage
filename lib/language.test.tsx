@@ -3,10 +3,11 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { LanguageProvider, useLanguage } from "./language";
 
 function Probe() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   return (
     <div>
       <span data-testid="lang">{lang}</span>
+      <span data-testid="translated">{t("hallo", "hello")}</span>
       <button onClick={() => setLang("en")}>to-en</button>
       <button onClick={() => setLang("nl")}>to-nl</button>
     </div>
@@ -57,5 +58,13 @@ describe("LanguageProvider", () => {
     vi.stubGlobal("navigator", { language: "en-US" });
     render(<LanguageProvider><Probe /></LanguageProvider>);
     expect(screen.getByTestId("lang").textContent).toBe("en");
+  });
+
+  it("t() picks the string matching the current language and switches when lang changes", () => {
+    vi.stubGlobal("navigator", { language: "nl-NL" });
+    render(<LanguageProvider><Probe /></LanguageProvider>);
+    expect(screen.getByTestId("translated").textContent).toBe("hallo");
+    fireEvent.click(screen.getByText("to-en"));
+    expect(screen.getByTestId("translated").textContent).toBe("hello");
   });
 });

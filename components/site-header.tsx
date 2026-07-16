@@ -12,7 +12,7 @@ const NAV_LINKS: Array<{ href: string; nl: string; en: string }> = [
 ];
 
 export function SiteHeader() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function SiteHeader() {
       <nav className="site-nav" aria-label="Main Navigation">
         {NAV_LINKS.map((link) => (
           <a key={link.href} href={link.href}>
-            {lang === "nl" ? link.nl : link.en}
+            {t(link.nl, link.en)}
           </a>
         ))}
 
@@ -60,7 +60,7 @@ export function SiteHeader() {
         </div>
 
         <a className="nav-cta" href="#paden">
-          {lang === "nl" ? "Boek een tasting" : "Book a tasting"}
+          {t("Boek een tasting", "Book a tasting")}
         </a>
       </nav>
     </header>

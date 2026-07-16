@@ -822,6 +822,8 @@ git add -A
 git commit -m "feat: add LanguageProvider replacing vanilla-JS language toggle"
 ```
 
+Addendum (added during Task 7 review, folded back into this task since it's the same file): once `SiteHeader` became the first real consumer of `useLanguage()`, code review flagged that every bilingual component was about to reinvent its own `lang === "nl" ? x : y` ternary or local `t()` helper independently (the plan's own Task 8 sample already did this). `LanguageContextValue` and the provider's returned value both gained a third member, `t: (nl: string, en: string) => string`, implemented as `lang === "nl" ? nl : en` and memoized alongside `setLang`. `lib/language.tsx` and `lib/language.test.tsx` (one more test, covering that `t()` tracks language changes) were updated in place — this isn't a new task, just documenting that `useLanguage()` now returns `{ lang, setLang, t }` instead of `{ lang, setLang }` for every task from here on.
+
 ---
 
 ### Task 4: Scroll-reveal hook (`lib/use-reveal.ts`)
@@ -1389,7 +1391,7 @@ const NAV_LINKS: Array<{ href: string; nl: string; en: string }> = [
 ];
 
 export function SiteHeader() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -1410,7 +1412,7 @@ export function SiteHeader() {
       <nav className="site-nav" aria-label="Main Navigation">
         {NAV_LINKS.map((link) => (
           <a key={link.href} href={link.href}>
-            {lang === "nl" ? link.nl : link.en}
+            {t(link.nl, link.en)}
           </a>
         ))}
 
@@ -1437,7 +1439,7 @@ export function SiteHeader() {
         </div>
 
         <a className="nav-cta" href="#paden">
-          {lang === "nl" ? "Boek een tasting" : "Book a tasting"}
+          {t("Boek een tasting", "Book a tasting")}
         </a>
       </nav>
     </header>
@@ -1445,7 +1447,7 @@ export function SiteHeader() {
 }
 ```
 
-Note: the theme (wine/yellow) dot switcher from the original header is gone — there is only one theme now, so nothing to switch.
+Note: the theme (wine/yellow) dot switcher from the original header is gone — there is only one theme now, so nothing to switch. Uses `t()` from `useLanguage()` (added as an addendum to Task 3, see above) for the bilingual strings — `lang` itself is still needed directly for the active-button styling/`aria-pressed`, which isn't a translation.
 
 - [ ] **Step 2: Verify it typechecks**
 
@@ -1474,8 +1476,7 @@ git commit -m "feat: add SiteHeader component"
 import { useLanguage } from "@/lib/language";
 
 export function SiteFooter() {
-  const { lang } = useLanguage();
-  const t = (nl: string, en: string) => (lang === "nl" ? nl : en);
+  const { t } = useLanguage();
 
   return (
     <footer className="site-footer on-dark">

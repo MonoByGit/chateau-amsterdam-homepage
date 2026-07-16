@@ -7,6 +7,7 @@ type Lang = "nl" | "en";
 type LanguageContextValue = {
   lang: Lang;
   setLang: (lang: Lang) => void;
+  t: (nl: string, en: string) => string;
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -34,7 +35,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("preferred-lang", next);
   }, []);
 
-  const value = useMemo(() => ({ lang, setLang }), [lang, setLang]);
+  const t = useCallback((nl: string, en: string) => (lang === "nl" ? nl : en), [lang]);
+
+  const value = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
