@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { getPublicUrl, uploadObject } from "./s3";
+import { getObjectUrl, uploadObject } from "./s3";
 
 const s3Mock = mockClient(S3Client);
 
@@ -38,9 +38,14 @@ describe("uploadObject", () => {
   });
 });
 
-describe("getPublicUrl", () => {
+// getObjectUrl signs the request with the S3 client's already-configured
+// endpoint/credentials (baked in at module load from the real bucket env
+// vars) — only the bucket name is re-read from process.env at call time,
+// so these tests assert the presigned URL's shape (contains the given
+// bucket/key, is a real AWS SigV4 query-signed URL) rather than a fixed
+// full string, since the signature and endpoint host vary by environment.
+describe("getObjectUrl", () => {
   beforeEach(() => {
-    vi.stubEnv("AWS_ENDPOINT_URL", "https://bucket-production.up.railway.app");
     vi.stubEnv("AWS_S3_BUCKET_NAME", "chateau-media-test");
   });
 
@@ -48,8 +53,17 @@ describe("getPublicUrl", () => {
     vi.unstubAllEnvs();
   });
 
-  it("builds a virtual-host-style public URL from the endpoint and bucket", () => {
-    const url = getPublicUrl("media/abc-test.jpg");
-    expect(url).toBe("https://chateau-media-test.bucket-production.up.railway.app/media/abc-test.jpg");
+  it("returns a presigned GET URL containing the bucket and key", async () => {
+    const url = await getObjectUrl("media/abc-test.jpg");
+
+    expect(url).toContain("chateau-media-test");
+    expect(url).toContain("media/abc-test.jpg");
+    expect(url).toContain("X-Amz-Signature=");
+    expect(url).toContain("X-Amz-Expires=86400");
+  });
+
+  it("throws when AWS_S3_BUCKET_NAME is not set", async () => {
+    vi.stubEnv("AWS_S3_BUCKET_NAME", "");
+    await expect(getObjectUrl("media/x.jpg")).rejects.toThrow("AWS_S3_BUCKET_NAME is not set");
   });
 });
