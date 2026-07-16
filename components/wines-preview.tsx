@@ -1,10 +1,14 @@
+// components/wines-preview.tsx
 "use client";
 
 import { useCallback } from "react";
 import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useMagnetic } from "@/lib/use-magnetic";
+import type { WinesContent } from "@/lib/content/defaults";
 
+// Unchanged — owned by a different chunk (Shopify integration). Do not edit
+// as part of this task.
 const WINES: Array<{
   n: string;
   meta: string;
@@ -23,6 +27,7 @@ const WINES: Array<{
   { n: "N°05", meta: "Sprankel · zero waste", name: "Piquette d'Amsterdam", nlTag: "tweede leven van de schil", enTag: "second life of the grape skin", price: "€ 12,50", img: "/assets/wine-5.png", alt: "Piquette d'Amsterdam Sparkling Wine Bottle Packshot", delay: 0.32 },
 ];
 
+// Unchanged — owned by a different chunk.
 function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "en" }) {
   const reveal = useReveal(wine.delay);
   return (
@@ -41,7 +46,7 @@ function WineCard({ wine, lang }: { wine: (typeof WINES)[number]; lang: "nl" | "
   );
 }
 
-export function WinesPreview() {
+export function WinesPreview({ content }: { content: WinesContent }) {
   const { lang, t } = useLanguage();
   const heading1 = useReveal();
   const heading2 = useReveal(0.12);
@@ -64,22 +69,22 @@ export function WinesPreview() {
       <div className="wines-head">
         <div>
           <div className="label rv in">
-            {t("De collectie", "The collection")} <span className="en">· made in Noord</span>
+            {t(content.label.nl, content.label.en)} <span className="en">· made in Noord</span>
           </div>
           <h2>
             <span ref={heading1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading1.isVisible ? " in" : ""}`}>
-              <span>{t("Van klassiek", "From classic")}</span>
+              <span>{t(content.heading_line1.nl, content.heading_line1.en)}</span>
             </span>
             <span ref={heading2.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading2.isVisible ? " in" : ""}`}>
               <span>
-                {t("tot ", "to ")}
-                <em>{t("eigenwijs.", "rebellious.")}</em>
+                {t(content.heading_line2_lead.nl, content.heading_line2_lead.en)}
+                <em>{t(content.heading_line2_em.nl, content.heading_line2_em.en)}</em>
               </span>
             </span>
           </h2>
         </div>
         <a ref={setCtaRef} className={`btn rv${cta.isVisible ? " in" : ""}`} href="#wijnen">
-          {t("Shop alle wijnen", "Shop all wines")} <span className="arr">→</span>
+          {t(content.cta_label.nl, content.cta_label.en)} <span className="arr">→</span>
         </a>
       </div>
       <div className="wine-row">

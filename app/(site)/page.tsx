@@ -12,6 +12,7 @@ import {
   PROCESS_DEFAULTS,
   PATHS_DEFAULTS,
   PLACE_DEFAULTS,
+  WINES_DEFAULTS,
 } from "@/lib/content/defaults";
 
 export default async function HomePage() {
@@ -21,6 +22,7 @@ export default async function HomePage() {
   const processContent = await getContent("home", "process", PROCESS_DEFAULTS);
   const pathsContent = await getContent("home", "paths", PATHS_DEFAULTS);
   const placeContent = await getContent("home", "place", PLACE_DEFAULTS);
+  const winesContent = await getContent("home", "wines", WINES_DEFAULTS);
 
   return (
     <>
@@ -28,7 +30,7 @@ export default async function HomePage() {
       <Manifest content={manifestContent} />
       <Process content={processContent} />
       <Paths content={pathsContent} />
-      <WinesPreview />
+      <WinesPreview content={winesContent} />
       <Place content={placeContent} />
     </>
   );
