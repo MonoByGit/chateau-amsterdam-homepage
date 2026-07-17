@@ -20,15 +20,15 @@ export function SiteFooter({ content }: { content: FooterContent }) {
         </div>
         <div>
           <h4>{t(content.discover_heading.nl, content.discover_heading.en)}</h4>
-          <a href="#verhaal">{t(content.discover_link_1.nl, content.discover_link_1.en)}</a>
-          <a href="#proces">{t(content.discover_link_2.nl, content.discover_link_2.en)}</a>
-          <a href="#wijnen">{t(content.discover_link_3.nl, content.discover_link_3.en)}</a>
+          <a href="/#verhaal">{t(content.discover_link_1.nl, content.discover_link_1.en)}</a>
+          <a href="/#proces">{t(content.discover_link_2.nl, content.discover_link_2.en)}</a>
+          <a href="/#wijnen">{t(content.discover_link_3.nl, content.discover_link_3.en)}</a>
         </div>
         <div>
           <h4>{t(content.do_heading.nl, content.do_heading.en)}</h4>
           <a href="/tours-tastings">Tours &amp; tastings</a>
           <a href="/voor-bedrijven">{t(content.do_link_2.nl, content.do_link_2.en)}</a>
-          <a href="#wijnen">Webshop</a>
+          <a href="/#wijnen">Webshop</a>
         </div>
         <div>
           <h4>Contact</h4>

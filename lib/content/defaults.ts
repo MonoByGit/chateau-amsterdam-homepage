@@ -13,10 +13,10 @@ export type HeaderContent = {
 };
 
 export const HEADER_DEFAULTS: HeaderContent = {
-  nav_1_label: { nl: "Het verhaal", en: "Our story" },
-  nav_2_label: { nl: "Het proces", en: "The process" },
-  nav_3_label: { nl: "Wijnen", en: "Wines" },
-  nav_4_label: { nl: "Voor bedrijven", en: "For businesses" },
+  nav_1_label: { nl: "Verhaal", en: "Story" },
+  nav_2_label: { nl: "Proces", en: "Process" },
+  nav_3_label: { nl: "Wijn", en: "Wine" },
+  nav_4_label: { nl: "Bedrijf", en: "Business" },
   nav_5_label: { nl: "Bezoek", en: "Visit" },
   cta_label: { nl: "Boek een tasting", en: "Book a tasting" },
 };

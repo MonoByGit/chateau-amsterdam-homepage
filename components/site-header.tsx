@@ -7,11 +7,11 @@ import { useMagnetic } from "@/lib/use-magnetic";
 import type { HeaderContent } from "@/lib/content/defaults";
 
 const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
-  { href: "#verhaal", fieldKey: "nav_1_label" },
-  { href: "#proces", fieldKey: "nav_2_label" },
-  { href: "#wijnen", fieldKey: "nav_3_label" },
+  { href: "/#verhaal", fieldKey: "nav_1_label" },
+  { href: "/#proces", fieldKey: "nav_2_label" },
+  { href: "/#wijnen", fieldKey: "nav_3_label" },
   { href: "/voor-bedrijven", fieldKey: "nav_4_label" },
-  { href: "#bezoek", fieldKey: "nav_5_label" },
+  { href: "/#bezoek", fieldKey: "nav_5_label" },
 ];
 
 export function SiteHeader({ content }: { content: HeaderContent }) {
@@ -30,7 +30,7 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
 
   return (
     <header className={`site-header${isScrolled ? " is-scrolled" : ""}`} id="header">
-      <a className="brand" href="#top">
+      <a className="brand" href="/">
         <img className="brand-logo" src="/assets/chateau-logo.png" alt="Chateau Amsterdam Logo" />
         <small>Urban&nbsp;Winery&nbsp;·&nbsp;aan&nbsp;het&nbsp;IJ</small>
       </a>
