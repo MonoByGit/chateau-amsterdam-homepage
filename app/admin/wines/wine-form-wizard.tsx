@@ -68,6 +68,7 @@ export function WineFormWizard({
         <div style={{ display: step === "details" ? "flex" : "none", flexDirection: "column", gap: "1.25rem" }}>
           <label className="a-field">
             <span className="a-label">Naam</span>
+            <span className="a-hint" />
             <input required type="text" id="name" name="name" defaultValue={wine?.name} className="a-input" placeholder="Riesling" />
           </label>
 
@@ -129,6 +130,7 @@ export function WineFormWizard({
             </label>
             <label className="a-field">
               <span className="a-label">Alcoholpercentage</span>
+              <span className="a-hint" />
               <input type="text" id="abv" name="abv" defaultValue={wine?.abv ?? ""} className="a-input" placeholder="13" />
             </label>
           </div>
@@ -136,10 +138,12 @@ export function WineFormWizard({
           <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
             <label className="a-field">
               <span className="a-label">Type (NL)</span>
+              <span className="a-hint" />
               <input type="text" id="wineTypeNl" name="wineTypeNl" defaultValue={wine?.wineTypeNl ?? ""} className="a-input" />
             </label>
             <label className="a-field">
               <span className="a-label">Type (EN)</span>
+              <span className="a-hint" />
               <input type="text" id="wineTypeEn" name="wineTypeEn" defaultValue={wine?.wineTypeEn ?? ""} className="a-input" />
             </label>
           </div>
@@ -147,10 +151,12 @@ export function WineFormWizard({
           <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
             <label className="a-field">
               <span className="a-label">Regio (NL)</span>
+              <span className="a-hint" />
               <input type="text" id="regionNl" name="regionNl" defaultValue={wine?.regionNl ?? ""} className="a-input" />
             </label>
             <label className="a-field">
               <span className="a-label">Regio (EN)</span>
+              <span className="a-hint" />
               <input type="text" id="regionEn" name="regionEn" defaultValue={wine?.regionEn ?? ""} className="a-input" />
             </label>
           </div>
@@ -158,10 +164,12 @@ export function WineFormWizard({
           <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
             <label className="a-field">
               <span className="a-label">Landbouwtechniek (NL)</span>
+              <span className="a-hint" />
               <input type="text" id="farmingMethodNl" name="farmingMethodNl" defaultValue={wine?.farmingMethodNl ?? ""} className="a-input" />
             </label>
             <label className="a-field">
               <span className="a-label">Landbouwtechniek (EN)</span>
+              <span className="a-hint" />
               <input type="text" id="farmingMethodEn" name="farmingMethodEn" defaultValue={wine?.farmingMethodEn ?? ""} className="a-input" />
             </label>
           </div>
@@ -169,10 +177,12 @@ export function WineFormWizard({
           <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
             <label className="a-field">
               <span className="a-label">Vinificatie (NL)</span>
+              <span className="a-hint" />
               <input type="text" id="vinificationNl" name="vinificationNl" defaultValue={wine?.vinificationNl ?? ""} className="a-input" />
             </label>
             <label className="a-field">
               <span className="a-label">Vinificatie (EN)</span>
+              <span className="a-hint" />
               <input type="text" id="vinificationEn" name="vinificationEn" defaultValue={wine?.vinificationEn ?? ""} className="a-input" />
             </label>
           </div>
