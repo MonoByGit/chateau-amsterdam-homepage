@@ -63,7 +63,7 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
           </button>
         </div>
 
-        <a className="nav-cta" ref={magneticRef as React.RefObject<HTMLAnchorElement>} href="#paden">
+        <a className="nav-cta" ref={magneticRef as React.RefObject<HTMLAnchorElement>} href="/tours-tastings#reserveren">
           {t(content.cta_label.nl, content.cta_label.en)}
         </a>
       </nav>

@@ -72,10 +72,10 @@ export function Hero({ content, marquee }: { content: HeroContent; marquee: Marq
             <em>{lang === "nl" ? content.intro_em.nl : content.intro_em.en}</em>
           </p>
           <div ref={ctaReveal.ref as React.RefObject<HTMLDivElement>} className={`hero-ctas rv${ctaReveal.isVisible ? " in" : ""}`}>
-            <a className="btn btn--primary" ref={primaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="#paden">
+            <a className="btn btn--primary" ref={primaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="/tours-tastings#reserveren">
               {t(content.cta_primary.nl, content.cta_primary.en)} <span className="arr">→</span>
             </a>
-            <a className="btn" ref={secondaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="#bedrijven">
+            <a className="btn" ref={secondaryCtaMagnetic as React.RefObject<HTMLAnchorElement>} href="/voor-bedrijven">
               {t(content.cta_secondary.nl, content.cta_secondary.en)} <span className="arr">→</span>
             </a>
           </div>

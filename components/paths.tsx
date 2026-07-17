@@ -19,7 +19,7 @@ const PATH_META: Array<{
   {
     idx: "01",
     word: "Taste",
-    href: "#paden",
+    href: "/tours-tastings",
     titleKey: "path_1_title",
     bodyKey: "path_1_body",
     img: "/assets/path-taste.png",
