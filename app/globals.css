@@ -609,7 +609,7 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .bd-form-card form { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
 .bd-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .bd-field label { display: block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(241, 236, 225, 0.5); margin-bottom: 6px; }
-.bd-input { width: 100%; border: none; border-bottom: 1px solid rgba(241, 236, 225, 0.25); background: transparent; color: var(--paper); padding: 8px 2px; font-size: 14px; font-family: inherit; border-radius: 0; }
+.bd-input { width: 100%; border: none; border-bottom: 1px solid rgba(241, 236, 225, 0.25); background: transparent; color: var(--paper); padding: 14px 2px; font-size: 14px; font-family: inherit; border-radius: 0; box-sizing: border-box; }
 .bd-input::placeholder { color: rgba(241, 236, 225, 0.35); }
 .bd-input:focus { outline: none; border-color: var(--accent); }
 select.bd-input option { color: var(--ink); }
@@ -729,7 +729,7 @@ select.bd-input option { color: var(--ink); }
 .tastings-field label { display: flex; align-items: baseline; gap: 2px; margin-bottom: 7px; }
 .tastings-field .fn { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--accent-badge); }
 .tastings-field .fl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(23,20,14,.55); margin-left: 6px; }
-.tastings-input { width: 100%; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); padding: 9px 2px; font-size: 14.5px; font-family: inherit; border-radius: 0; }
+.tastings-input { width: 100%; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); padding: 14px 2px; font-size: 14.5px; font-family: inherit; border-radius: 0; box-sizing: border-box; }
 .tastings-input:focus { outline: none; border-color: var(--accent-badge); }
 .tastings-submit {
   align-self: center; margin-top: 12px; display: inline-flex; align-items: center; gap: 10px;
