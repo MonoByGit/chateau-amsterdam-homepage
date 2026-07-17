@@ -479,7 +479,9 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .wijn-detail-info .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--theme-fg-muted); }
 .wijn-detail-info h1 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(34px, 4vw, 56px); line-height: 0.95; margin: 10px 0 4px; }
 .wijn-detail-info .tag { font-family: var(--font-serif); font-style: italic; color: var(--theme-accent-text); font-size: 22px; display: block; margin-bottom: 22px; }
-.wijn-detail-info .description { font-size: 17px; line-height: 1.65; max-width: 46ch; color: var(--theme-fg); opacity: 0.85; margin-bottom: 30px; }
+.wijn-detail-info .description { font-size: 17px; line-height: 1.65; max-width: 46ch; color: var(--theme-fg); opacity: 0.85; margin-bottom: 20px; }
+.wijn-detail-info .description-more { display: flex; flex-direction: column; gap: 14px; max-width: 44ch; margin-bottom: 30px; padding-top: 18px; border-top: 1px solid var(--theme-border); }
+.wijn-detail-info .description-more p { font-size: 14.5px; line-height: 1.7; color: var(--theme-fg-muted); }
 
 .wijn-profile { border: 1px solid var(--theme-border); border-radius: 2px; margin-bottom: 26px; overflow: hidden; }
 .wijn-profile-title { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--theme-accent-text); background: var(--theme-bg-dim); padding: 10px 16px; }

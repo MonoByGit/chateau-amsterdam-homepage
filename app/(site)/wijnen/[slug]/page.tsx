@@ -69,7 +69,23 @@ export default async function WijnDetailPage({ params }: { params: Promise<{ slu
           <h1>{wine.name}</h1>
           <span className="tag">{wine.tagNl}</span>
 
-          {wine.descriptionNl ? <p className="description">{wine.descriptionNl}</p> : null}
+          {wine.descriptionNl
+            ? (() => {
+                const [lede, ...more] = wine.descriptionNl.split("\n\n").filter(Boolean);
+                return (
+                  <>
+                    <p className="description">{lede}</p>
+                    {more.length > 0 ? (
+                      <div className="description-more">
+                        {more.map((paragraph, i) => (
+                          <p key={i}>{paragraph}</p>
+                        ))}
+                      </div>
+                    ) : null}
+                  </>
+                );
+              })()
+            : null}
 
           {hasFacts || hasDetails ? (
             <div className="wijn-profile">
