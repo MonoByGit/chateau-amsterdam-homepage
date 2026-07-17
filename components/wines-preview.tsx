@@ -6,35 +6,13 @@ import { useLanguage } from "@/lib/language";
 import { useReveal } from "@/lib/use-reveal";
 import { useMagnetic } from "@/lib/use-magnetic";
 import type { WinesContent } from "@/lib/content/defaults";
+import { WineCard, type WineCardData } from "./wine-card";
 
-export type WineCardData = {
-  n: string;
-  meta: string;
-  name: string;
-  nlTag: string;
-  enTag: string;
-  price: string;
-  img: string;
-  alt: string;
-  delay: number;
-};
+export type { WineCardData };
 
-function WineCard({ wine, lang }: { wine: WineCardData; lang: "nl" | "en" }) {
+function RevealingWineCard({ wine, lang }: { wine: WineCardData; lang: "nl" | "en" }) {
   const reveal = useReveal(wine.delay);
-  return (
-    <article ref={reveal.ref as React.RefObject<HTMLElement>} className={`wine-card rv${reveal.isVisible ? " in" : ""}`}>
-      <div className="meta">
-        <span>{wine.n}</span>
-        <span>{wine.meta}</span>
-      </div>
-      <div className="wine-img-wrap">
-        <img src={wine.img} alt={wine.alt} className="wine-packshot" />
-      </div>
-      <h3>{wine.name}</h3>
-      <div className="tag">{lang === "nl" ? wine.nlTag : wine.enTag}</div>
-      <div className="price">{wine.price}</div>
-    </article>
-  );
+  return <WineCard wine={wine} lang={lang} reveal={reveal} />;
 }
 
 export function WinesPreview({ content, wines }: { content: WinesContent; wines: WineCardData[] }) {
@@ -74,13 +52,13 @@ export function WinesPreview({ content, wines }: { content: WinesContent; wines:
             </span>
           </h2>
         </div>
-        <a ref={setCtaRef} className={`btn rv${cta.isVisible ? " in" : ""}`} href="#wijnen">
+        <a ref={setCtaRef} className={`btn rv${cta.isVisible ? " in" : ""}`} href="/wijnen">
           {t(content.cta_label.nl, content.cta_label.en)} <span className="arr">→</span>
         </a>
       </div>
       <div className="wine-row">
         {wines.map((wine) => (
-          <WineCard key={wine.n} wine={wine} lang={lang} />
+          <RevealingWineCard key={wine.n} wine={wine} lang={lang} />
         ))}
       </div>
     </section>

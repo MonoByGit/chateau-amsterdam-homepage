@@ -432,6 +432,7 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .wine-row { display: flex; gap: clamp(16px, 2vw, 28px); overflow-x: auto; padding: 26px var(--gutter) 30px; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .wine-row::-webkit-scrollbar { display: none; }
 .wine-card {
+  display: block;
   flex: 0 0 clamp(240px, 24vw, 320px); scroll-snap-align: start;
   background: var(--theme-bg-card); border: 1px solid var(--theme-border);
   z-index: 2; padding: 26px 26px 30px; position: relative;

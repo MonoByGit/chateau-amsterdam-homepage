@@ -41,6 +41,11 @@ export default async function HomePage() {
   const wines: WineCardData[] = await Promise.all(
     wineRows.map(async (wine, index) => ({
       n: `N°${String(index + 1).padStart(2, "0")}`,
+      // slug is nullable in the DB only because Postgres can't add a NOT
+      // NULL column to a populated table; createWine always sets one for
+      // new wines, and the migration's backfill script sets one for every
+      // existing wine, so this is never actually null once code runs.
+      slug: wine.slug!,
       meta: wine.metaNl,
       name: wine.name,
       nlTag: wine.tagNl,
