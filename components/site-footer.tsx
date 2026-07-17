@@ -27,12 +27,13 @@ export function SiteFooter({ content }: { content: FooterContent }) {
         <div>
           <h4>{t(content.do_heading.nl, content.do_heading.en)}</h4>
           <a href="#paden">Tours &amp; tastings</a>
-          <a href="#bedrijven">{t(content.do_link_2.nl, content.do_link_2.en)}</a>
+          <a href="/voor-bedrijven">{t(content.do_link_2.nl, content.do_link_2.en)}</a>
           <a href="#wijnen">Webshop</a>
         </div>
         <div>
           <h4>Contact</h4>
           <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>
+          <a href="mailto:sales@chateau.amsterdam">sales@chateau.amsterdam</a>
           <a href="https://www.instagram.com/chateauamsterdam/" target="_blank" rel="noopener noreferrer">
             Instagram
           </a>

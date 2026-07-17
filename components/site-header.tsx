@@ -10,7 +10,7 @@ const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
   { href: "#verhaal", fieldKey: "nav_1_label" },
   { href: "#proces", fieldKey: "nav_2_label" },
   { href: "#wijnen", fieldKey: "nav_3_label" },
-  { href: "#bedrijven", fieldKey: "nav_4_label" },
+  { href: "/voor-bedrijven", fieldKey: "nav_4_label" },
   { href: "#bezoek", fieldKey: "nav_5_label" },
 ];
 

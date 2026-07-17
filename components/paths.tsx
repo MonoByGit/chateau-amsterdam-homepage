@@ -29,7 +29,7 @@ const PATH_META: Array<{
   {
     idx: "02",
     word: "Pour",
-    href: "#bedrijven",
+    href: "/voor-bedrijven",
     titleKey: "path_2_title",
     bodyKey: "path_2_body",
     img: "/assets/path-pour.png",
@@ -62,6 +62,10 @@ function PathRow({
 
   function handleRowClick(e: React.MouseEvent<HTMLDivElement>) {
     if ((e.target as HTMLElement).closest("a")) return;
+    if (!meta.href.startsWith("#")) {
+      window.location.href = meta.href;
+      return;
+    }
     const target = document.querySelector(meta.href);
     if (target) {
       e.preventDefault();
@@ -73,7 +77,6 @@ function PathRow({
     <div
       ref={reveal.ref as React.RefObject<HTMLDivElement>}
       className={`path rv${reveal.isVisible ? " in" : ""}`}
-      id={meta.href === "#bedrijven" ? "bedrijven" : undefined}
       onClick={handleRowClick}
     >
       <div className="idx">{meta.idx}</div>
