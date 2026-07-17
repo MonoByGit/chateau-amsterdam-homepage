@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, integer, boolean, pgEnum, date, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, integer, boolean, pgEnum, date, uniqueIndex, real } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -40,6 +40,7 @@ export const media = pgTable("media", {
 
 export const wines = pgTable("wines", {
   id: uuid("id").primaryKey().defaultRandom(),
+  slug: text("slug"),
   name: text("name").notNull(),
   metaNl: text("meta_nl").notNull(),
   metaEn: text("meta_en").notNull(),
@@ -49,8 +50,25 @@ export const wines = pgTable("wines", {
   shopifyHandle: text("shopify_handle").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
   isActive: boolean("is_active").notNull().default(true),
+  descriptionNl: text("description_nl"),
+  descriptionEn: text("description_en"),
+  grapes: text("grapes"),
+  vintage: text("vintage"),
+  wineTypeNl: text("wine_type_nl"),
+  wineTypeEn: text("wine_type_en"),
+  regionNl: text("region_nl"),
+  regionEn: text("region_en"),
+  farmingMethodNl: text("farming_method_nl"),
+  farmingMethodEn: text("farming_method_en"),
+  vinificationNl: text("vinification_nl"),
+  vinificationEn: text("vinification_en"),
+  abv: real("abv"),
+  foodPairingNl: text("food_pairing_nl"),
+  foodPairingEn: text("food_pairing_en"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => ({
+  uniqueSlug: uniqueIndex("wines_slug_idx").on(table.slug),
+}));
 
 export const reservationTrackEnum = pgEnum("reservation_track", ["standaard", "zakelijk"]);
 export const reservationStatusEnum = pgEnum("reservation_status", ["nieuw", "in_behandeling", "bevestigd", "afgewezen"]);

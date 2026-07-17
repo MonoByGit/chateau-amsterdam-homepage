@@ -8,6 +8,13 @@
       "when": 1784212049147,
       "tag": "0000_dizzy_lilandra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784290769993,
+      "tag": "0001_nosy_doctor_octopus",
+      "breakpoints": true
     }
   ]
 }
