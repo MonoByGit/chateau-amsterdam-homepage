@@ -6,7 +6,9 @@ import { createMedia } from "./media";
 import {
   createWine,
   deleteWine,
+  getRelatedWines,
   getWine,
+  getWineBySlug,
   getWinesForHomepage,
   listWines,
   reorderWines,
@@ -87,6 +89,66 @@ describe("wines repository", () => {
     const rows = await listWines({});
     expect(rows.map((w) => w.id)).toEqual([c.id, a.id, b.id]);
     expect(rows.map((w) => w.sortOrder)).toEqual([0, 1, 2]);
+  });
+});
+
+describe("createWine slug generation", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+  });
+
+  it("generates a slug from the name", async () => {
+    const wine = await createWine(wineInput({ name: "Pinot Noir" }));
+    expect(wine.slug).toBe("pinot-noir");
+  });
+
+  it("appends a numeric suffix when the slug is already taken", async () => {
+    await createWine(wineInput({ name: "Pinot Noir" }));
+    const second = await createWine(wineInput({ name: "Pinot Noir" }));
+    expect(second.slug).toBe("pinot-noir-2");
+  });
+
+  it("does not change the slug when the wine is later renamed", async () => {
+    const wine = await createWine(wineInput({ name: "Pinot Noir" }));
+    await updateWine(wine.id, { name: "Pinot Noir Reserve" });
+    expect((await getWine(wine.id))?.slug).toBe("pinot-noir");
+  });
+});
+
+describe("getWineBySlug", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+  });
+
+  it("returns the matching row, or null when not found", async () => {
+    const created = await createWine(wineInput({ name: "Pinot Noir" }));
+    expect((await getWineBySlug("pinot-noir"))?.id).toBe(created.id);
+    expect(await getWineBySlug("does-not-exist")).toBeNull();
+  });
+});
+
+describe("getRelatedWines", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+  });
+
+  it("returns other active wines, excluding the given id", async () => {
+    const a = await createWine(wineInput({ name: "A" }));
+    const b = await createWine(wineInput({ name: "B" }));
+    const c = await createWine(wineInput({ name: "C", isActive: false }));
+
+    const related = await getRelatedWines(a.id);
+    expect(related.map((w) => w.id)).toEqual([b.id]);
+    expect(related.map((w) => w.id)).not.toContain(a.id);
+    expect(related.map((w) => w.id)).not.toContain(c.id);
+  });
+
+  it("caps the result at 4 wines", async () => {
+    const created = await Promise.all(
+      Array.from({ length: 6 }, (_, i) => createWine(wineInput({ name: `Wine ${i}` })))
+    );
+    const related = await getRelatedWines(created[0].id);
+    expect(related.length).toBeLessThanOrEqual(4);
   });
 });
 
