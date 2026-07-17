@@ -4,6 +4,7 @@
 import { redirect } from "next/navigation";
 import { createBusinessReservation } from "@/lib/db/reservations";
 import { validateBusinessInquiry, type BusinessInquiryInput } from "@/lib/validation/business-inquiry";
+import { checkRateLimit, recordFailedAttempt } from "@/lib/auth/rate-limit";
 
 function readInquiryForm(formData: FormData): BusinessInquiryInput {
   return {
@@ -12,17 +13,26 @@ function readInquiryForm(formData: FormData): BusinessInquiryInput {
     email: String(formData.get("email") ?? ""),
     phone: String(formData.get("phone") ?? ""),
     occasion: String(formData.get("occasion") ?? ""),
+    groupSize: String(formData.get("groupSize") ?? ""),
     notes: String(formData.get("notes") ?? ""),
   };
 }
 
 export async function submitBusinessInquiry(formData: FormData): Promise<void> {
   const input = readInquiryForm(formData);
+  const rateLimitKey = `business:${input.email.trim().toLowerCase()}`;
+
+  const rateLimit = checkRateLimit(rateLimitKey);
+  if (!rateLimit.allowed) {
+    redirect(`/voor-bedrijven?fout=rate_limited#aanvraag`);
+  }
 
   const validationError = validateBusinessInquiry(input);
   if (validationError) {
     redirect(`/voor-bedrijven?fout=${encodeURIComponent(validationError)}#aanvraag`);
   }
+
+  recordFailedAttempt(rateLimitKey);
 
   await createBusinessReservation({
     contactName: input.name,
@@ -30,6 +40,7 @@ export async function submitBusinessInquiry(formData: FormData): Promise<void> {
     email: input.email,
     phone: input.phone,
     occasion: input.occasion,
+    groupSize: input.groupSize.trim() ? Number(input.groupSize) : null,
     notes: input.notes,
   });
 

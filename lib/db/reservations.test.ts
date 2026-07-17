@@ -156,6 +156,7 @@ describe("reservations repository", () => {
         email: "jan@acme.nl",
         phone: "0612345678",
         occasion: "Zakelijke tasting of borrel",
+        groupSize: 20,
         notes: "Graag met 20 collega's.",
       });
 
@@ -164,6 +165,7 @@ describe("reservations repository", () => {
       expect(created.contactName).toBe("Jan Jansen");
       expect(created.companyName).toBe("Acme B.V.");
       expect(created.occasion).toBe("Zakelijke tasting of borrel");
+      expect(created.groupSize).toBe(20);
       expect(created.notes).toBe("Graag met 20 collega's.");
     });
 
@@ -174,11 +176,13 @@ describe("reservations repository", () => {
         email: "jan@acme.nl",
         phone: "",
         occasion: "Iets anders",
+        groupSize: null,
         notes: "",
       });
 
       expect(created.companyName).toBeNull();
       expect(created.phone).toBeNull();
+      expect(created.groupSize).toBeNull();
       expect(created.notes).toBeNull();
     });
   });

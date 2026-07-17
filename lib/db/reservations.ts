@@ -50,6 +50,7 @@ export type BusinessReservationInput = {
   email: string;
   phone: string;
   occasion: string;
+  groupSize: number | null;
   notes: string;
 };
 
@@ -63,6 +64,7 @@ export async function createBusinessReservation(input: BusinessReservationInput)
       email: input.email,
       phone: input.phone || null,
       occasion: input.occasion,
+      groupSize: input.groupSize,
       notes: input.notes || null,
     })
     .returning();
