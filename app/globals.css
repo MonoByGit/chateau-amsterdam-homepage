@@ -536,3 +536,43 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--line-light); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(241,236,225,0.45); }
 .footer-logo { display: block; height: 18px; width: auto; filter: invert(1); opacity: 0.55; }
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+/* ============================================================
+   VOOR BEDRIJVEN
+   ============================================================ */
+.zakelijk-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--theme-accent-text); }
+
+.zakelijk-intro { position: relative; z-index: 2; padding: 24px var(--gutter) 40px; }
+.zakelijk-intro h1 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(38px, 6vw, 68px); line-height: 0.96; margin: 14px 0 20px; }
+.zakelijk-intro h1 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent-text); }
+.zakelijk-intro p { max-width: 52ch; font-size: 17px; line-height: 1.6; color: var(--theme-fg-muted); }
+
+.zakelijk-sec { position: relative; z-index: 2; padding: 90px var(--gutter); border-top: 1px solid var(--theme-border); display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: center; }
+.zakelijk-sec h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(26px, 3vw, 38px); margin-top: 12px; line-height: 1.05; }
+.zakelijk-sec p { font-size: 15.5px; color: var(--theme-fg-muted); max-width: 44ch; margin-top: 14px; }
+.zakelijk-ph { background: var(--theme-bg-card); border: 1px solid var(--theme-border); height: 340px; display: flex; align-items: center; justify-content: center; color: var(--theme-accent-text); font-family: var(--font-mono); font-size: 12px; opacity: 0.6; }
+@media (max-width: 860px) { .zakelijk-sec { grid-template-columns: 1fr !important; } }
+
+.zakelijk-why { position: relative; z-index: 2; padding: 90px var(--gutter) 50px; border-top: 1px solid var(--theme-border); }
+.zakelijk-why h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(30px, 4.4vw, 54px); line-height: 0.96; margin-top: 16px; max-width: 16ch; }
+.zakelijk-why h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent-text); }
+.zakelijk-stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(50px, 8vh, 80px); border-top: 1px solid var(--theme-border); }
+.zakelijk-stat { padding: 26px clamp(12px, 2vw, 28px) 6px clamp(18px, 2.4vw, 40px); border-right: 1px solid var(--theme-border); }
+.zakelijk-stat:first-child { padding-left: 0; }
+.zakelijk-stat:last-child { border-right: 0; }
+.zakelijk-stat .num { font-stretch: 125%; font-weight: 800; line-height: 1; font-size: clamp(30px, 4vw, 58px); letter-spacing: -0.01em; }
+.zakelijk-stat .desc { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--theme-fg-muted); margin-top: 14px; line-height: 1.7; max-width: 22ch; }
+@media (max-width: 760px) { .zakelijk-stats { grid-template-columns: 1fr 1fr; } .zakelijk-stat:nth-child(2) { border-right: 0; } }
+
+.zakelijk-form-sec { position: relative; z-index: 2; padding: 90px var(--gutter) 130px; border-top: 1px solid var(--theme-border); display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; }
+.zakelijk-form-sec h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(26px, 3vw, 38px); margin-top: 12px; max-width: 16ch; }
+.zakelijk-form-sec > div > p { font-size: 15.5px; color: var(--theme-fg-muted); max-width: 38ch; margin-top: 14px; }
+.zakelijk-form-card { background: var(--theme-bg-card); border: 1px solid var(--theme-border); padding: 36px; }
+.zakelijk-form-card form { display: flex; flex-direction: column; gap: 12px; }
+.zakelijk-form-card .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.zakelijk-input { width: 100%; border: 1px solid var(--theme-border); background: var(--theme-bg); color: var(--theme-fg); padding: 11px 13px; font-size: 14px; font-family: inherit; border-radius: 0; }
+.zakelijk-input:focus { outline: none; border-color: var(--theme-accent-text); }
+.zakelijk-form-card button { align-self: flex-start; margin-top: 8px; }
+.zakelijk-form-success { font-size: 15.5px; }
+.zakelijk-form-error { font-size: 14px; color: #b3261e; margin-bottom: 4px; }
+@media (max-width: 860px) { .zakelijk-form-sec { grid-template-columns: 1fr; } .zakelijk-form-card .row { grid-template-columns: 1fr; } }
