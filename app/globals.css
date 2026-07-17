@@ -448,6 +448,59 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .wine-card .price { font-family: var(--font-mono); font-size: 13px; margin-top: 14px; color: var(--theme-fg-muted); }
 .wines-foot { padding: 10px var(--gutter) 0; display: flex; gap: 14px; }
 
+.wijnen-breadcrumb { padding: 130px var(--gutter) 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--theme-fg-muted); }
+.wijnen-breadcrumb a:hover { color: var(--theme-fg); }
+.wijnen-breadcrumb .sep { margin: 0 8px; }
+.wijnen-breadcrumb .current { color: var(--theme-fg); }
+
+.wijnen-intro { padding: 30px var(--gutter) 10px; }
+.wijnen-intro h1 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(38px, 6vw, 80px); line-height: 0.95; margin: 14px 0 20px; }
+.wijnen-intro h1 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent); }
+.wijnen-intro p { max-width: 50ch; font-size: 17px; line-height: 1.6; color: var(--theme-fg-muted); }
+
+.wijnen-grid { padding: 40px var(--gutter) 120px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.wijnen-grid .wine-card { flex: none; }
+.wijnen-grid .wine-link-cue { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--theme-fg-muted); margin-top: 16px; display: block; }
+@media (max-width: 900px) { .wijnen-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .wijnen-grid { grid-template-columns: 1fr; } }
+
+.wijn-detail { display: grid; grid-template-columns: 0.85fr 1fr; gap: 56px; padding: 40px var(--gutter) 90px; }
+@media (max-width: 900px) { .wijn-detail { grid-template-columns: 1fr; } }
+
+.wijn-detail-photo { display: flex; flex-direction: column; }
+.wijn-detail-photo .frame { background: var(--theme-bg-card); border: 1px solid var(--theme-border); border-radius: 2px; height: 560px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.wijn-detail-photo .frame img { height: 88%; object-fit: contain; }
+
+.wijn-pairing { background: var(--theme-bg-card); border-left: 3px solid var(--theme-accent); padding: 18px 20px; margin-top: 24px; }
+.wijn-pairing .label { margin-bottom: 8px; }
+.wijn-pairing p { font-size: 15px; line-height: 1.6; }
+
+.wijn-detail-info .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--theme-fg-muted); }
+.wijn-detail-info h1 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(34px, 4vw, 56px); line-height: 0.95; margin: 10px 0 4px; }
+.wijn-detail-info .tag { font-family: var(--font-serif); font-style: italic; color: var(--theme-accent-text); font-size: 22px; display: block; margin-bottom: 22px; }
+.wijn-detail-info .description { font-size: 17px; line-height: 1.65; max-width: 46ch; color: var(--theme-fg); opacity: 0.85; margin-bottom: 30px; }
+
+.wijn-profile { border: 1px solid var(--theme-border); border-radius: 2px; margin-bottom: 26px; overflow: hidden; }
+.wijn-profile-title { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--theme-accent-text); background: var(--theme-bg-dim); padding: 10px 16px; }
+.wijn-profile-body { display: flex; gap: 30px; padding: 18px 16px; }
+.wijn-profile-facts { flex: 0 0 34%; display: flex; flex-direction: column; gap: 14px; padding-right: 24px; border-right: 1px solid var(--theme-border); }
+.wijn-profile-details { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.wijn-profile-item .k { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--theme-fg-muted); display: block; margin-bottom: 4px; }
+.wijn-profile-item .v { font-size: 14.5px; }
+.wijn-profile-facts .wijn-profile-item:not(:last-child),
+.wijn-profile-details .wijn-profile-item:not(:last-child) { border-bottom: 1px solid var(--theme-border); padding-bottom: 14px; }
+@media (max-width: 520px) {
+  .wijn-profile-body { flex-direction: column; }
+  .wijn-profile-facts { border-right: none; border-bottom: 1px solid var(--theme-border); padding-right: 0; padding-bottom: 16px; }
+}
+
+.wijn-related { padding: 20px var(--gutter) 120px; }
+.wijn-related h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: clamp(26px, 3.4vw, 40px); margin-bottom: 24px; }
+.wijn-related h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent); }
+.wijn-related-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.wijn-related-row .wine-card { flex: none; }
+@media (max-width: 900px) { .wijn-related-row { grid-template-columns: repeat(2, 1fr); } }
+
 /* ============================================================
    DE PLEK
    ============================================================ */
