@@ -17,8 +17,6 @@ import {
 import { getWinesForHomepage } from "@/lib/db/wines";
 import { getObjectUrl } from "@/lib/storage/s3";
 
-const WINE_PRICE_PLACEHOLDER = "vanaf shop.chateau.amsterdam";
-
 // Forces this route to render per-request instead of being statically
 // prerendered at build time. Without this, `next build` tries to execute
 // getContent()/getWinesForHomepage() during the build step to produce
@@ -50,7 +48,6 @@ export default async function HomePage() {
       name: wine.name,
       nlTag: wine.tagNl,
       enTag: wine.tagEn,
-      price: WINE_PRICE_PLACEHOLDER,
       img: wine.imageStorageKey ? await getObjectUrl(wine.imageStorageKey) : "/assets/wine-1.png",
       alt: wine.imageAltNl || wine.name,
       delay: index * 0.08,
