@@ -52,7 +52,11 @@ export default async function ToursTastingsPage({
       </section>
 
       <section className="tastings-opening">
-        <p>Midden in de stad wordt hier wijn gemaakt, van tank tot glas. Wij laten je proeven wat er ontstaat.</p>
+        <p>
+          Midden in de stad wordt hier wijn gemaakt, van tank tot glas.
+          <br />
+          Wij laten je proeven wat er ontstaat.
+        </p>
       </section>
 
       <section className="tastings-gang">
