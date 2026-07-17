@@ -44,6 +44,31 @@ export async function listReservations(
     .orderBy(desc(reservations.createdAt));
 }
 
+export type BusinessReservationInput = {
+  contactName: string;
+  companyName: string;
+  email: string;
+  phone: string;
+  occasion: string;
+  notes: string;
+};
+
+export async function createBusinessReservation(input: BusinessReservationInput): Promise<Reservation> {
+  const [row] = await db
+    .insert(reservations)
+    .values({
+      track: "zakelijk",
+      contactName: input.contactName,
+      companyName: input.companyName || null,
+      email: input.email,
+      phone: input.phone || null,
+      occasion: input.occasion,
+      notes: input.notes || null,
+    })
+    .returning();
+  return row;
+}
+
 export async function getReservation(id: string): Promise<Reservation | null> {
   const [row] = await db.select().from(reservations).where(eq(reservations.id, id)).limit(1);
   return row ?? null;

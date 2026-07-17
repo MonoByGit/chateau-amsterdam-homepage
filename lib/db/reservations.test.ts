@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { db } from "@/lib/db/client";
 import { reservations } from "@/lib/db/schema";
 import {
+  createBusinessReservation,
   getReservation,
   isValidTransition,
   listReservations,
@@ -143,6 +144,41 @@ describe("reservations repository", () => {
       await expect(
         updateReservationStatus("00000000-0000-0000-0000-000000000000", "in_behandeling")
       ).rejects.toThrow(/not found/i);
+    });
+  });
+
+  describe("createBusinessReservation", () => {
+    it("inserts a zakelijk-track reservation with status nieuw", async () => {
+      const created = await createBusinessReservation({
+        contactName: "Jan Jansen",
+        companyName: "Acme B.V.",
+        email: "jan@acme.nl",
+        phone: "0612345678",
+        occasion: "Zakelijke tasting of borrel",
+        notes: "Graag met 20 collega's.",
+      });
+
+      expect(created.track).toBe("zakelijk");
+      expect(created.status).toBe("nieuw");
+      expect(created.contactName).toBe("Jan Jansen");
+      expect(created.companyName).toBe("Acme B.V.");
+      expect(created.occasion).toBe("Zakelijke tasting of borrel");
+      expect(created.notes).toBe("Graag met 20 collega's.");
+    });
+
+    it("stores empty optional fields as null", async () => {
+      const created = await createBusinessReservation({
+        contactName: "Jan Jansen",
+        companyName: "",
+        email: "jan@acme.nl",
+        phone: "",
+        occasion: "Iets anders",
+        notes: "",
+      });
+
+      expect(created.companyName).toBeNull();
+      expect(created.phone).toBeNull();
+      expect(created.notes).toBeNull();
     });
   });
 });
