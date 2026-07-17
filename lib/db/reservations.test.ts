@@ -4,6 +4,7 @@ import { db } from "@/lib/db/client";
 import { reservations } from "@/lib/db/schema";
 import {
   createBusinessReservation,
+  createTastingReservation,
   getReservation,
   isValidTransition,
   listReservations,
@@ -178,6 +179,48 @@ describe("reservations repository", () => {
 
       expect(created.companyName).toBeNull();
       expect(created.phone).toBeNull();
+      expect(created.notes).toBeNull();
+    });
+  });
+
+  describe("createTastingReservation", () => {
+    it("inserts a standaard-track reservation with status nieuw", async () => {
+      const created = await createTastingReservation({
+        contactName: "Sanne de Vries",
+        email: "sanne@example.com",
+        phone: "0612345678",
+        partySize: 4,
+        requestedDate: "2026-08-14",
+        preferredPeriod: "Zaterdagavond",
+        occasion: "30ste verjaardag",
+        notes: "Notenallergie in de groep.",
+      });
+
+      expect(created.track).toBe("standaard");
+      expect(created.status).toBe("nieuw");
+      expect(created.contactName).toBe("Sanne de Vries");
+      expect(created.partySize).toBe(4);
+      expect(created.requestedDate).toBe("2026-08-14");
+      expect(created.preferredPeriod).toBe("Zaterdagavond");
+      expect(created.occasion).toBe("30ste verjaardag");
+      expect(created.notes).toBe("Notenallergie in de groep.");
+    });
+
+    it("stores empty optional fields as null", async () => {
+      const created = await createTastingReservation({
+        contactName: "Sanne de Vries",
+        email: "sanne@example.com",
+        phone: "",
+        partySize: 2,
+        requestedDate: "2026-08-14",
+        preferredPeriod: "",
+        occasion: "",
+        notes: "",
+      });
+
+      expect(created.phone).toBeNull();
+      expect(created.preferredPeriod).toBeNull();
+      expect(created.occasion).toBeNull();
       expect(created.notes).toBeNull();
     });
   });

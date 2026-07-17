@@ -69,6 +69,35 @@ export async function createBusinessReservation(input: BusinessReservationInput)
   return row;
 }
 
+export type TastingReservationInput = {
+  contactName: string;
+  email: string;
+  phone: string;
+  partySize: number;
+  requestedDate: string;
+  preferredPeriod: string;
+  occasion: string;
+  notes: string;
+};
+
+export async function createTastingReservation(input: TastingReservationInput): Promise<Reservation> {
+  const [row] = await db
+    .insert(reservations)
+    .values({
+      track: "standaard",
+      contactName: input.contactName,
+      email: input.email,
+      phone: input.phone || null,
+      partySize: input.partySize,
+      requestedDate: input.requestedDate,
+      preferredPeriod: input.preferredPeriod || null,
+      occasion: input.occasion || null,
+      notes: input.notes || null,
+    })
+    .returning();
+  return row;
+}
+
 export async function getReservation(id: string): Promise<Reservation | null> {
   const [row] = await db.select().from(reservations).where(eq(reservations.id, id)).limit(1);
   return row ?? null;
