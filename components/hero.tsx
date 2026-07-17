@@ -84,7 +84,7 @@ export function Hero({ content, marquee }: { content: HeroContent; marquee: Marq
           <div className="media-clip">
             <div ref={parallaxRef as React.RefObject<HTMLDivElement>} className="pwrap">
               <img
-                src="/assets/hero-winery.png"
+                src="/assets/hero-winery.jpg"
                 alt="Chateau Amsterdam Winery Interior Hall with stainless steel tanks and oak barrels"
               />
             </div>

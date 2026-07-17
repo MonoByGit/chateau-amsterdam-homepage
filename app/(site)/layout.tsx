@@ -19,13 +19,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Chateau Amsterdam · Urban Winery",
     description: "Geen wijngaard. Wel wijn. Druiven uit heel Europa, wijn gemaakt aan het IJ in Amsterdam-Noord.",
-    images: ["/assets/place-hal.png"],
+    images: ["/assets/place-hal.jpg"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Chateau Amsterdam · Urban Winery",
     description: "Geen wijngaard. Wel wijn. Druiven uit heel Europa, wijn gemaakt aan het IJ in Amsterdam-Noord.",
-    images: ["/assets/place-hal.png"],
+    images: ["/assets/place-hal.jpg"],
   },
 };
 
@@ -33,7 +33,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Winery",
   name: "Chateau Amsterdam",
-  image: "https://chateau.amsterdam/assets/place-hal.png",
+  image: "https://chateau.amsterdam/assets/place-hal.jpg",
   "@id": "https://chateau.amsterdam/#winery",
   url: "https://chateau.amsterdam/",
   telephone: "+31200000000",

@@ -16,7 +16,7 @@ const STEP_META: Array<{
     idx: "01",
     titleKey: "step_1_title",
     bodyKey: "step_1_body",
-    img: "/assets/step-druif.png",
+    img: "/assets/step-druif.jpg",
     alt: "Close-up of hands picking organic red wine grapes into a rustic wooden box",
   },
   {
@@ -30,14 +30,14 @@ const STEP_META: Array<{
     idx: "03",
     titleKey: "step_3_title",
     bodyKey: "step_3_body",
-    img: "/assets/step-makerij.png",
+    img: "/assets/step-makerij.jpg",
     alt: "Winemaker measuring wine levels near large stainless steel fermentation tanks",
   },
   {
     idx: "04",
     titleKey: "step_4_title",
     bodyKey: "step_4_body",
-    img: "/assets/step-fles.png",
+    img: "/assets/step-fles.jpg",
     alt: "Automated bottling and labeling machine with wine bottles in a row",
   },
 ];
