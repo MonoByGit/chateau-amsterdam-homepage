@@ -10,6 +10,7 @@ import { ImageField } from "./image-field";
 const STEPS = [
   { key: "foto", label: "Foto" },
   { key: "details", label: "Details" },
+  { key: "profiel", label: "Profiel" },
   { key: "publiceren", label: "Publiceren" },
 ] as const;
 
@@ -95,6 +96,95 @@ export function WineFormWizard({
               <span className="a-label">Tagline (EN)</span>
               <span className="a-hint">Short, punchy line under the wine name.</span>
               <input type="text" id="tagEn" name="tagEn" defaultValue={wine?.tagEn} placeholder="the classic" className="a-input" />
+            </label>
+          </div>
+        </div>
+
+        <div style={{ display: step === "profiel" ? "flex" : "none", flexDirection: "column", gap: "1.25rem" }}>
+          <span className="a-hint">
+            Alles hieronder is optioneel en verschijnt op de detailpagina van deze wijn. Leeg laten mag, vul aan wanneer je de content klaar hebt.
+          </span>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Beschrijving (NL)</span>
+              <textarea id="descriptionNl" name="descriptionNl" defaultValue={wine?.descriptionNl ?? ""} className="a-input" rows={3} />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Beschrijving (EN)</span>
+              <textarea id="descriptionEn" name="descriptionEn" defaultValue={wine?.descriptionEn ?? ""} className="a-input" rows={3} />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Druif / blend</span>
+              <span className="a-hint">Bijv. &ldquo;Chardonnay, macabeo, viognier&rdquo;.</span>
+              <input type="text" id="grapes" name="grapes" defaultValue={wine?.grapes ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Jaargang</span>
+              <span className="a-hint">Bijv. &ldquo;2023&rdquo; of &ldquo;blend&rdquo;.</span>
+              <input type="text" id="vintage" name="vintage" defaultValue={wine?.vintage ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Alcoholpercentage</span>
+              <input type="text" id="abv" name="abv" defaultValue={wine?.abv ?? ""} className="a-input" placeholder="13" />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Type (NL)</span>
+              <input type="text" id="wineTypeNl" name="wineTypeNl" defaultValue={wine?.wineTypeNl ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Type (EN)</span>
+              <input type="text" id="wineTypeEn" name="wineTypeEn" defaultValue={wine?.wineTypeEn ?? ""} className="a-input" />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Regio (NL)</span>
+              <input type="text" id="regionNl" name="regionNl" defaultValue={wine?.regionNl ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Regio (EN)</span>
+              <input type="text" id="regionEn" name="regionEn" defaultValue={wine?.regionEn ?? ""} className="a-input" />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Landbouwtechniek (NL)</span>
+              <input type="text" id="farmingMethodNl" name="farmingMethodNl" defaultValue={wine?.farmingMethodNl ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Landbouwtechniek (EN)</span>
+              <input type="text" id="farmingMethodEn" name="farmingMethodEn" defaultValue={wine?.farmingMethodEn ?? ""} className="a-input" />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Vinificatie (NL)</span>
+              <input type="text" id="vinificationNl" name="vinificationNl" defaultValue={wine?.vinificationNl ?? ""} className="a-input" />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Vinificatie (EN)</span>
+              <input type="text" id="vinificationEn" name="vinificationEn" defaultValue={wine?.vinificationEn ?? ""} className="a-input" />
+            </label>
+          </div>
+
+          <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            <label className="a-field">
+              <span className="a-label">Wijn-spijs suggestie (NL)</span>
+              <textarea id="foodPairingNl" name="foodPairingNl" defaultValue={wine?.foodPairingNl ?? ""} className="a-input" rows={2} />
+            </label>
+            <label className="a-field">
+              <span className="a-label">Wijn-spijs suggestie (EN)</span>
+              <textarea id="foodPairingEn" name="foodPairingEn" defaultValue={wine?.foodPairingEn ?? ""} className="a-input" rows={2} />
             </label>
           </div>
         </div>

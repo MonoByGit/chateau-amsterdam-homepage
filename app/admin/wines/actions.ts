@@ -25,6 +25,21 @@ function readWineForm(formData: FormData): WineFormInput {
     imageId: (formData.get("imageId") as string) || null,
     shopifyHandle: String(formData.get("shopifyHandle") ?? ""),
     isActive: formData.get("isActive") === "on",
+    descriptionNl: String(formData.get("descriptionNl") ?? ""),
+    descriptionEn: String(formData.get("descriptionEn") ?? ""),
+    grapes: String(formData.get("grapes") ?? ""),
+    vintage: String(formData.get("vintage") ?? ""),
+    wineTypeNl: String(formData.get("wineTypeNl") ?? ""),
+    wineTypeEn: String(formData.get("wineTypeEn") ?? ""),
+    regionNl: String(formData.get("regionNl") ?? ""),
+    regionEn: String(formData.get("regionEn") ?? ""),
+    farmingMethodNl: String(formData.get("farmingMethodNl") ?? ""),
+    farmingMethodEn: String(formData.get("farmingMethodEn") ?? ""),
+    vinificationNl: String(formData.get("vinificationNl") ?? ""),
+    vinificationEn: String(formData.get("vinificationEn") ?? ""),
+    abv: String(formData.get("abv") ?? ""),
+    foodPairingNl: String(formData.get("foodPairingNl") ?? ""),
+    foodPairingEn: String(formData.get("foodPairingEn") ?? ""),
   };
 }
 
@@ -38,15 +53,20 @@ export async function saveWine(formData: FormData): Promise<void> {
     redirect(`${target}?error=${encodeURIComponent(validationError)}`);
   }
 
+  const { abv, ...rest } = input;
+  const dbInput = { ...rest, abv: abv.trim() ? Number(abv) : null };
+
   if (id) {
-    await updateWine(id, input);
+    await updateWine(id, dbInput);
   } else {
-    await createWine(input);
+    await createWine(dbInput);
   }
 
   revalidatePath("/admin/wines");
   revalidatePath("/admin");
   revalidatePath("/");
+  revalidatePath("/wijnen");
+  revalidatePath("/wijnen/[slug]", "page");
   redirect("/admin/wines");
 }
 
@@ -84,10 +104,14 @@ export async function deleteWine(formData: FormData): Promise<void> {
   revalidatePath("/admin/wines");
   revalidatePath("/admin");
   revalidatePath("/");
+  revalidatePath("/wijnen");
+  revalidatePath("/wijnen/[slug]", "page");
 }
 
 export async function reorderWinesTo(newOrderedIds: string[]): Promise<void> {
   await reorderWinesRow(newOrderedIds);
   revalidatePath("/admin/wines");
   revalidatePath("/");
+  revalidatePath("/wijnen");
+  revalidatePath("/wijnen/[slug]", "page");
 }
