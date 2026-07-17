@@ -1,8 +1,25 @@
 // app/(site)/voor-bedrijven/page.tsx
-import Link from "next/link";
-import { BusinessInquiry } from "@/components/business-inquiry";
+import type { Metadata } from "next";
+import { VoorBedrijvenContent } from "@/components/voor-bedrijven-content";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Voor bedrijven · Chateau Amsterdam",
+  description:
+    "Zakelijke tastings, private label, events en groothandel bij de urban winery van Amsterdam-Noord. Eén aanspreekpunt, tien minuten van Amsterdam CS.",
+  openGraph: {
+    title: "Voor bedrijven · Chateau Amsterdam",
+    description: "Wijn die je bedrijf een verhaal geeft. Eén partner, geproduceerd tien minuten van Amsterdam CS.",
+    images: ["/assets/path-pour.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Voor bedrijven · Chateau Amsterdam",
+    description: "Wijn die je bedrijf een verhaal geeft.",
+    images: ["/assets/path-pour.jpg"],
+  },
+};
 
 export default async function VoorBedrijvenPage({
   searchParams,
@@ -11,53 +28,5 @@ export default async function VoorBedrijvenPage({
 }) {
   const { verzonden, fout } = await searchParams;
 
-  return (
-    <>
-      <section className="bd-intro">
-        <nav className="bd-breadcrumb">
-          <Link href="/">Home</Link>
-          <span className="sep">/</span>
-          <span className="current">Voor bedrijven</span>
-        </nav>
-        <div className="bd-intro-grid">
-          <div className="bd-intro-text">
-            <div className="bd-label">Zakelijk &amp; horeca</div>
-            <h1>
-              Wijn die je bedrijf
-              <br />
-              een <em>verhaal</em> geeft
-            </h1>
-            <p>
-              Van de borrel tussen de tanks tot je naam op de fles. Eén partner, geproduceerd tien minuten van
-              Amsterdam CS. Kies hieronder waar je aan denkt, wij nemen het van daar over.
-            </p>
-          </div>
-          <div className="bd-intro-photo">
-            <img src="/assets/path-pour.png" alt="Lange gedekte tafel met kaarslicht in de winery-hal" />
-          </div>
-        </div>
-      </section>
-
-      <section className="bd-body" id="aanvraag">
-        <BusinessInquiry verzonden={verzonden} fout={fout} />
-      </section>
-
-      <section className="bd-strip">
-        <div className="bd-strip-inner">
-          <div className="bd-strip-item">
-            <div className="n">1</div>
-            <div className="d">Aanspreekpunt, van begin tot levering</div>
-          </div>
-          <div className="bd-strip-item">
-            <div className="n">10 min</div>
-            <div className="d">Van Amsterdam CS, midden in Noord</div>
-          </div>
-          <div className="bd-strip-item">
-            <div className="n">100%</div>
-            <div className="d">Geproduceerd in de eigen winery</div>
-          </div>
-        </div>
-      </section>
-    </>
-  );
+  return <VoorBedrijvenContent verzonden={verzonden} fout={fout} />;
 }
