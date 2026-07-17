@@ -29,9 +29,10 @@ Deferred to their own later phases (not this spec): the reservation form, Voor B
 ## Wine overview page
 
 - New route, e.g. `/wijnen`.
-- Simple grid, reusing the existing wine-card visual treatment from the homepage (image, meta, name, tag).
+- Intro block above the grid, stacked top to bottom (not side by side with the grid or with each other): the small mono label used elsewhere on the site (e.g. "De collectie"), then a bold headline in the same voice as the rest of the site (e.g. "Van klassiek *tot rebels*", italic accent word), then a short intro paragraph directly underneath the headline. Stacking, rather than placing the paragraph beside the headline, was chosen deliberately for simpler responsive line-breaking.
+- Simple grid, reusing the existing wine-card visual treatment from the homepage (image, meta, name, tag), including its hover interaction (lift, slight rotation, shadow) unchanged. No price shown on the cards, consistent with the detail page and validated against two award-winning wine brand sites researched during design (Ashes & Diamonds, BRAND Napa Valley): neither shows price on its collection/overview page, both push price and full detail to the individual wine page.
 - No filtering or sorting. Five wines today, filtering would be premature.
-- Each card links to that wine's detail page.
+- Each card has a short link cue (e.g. "Bekijk deze fles →") and links to that wine's detail page.
 
 ## Wine detail page
 
@@ -106,3 +107,4 @@ No new tokens. This is public-site work, so it inherits `app/globals.css`'s exis
 - "Misschien vind je dit ook leuk" chosen over "andere mensen kochten ook zoiets" specifically to avoid an unsubstantiated data claim (see "Below the two-column area" above).
 - Buy button intentionally obscures the Shopify hand-off (label plus no subtext) to support a single seamless-site feel. This is a deliberate today-state, not a permanent one, hence the required code comment describing the end state.
 - Wijnprofiel fields are grouped by content type (short facts vs. longer descriptive fields) rather than in strict alternating-row order, both for readability and because the alternating-row version produced an inconsistent border depending on which column had more rows.
+- Wine overview page's no-price, no-filter approach was cross-checked against real examples (Ashes & Diamonds' `/shop`, BRAND Napa Valley's `/our-wines/`) rather than decided on taste alone: both hide price on the overview and rely on the detail page for the real content, matching what was already decided here independently.
