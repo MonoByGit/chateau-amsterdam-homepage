@@ -464,10 +464,11 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 @media (max-width: 900px) { .wijnen-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .wijnen-grid { grid-template-columns: 1fr; } }
 
-.wijn-detail { position: relative; z-index: 2; display: grid; grid-template-columns: 0.85fr 1fr; gap: 56px; padding: 40px var(--gutter) 90px; }
+.wijn-detail { position: relative; z-index: 2; display: grid; grid-template-columns: 0.85fr 1fr; gap: 56px; padding: 40px var(--gutter) 90px; align-items: start; }
 @media (max-width: 900px) { .wijn-detail { grid-template-columns: 1fr; } }
 
-.wijn-detail-photo { display: flex; flex-direction: column; }
+.wijn-detail-photo { display: flex; flex-direction: column; position: sticky; top: 110px; }
+@media (max-width: 900px) { .wijn-detail-photo { position: static; } }
 .wijn-detail-photo .frame { background: var(--theme-bg-card); border: 1px solid var(--theme-border); border-radius: 2px; height: 560px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .wijn-detail-photo .frame img { height: 88%; object-fit: contain; }
 
