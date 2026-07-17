@@ -174,8 +174,8 @@ export const PATHS_DEFAULTS: PathsContent = {
   },
   path_1_title: { nl: "Tours & tastings", en: "Tours & tastings" },
   path_1_body: {
-    nl: "Proef 7 wijnen tussen de tanks, met verhaal en bites. Voor bezoekers van de stad, vriendengroepen en iedereen die wil weten hoe stadswijn smaakt.",
-    en: "Taste 7 wines between the tanks, complete with stories and bites. For city visitors, groups of friends, and anyone who wants to know how urban wine tastes.",
+    nl: "70 minuten tussen de tanks, zes wijnen op tafel, met verhaal en bites. Voor bezoekers van de stad, vriendengroepen en iedereen die wil weten hoe stadswijn smaakt.",
+    en: "70 minutes between the tanks, six wines on the table, complete with stories and bites. For city visitors, groups of friends, and anyone who wants to know how urban wine tastes.",
   },
   path_2_title: { nl: "Voor bedrijven & horeca", en: "For businesses & hospitality" },
   path_2_body: {
