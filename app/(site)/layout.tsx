@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
 import { CartProvider } from "@/lib/cart/context";
+import { ConsentProvider } from "@/lib/consent/context";
 import { CartDrawer } from "@/components/cart-drawer";
+import { CookieBanner } from "@/components/cookie-banner";
+import { AgeGate } from "@/components/age-gate";
+import { AnalyticsScript } from "@/components/analytics-script";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getContent } from "@/lib/content/get-content";
@@ -68,14 +72,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body data-pattern="arcering" style={{ "--pattern-o": 0.04 } as React.CSSProperties}>
         <LanguageProvider>
-          <CartProvider>
-            <div className="grain" />
-            <div className="bg-pattern" />
-            <SiteHeader content={headerContent} />
-            <main id="main-content">{children}</main>
-            <SiteFooter content={footerContent} />
-            <CartDrawer />
-          </CartProvider>
+          <ConsentProvider>
+            <CartProvider>
+              <div className="grain" />
+              <div className="bg-pattern" />
+              <SiteHeader content={headerContent} />
+              <main id="main-content">{children}</main>
+              <SiteFooter content={footerContent} />
+              <CartDrawer />
+              <AgeGate />
+              <CookieBanner />
+              <AnalyticsScript />
+            </CartProvider>
+          </ConsentProvider>
         </LanguageProvider>
       </body>
     </html>

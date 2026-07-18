@@ -45,6 +45,10 @@ export function SiteFooter({ content }: { content: FooterContent }) {
       <div className="footer-bottom">
         <img className="footer-logo" src="/assets/chateau-logo.png" alt="Chateau Amsterdam Logo Monochromatic" />
         <span>© 2026 Chateau Amsterdam</span>
+        <nav className="footer-legal">
+          <a href="/privacybeleid">{t("Privacybeleid", "Privacy policy")}</a>
+          <a href="/algemene-voorwaarden">{t("Algemene voorwaarden", "Terms & conditions")}</a>
+        </nav>
       </div>
     </footer>
   );
