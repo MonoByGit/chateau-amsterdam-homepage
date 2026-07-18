@@ -3,12 +3,14 @@ import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
 import { CartProvider } from "@/lib/cart/context";
 import { ConsentProvider } from "@/lib/consent/context";
+import { MobileNavProvider } from "@/lib/mobile-nav/context";
 import { CartDrawer } from "@/components/cart-drawer";
 import { CookieBanner } from "@/components/cookie-banner";
 import { AgeGate } from "@/components/age-gate";
 import { AnalyticsScript } from "@/components/analytics-script";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { MobileNavPanel } from "@/components/mobile-nav-panel";
 import { getContent } from "@/lib/content/get-content";
 import { HEADER_DEFAULTS, FOOTER_DEFAULTS } from "@/lib/content/defaults";
 import "../globals.css";
@@ -74,15 +76,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <LanguageProvider>
           <ConsentProvider>
             <CartProvider>
-              <div className="grain" />
-              <div className="bg-pattern" />
-              <SiteHeader content={headerContent} />
-              <main id="main-content">{children}</main>
-              <SiteFooter content={footerContent} />
-              <CartDrawer />
-              <AgeGate />
-              <CookieBanner />
-              <AnalyticsScript />
+              <MobileNavProvider>
+                <div className="grain" />
+                <div className="bg-pattern" />
+                <SiteHeader content={headerContent} />
+                <main id="main-content">{children}</main>
+                <SiteFooter content={footerContent} />
+                <CartDrawer />
+                <MobileNavPanel content={headerContent} />
+                <AgeGate />
+                <CookieBanner />
+                <AnalyticsScript />
+              </MobileNavProvider>
             </CartProvider>
           </ConsentProvider>
         </LanguageProvider>

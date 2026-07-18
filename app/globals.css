@@ -171,12 +171,38 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .site-header.is-scrolled .nav-cta:hover { background: var(--paper); color: var(--ink); }
 .nav-cta::after { display: none; }
 
+/* ---------- mobile menu (hamburger + overlay nav) ---------- */
+.menu-toggle { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 26px; height: 22px; flex: 0 0 auto; }
+.menu-toggle span { display: block; width: 100%; height: 2px; background: currentColor; transition: transform 0.35s var(--ease-out), opacity 0.25s var(--ease-out); }
+.menu-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+.menu-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  position: fixed; inset: 0; z-index: 150; display: none;
+  background: rgba(23, 20, 14, 0.6); opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out);
+}
+.mobile-nav {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 151; width: min(340px, 84vw); display: none;
+  flex-direction: column; justify-content: center; gap: clamp(32px, 6vh, 56px);
+  background: var(--ink); color: var(--paper); padding: 40px var(--gutter);
+  transform: translateX(100%); transition: transform 0.5s var(--ease-out);
+}
+.mobile-nav-links { display: flex; flex-direction: column; gap: 22px; }
+.mobile-nav-links a { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; font-size: 26px; letter-spacing: -0.01em; }
+.mobile-nav .lang-selector { display: flex; font-size: 14px; gap: 8px; }
+.mobile-nav .lang-btn { font-size: 14px; }
+.mobile-nav-cta { align-self: flex-start; }
+
 @media (max-width: 900px) {
   .site-nav a:not(.nav-cta) { display: none; }
-  .lang-selector { display: none; }
-}
-@media (max-width: 520px) {
-  .nav-cta { padding: 10px 18px; font-size: 11px; letter-spacing: 0.1em; }
+  .site-nav .lang-selector { display: none; }
+  .nav-cta { display: none; }
+  .menu-toggle { display: flex; }
+  .mobile-nav-overlay { display: block; }
+  .mobile-nav-overlay.is-open { opacity: 1; pointer-events: auto; }
+  .mobile-nav { display: flex; }
+  .mobile-nav.is-open { transform: translateX(0); }
 }
 
 /* ---------- buttons ---------- */

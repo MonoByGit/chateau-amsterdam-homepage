@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
 import { useMagnetic } from "@/lib/use-magnetic";
 import { useCart } from "@/lib/cart/context";
+import { useMobileNav } from "@/lib/mobile-nav/context";
 import type { HeaderContent } from "@/lib/content/defaults";
 
-const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
+export const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
   { href: "/#verhaal", fieldKey: "nav_1_label" },
   { href: "/#proces", fieldKey: "nav_2_label" },
   { href: "/#wijnen", fieldKey: "nav_3_label" },
@@ -20,6 +21,7 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const magneticRef = useMagnetic();
   const { cart, openCart } = useCart();
+  const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu } = useMobileNav();
   const itemCount = cart?.totalQuantity ?? 0;
 
   useEffect(() => {
@@ -76,6 +78,19 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
             <path d="M9 8V6a3 3 0 0 1 6 0v2" />
           </svg>
           {itemCount > 0 ? <span className="cart-trigger-count">{itemCount}</span> : null}
+        </button>
+
+        <button
+          type="button"
+          className={`menu-toggle${isMobileMenuOpen ? " is-open" : ""}`}
+          aria-label={t("Menu", "Menu")}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-nav"
+          onClick={toggleMobileMenu}
+        >
+          <span />
+          <span />
+          <span />
         </button>
       </nav>
     </header>
