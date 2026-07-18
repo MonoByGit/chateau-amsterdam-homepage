@@ -3,7 +3,8 @@
 
 import { cookies } from "next/headers";
 import { addCartLines, createCart, getCart, removeCartLine, updateCartLine } from "@/lib/shopify/cart";
-import { isShopifyConfigured, SHOPIFY_NOT_CONFIGURED_ERROR } from "@/lib/shopify/client";
+import { isShopifyConfigured } from "@/lib/shopify/client";
+import { SHOPIFY_NOT_CONFIGURED_ERROR } from "@/lib/shopify/constants";
 import { firstAvailableVariant, getProductByHandle } from "@/lib/shopify/product";
 import type { CartActionResult } from "@/lib/shopify/types";
 

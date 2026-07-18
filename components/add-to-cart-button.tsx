@@ -3,7 +3,7 @@
 
 import { useLanguage } from "@/lib/language";
 import { useCart } from "@/lib/cart/context";
-import { SHOPIFY_NOT_CONFIGURED_ERROR } from "@/lib/shopify/client";
+import { SHOPIFY_NOT_CONFIGURED_ERROR } from "@/lib/shopify/constants";
 
 export function AddToCartButton({ shopifyHandle }: { shopifyHandle: string }) {
   const { addItem, isPending, error } = useCart();

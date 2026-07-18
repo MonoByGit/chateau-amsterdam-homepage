@@ -12,11 +12,6 @@ export function isShopifyConfigured(): boolean {
   return Boolean(process.env.SHOPIFY_STORE_DOMAIN && process.env.SHOPIFY_STOREFRONT_TOKEN);
 }
 
-// A cart action returns this exact string as its `error` when Shopify isn't
-// configured yet, so the UI can distinguish "not set up" (show a fallback
-// link to the shop) from a real, unexpected failure (show a retry message).
-export const SHOPIFY_NOT_CONFIGURED_ERROR = "shopify_not_configured";
-
 function getConfig(): { domain: string; token: string; apiVersion: string } {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;
   const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
