@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
 import { useMagnetic } from "@/lib/use-magnetic";
+import { useCart } from "@/lib/cart/context";
 import type { HeaderContent } from "@/lib/content/defaults";
 
 const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
@@ -18,6 +19,8 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const magneticRef = useMagnetic();
+  const { cart, openCart } = useCart();
+  const itemCount = cart?.totalQuantity ?? 0;
 
   useEffect(() => {
     function onScroll() {
@@ -66,6 +69,14 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
         <a className="nav-cta" ref={magneticRef as React.RefObject<HTMLAnchorElement>} href="/tours-tastings#reserveren">
           {t(content.cta_label.nl, content.cta_label.en)}
         </a>
+
+        <button type="button" className="cart-trigger" aria-label={t("Open winkelmandje", "Open cart")} onClick={openCart}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <path d="M6 8h12l-1.2 11a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 8Z" />
+            <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+          </svg>
+          {itemCount > 0 ? <span className="cart-trigger-count">{itemCount}</span> : null}
+        </button>
       </nav>
     </header>
   );

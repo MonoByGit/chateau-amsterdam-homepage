@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
+import { CartProvider } from "@/lib/cart/context";
+import { CartDrawer } from "@/components/cart-drawer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getContent } from "@/lib/content/get-content";
@@ -66,11 +68,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body data-pattern="arcering" style={{ "--pattern-o": 0.04 } as React.CSSProperties}>
         <LanguageProvider>
-          <div className="grain" />
-          <div className="bg-pattern" />
-          <SiteHeader content={headerContent} />
-          <main id="main-content">{children}</main>
-          <SiteFooter content={footerContent} />
+          <CartProvider>
+            <div className="grain" />
+            <div className="bg-pattern" />
+            <SiteHeader content={headerContent} />
+            <main id="main-content">{children}</main>
+            <SiteFooter content={footerContent} />
+            <CartDrawer />
+          </CartProvider>
         </LanguageProvider>
       </body>
     </html>

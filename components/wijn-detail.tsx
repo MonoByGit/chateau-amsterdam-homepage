@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { WineCard, type WineCardData } from "@/components/wine-card";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 
 export type WijnDetailWine = {
   name: string;
@@ -170,23 +171,18 @@ export function WijnDetail({
           ) : null}
 
           {/*
-            TEMPORARY BRIDGE: this button links straight to the wine's
-            existing Shopify product page. It is not the end state, do
-            not extend this pattern elsewhere.
-
-            End state (Shopify Storefront API phase, a later, separate
-            plan): this becomes an "In winkelmandje" action that adds
-            the item to a Cart (Storefront API Cart object) and opens a
-            slide-in drawer. The customer adds/removes wines and stays
-            on this site throughout; only the final payment step
-            redirects once to Shopify's hosted checkout. Price and
-            stock become live at that point via a server-side
-            Storefront API call. Replace this direct link wholesale
-            when that phase starts, do not build on top of it.
+            Shopify Storefront API phase (this component, live once
+            SHOPIFY_STORE_DOMAIN/SHOPIFY_STOREFRONT_TOKEN are set): adds the
+            item to a Cart (Storefront API Cart object) and opens the
+            slide-in drawer (components/cart-drawer.tsx). The customer
+            adds/removes wines and stays on this site throughout; only the
+            final payment step redirects once to Shopify's hosted checkout
+            (cart.checkoutUrl). If the API call fails — including "not
+            configured yet" while the token is still pending — AddToCartButton
+            falls back to a direct link to this wine's Shopify product page,
+            so the page never breaks even before the token is wired up.
           */}
-          <a className="btn btn--primary" href={`https://shop.chateau.amsterdam/products/${wine.shopifyHandle}`}>
-            {t("Bestel deze fles", "Order this bottle")} <span className="arr">→</span>
-          </a>
+          <AddToCartButton shopifyHandle={wine.shopifyHandle} />
         </div>
       </div>
 
