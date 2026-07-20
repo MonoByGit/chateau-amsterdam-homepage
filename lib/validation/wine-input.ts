@@ -7,6 +7,7 @@ export type WineFormInput = {
   imageId: string | null;
   shopifyHandle: string;
   isActive: boolean;
+  showOnHomepage: boolean;
   descriptionNl: string;
   descriptionEn: string;
   grapes: string;

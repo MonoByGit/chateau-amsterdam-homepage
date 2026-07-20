@@ -12,6 +12,7 @@ function validInput() {
     imageId: null,
     shopifyHandle: "riesling",
     isActive: true,
+    showOnHomepage: true,
     descriptionNl: "",
     descriptionEn: "",
     grapes: "",

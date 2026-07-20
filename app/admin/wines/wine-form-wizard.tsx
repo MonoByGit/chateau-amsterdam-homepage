@@ -25,10 +25,12 @@ export function WineFormWizard({
   wine,
   error,
   media,
+  maxHomepageWines,
 }: {
   wine: Wine | null;
   error?: string;
   media: PickerMediaItem[];
+  maxHomepageWines: number;
 }) {
   const [step, setStep] = useState<StepKey>("foto");
   const stepIndex = STEPS.findIndex((s) => s.key === step);
@@ -209,6 +211,22 @@ export function WineFormWizard({
             <input type="checkbox" id="isActive" name="isActive" defaultChecked={wine?.isActive ?? true} className="a-checkbox" />
             <span className="a-label" style={{ fontWeight: 500 }}>
               Actief op de website
+            </span>
+          </label>
+
+          <label className="a-checkbox-row">
+            <input
+              type="checkbox"
+              id="showOnHomepage"
+              name="showOnHomepage"
+              defaultChecked={wine?.showOnHomepage ?? true}
+              className="a-checkbox"
+            />
+            <span className="a-label" style={{ fontWeight: 500 }}>
+              Toon op de homepage
+              <span className="a-hint" style={{ fontWeight: 400, display: "block" }}>
+                Maximaal {maxHomepageWines} tegelijk. De wijnenoverzichtpagina toont sowieso alle actieve wijnen.
+              </span>
             </span>
           </label>
         </div>

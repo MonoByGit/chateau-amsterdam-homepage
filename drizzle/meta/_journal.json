@@ -22,6 +22,13 @@
       "when": 1784570000000,
       "tag": "0002_variable_availability_slots",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784570001000,
+      "tag": "0003_add_show_on_homepage",
+      "breakpoints": true
     }
   ]
 }

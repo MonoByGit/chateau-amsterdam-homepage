@@ -109,9 +109,12 @@ export function WinesList({ wines: initialWines }: { wines: WineWithImage[] }) {
             </div>
           </div>
 
-          <span className={`a-badge ${wine.isActive ? "a-badge--success" : "a-badge--neutral"}`}>
-            {wine.isActive ? "Actief" : "Inactief"}
-          </span>
+          <div style={{ display: "flex", gap: "0.375rem" }}>
+            <span className={`a-badge ${wine.isActive ? "a-badge--success" : "a-badge--neutral"}`}>
+              {wine.isActive ? "Actief" : "Inactief"}
+            </span>
+            {wine.showOnHomepage ? <span className="a-badge a-badge--neutral">Homepage</span> : null}
+          </div>
 
           <div className="a-row-actions">
             <Link href={`/admin/wines/${wine.id}`} className="a-icon-btn" aria-label={`${wine.name} bewerken`} title="Bewerken">

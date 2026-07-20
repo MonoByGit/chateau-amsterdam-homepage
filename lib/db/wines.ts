@@ -14,6 +14,7 @@ export type WineInput = {
   imageId: string | null;
   shopifyHandle: string;
   isActive: boolean;
+  showOnHomepage: boolean;
   descriptionNl?: string | null;
   descriptionEn?: string | null;
   grapes?: string | null;
@@ -85,6 +86,20 @@ export async function deleteWine(id: string): Promise<void> {
   await db.delete(wines).where(eq(wines.id, id));
 }
 
+// The homepage's wine teaser is a hand-picked handful, not "whatever's in
+// the catalog" — this caps how many wines can have showOnHomepage set at
+// once, enforced by the caller (see app/admin/wines/actions.ts) before it
+// writes a wine with showOnHomepage: true.
+export const MAX_HOMEPAGE_WINES = 5;
+
+export async function countHomepageWines(excludeId?: string): Promise<number> {
+  const [{ count }] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(wines)
+    .where(excludeId ? and(eq(wines.showOnHomepage, true), ne(wines.id, excludeId)) : eq(wines.showOnHomepage, true));
+  return Number(count);
+}
+
 export async function reorderWines(orderedIds: string[]): Promise<void> {
   await db.transaction(async (tx) => {
     for (const [index, id] of orderedIds.entries()) {
@@ -99,42 +114,59 @@ export type WineWithImage = Wine & {
   imageAltEn: string | null;
 };
 
-export async function getWinesForHomepage(): Promise<WineWithImage[]> {
+const WINE_WITH_IMAGE_COLUMNS = {
+  id: wines.id,
+  slug: wines.slug,
+  name: wines.name,
+  metaNl: wines.metaNl,
+  metaEn: wines.metaEn,
+  tagNl: wines.tagNl,
+  tagEn: wines.tagEn,
+  imageId: wines.imageId,
+  shopifyHandle: wines.shopifyHandle,
+  sortOrder: wines.sortOrder,
+  isActive: wines.isActive,
+  showOnHomepage: wines.showOnHomepage,
+  descriptionNl: wines.descriptionNl,
+  descriptionEn: wines.descriptionEn,
+  grapes: wines.grapes,
+  vintage: wines.vintage,
+  wineTypeNl: wines.wineTypeNl,
+  wineTypeEn: wines.wineTypeEn,
+  regionNl: wines.regionNl,
+  regionEn: wines.regionEn,
+  farmingMethodNl: wines.farmingMethodNl,
+  farmingMethodEn: wines.farmingMethodEn,
+  vinificationNl: wines.vinificationNl,
+  vinificationEn: wines.vinificationEn,
+  abv: wines.abv,
+  foodPairingNl: wines.foodPairingNl,
+  foodPairingEn: wines.foodPairingEn,
+  updatedAt: wines.updatedAt,
+  imageStorageKey: media.storageKey,
+  imageAltNl: media.altTextNl,
+  imageAltEn: media.altTextEn,
+};
+
+// Full active catalog — the wines overview page ("shop everything we
+// pour"), not the homepage teaser. Despite the name this historically fed
+// the homepage too, back when "every active wine" and "the wine on the
+// homepage" were the same five rows; see getFeaturedWines for that split.
+export async function listActiveWines(): Promise<WineWithImage[]> {
   return db
-    .select({
-      id: wines.id,
-      slug: wines.slug,
-      name: wines.name,
-      metaNl: wines.metaNl,
-      metaEn: wines.metaEn,
-      tagNl: wines.tagNl,
-      tagEn: wines.tagEn,
-      imageId: wines.imageId,
-      shopifyHandle: wines.shopifyHandle,
-      sortOrder: wines.sortOrder,
-      isActive: wines.isActive,
-      descriptionNl: wines.descriptionNl,
-      descriptionEn: wines.descriptionEn,
-      grapes: wines.grapes,
-      vintage: wines.vintage,
-      wineTypeNl: wines.wineTypeNl,
-      wineTypeEn: wines.wineTypeEn,
-      regionNl: wines.regionNl,
-      regionEn: wines.regionEn,
-      farmingMethodNl: wines.farmingMethodNl,
-      farmingMethodEn: wines.farmingMethodEn,
-      vinificationNl: wines.vinificationNl,
-      vinificationEn: wines.vinificationEn,
-      abv: wines.abv,
-      foodPairingNl: wines.foodPairingNl,
-      foodPairingEn: wines.foodPairingEn,
-      updatedAt: wines.updatedAt,
-      imageStorageKey: media.storageKey,
-      imageAltNl: media.altTextNl,
-      imageAltEn: media.altTextEn,
-    })
+    .select(WINE_WITH_IMAGE_COLUMNS)
     .from(wines)
     .leftJoin(media, eq(wines.imageId, media.id))
     .where(eq(wines.isActive, true))
+    .orderBy(asc(wines.sortOrder));
+}
+
+// The homepage's hand-picked selection (see MAX_HOMEPAGE_WINES).
+export async function getFeaturedWines(): Promise<WineWithImage[]> {
+  return db
+    .select(WINE_WITH_IMAGE_COLUMNS)
+    .from(wines)
+    .leftJoin(media, eq(wines.imageId, media.id))
+    .where(and(eq(wines.isActive, true), eq(wines.showOnHomepage, true)))
     .orderBy(asc(wines.sortOrder));
 }

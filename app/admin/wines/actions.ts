@@ -5,8 +5,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import {
+  countHomepageWines,
   createWine,
   deleteWine as deleteWineRow,
+  MAX_HOMEPAGE_WINES,
   reorderWines as reorderWinesRow,
   updateWine,
 } from "@/lib/db/wines";
@@ -25,6 +27,7 @@ function readWineForm(formData: FormData): WineFormInput {
     imageId: (formData.get("imageId") as string) || null,
     shopifyHandle: String(formData.get("shopifyHandle") ?? ""),
     isActive: formData.get("isActive") === "on",
+    showOnHomepage: formData.get("showOnHomepage") === "on",
     descriptionNl: String(formData.get("descriptionNl") ?? ""),
     descriptionEn: String(formData.get("descriptionEn") ?? ""),
     grapes: String(formData.get("grapes") ?? ""),
@@ -51,6 +54,15 @@ export async function saveWine(formData: FormData): Promise<void> {
   if (validationError) {
     const target = id ? `/admin/wines/${id}` : "/admin/wines/new";
     redirect(`${target}?error=${encodeURIComponent(validationError)}`);
+  }
+
+  if (input.showOnHomepage && (await countHomepageWines(id ?? undefined)) >= MAX_HOMEPAGE_WINES) {
+    const target = id ? `/admin/wines/${id}` : "/admin/wines/new";
+    redirect(
+      `${target}?error=${encodeURIComponent(
+        `Er staan al ${MAX_HOMEPAGE_WINES} wijnen op de homepage. Zet eerst een andere wijn uit voordat je deze toevoegt.`
+      )}`
+    );
   }
 
   const { abv, ...rest } = input;

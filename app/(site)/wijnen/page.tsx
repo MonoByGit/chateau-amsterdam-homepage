@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { WijnenOverview } from "@/components/wijnen-overview";
-import { getWinesForHomepage } from "@/lib/db/wines";
+import { listActiveWines } from "@/lib/db/wines";
 import { resolveWineImageUrl } from "@/lib/wines/image";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WijnenOverviewPage() {
-  const wineRows = await getWinesForHomepage();
+  const wineRows = await listActiveWines();
   const wines = await Promise.all(
     wineRows.map(async (wine, index) => ({
       n: `N°${String(index + 1).padStart(2, "0")}`,

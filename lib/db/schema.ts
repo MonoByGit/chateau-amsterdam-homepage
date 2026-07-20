@@ -50,6 +50,7 @@ export const wines = pgTable("wines", {
   shopifyHandle: text("shopify_handle").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
   isActive: boolean("is_active").notNull().default(true),
+  showOnHomepage: boolean("show_on_homepage").notNull().default(true),
   descriptionNl: text("description_nl"),
   descriptionEn: text("description_en"),
   grapes: text("grapes"),
