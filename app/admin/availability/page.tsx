@@ -1,16 +1,6 @@
 // app/admin/availability/page.tsx
 import Link from "next/link";
-import { listBlocksForMonth, type Daypart } from "@/lib/db/availability";
-import { toggleAvailability } from "./actions";
-
-const DAYPARTS: Daypart[] = ["ochtend", "middag", "avond", "hele_dag"];
-
-const DAYPART_LABELS: Record<Daypart, string> = {
-  ochtend: "Ochtend · 9-12u",
-  middag: "Middag · 12-17u",
-  avond: "Avond · 17-22u",
-  hele_dag: "Hele dag",
-};
+import { listBlocksForMonth, type AvailabilityBlock } from "@/lib/db/availability";
 
 function pad(n: number): string {
   return n.toString().padStart(2, "0");
@@ -51,11 +41,11 @@ export default async function AvailabilityPage({
   const { year, month } = parseMonthParam(params.month);
 
   const blocks = await listBlocksForMonth(year, month);
-  const blockedByDate = new Map<string, Set<Daypart>>();
+  const blocksByDate = new Map<string, AvailabilityBlock[]>();
   for (const block of blocks) {
-    const set = blockedByDate.get(block.date) ?? new Set<Daypart>();
-    set.add(block.daypart);
-    blockedByDate.set(block.date, set);
+    const list = blocksByDate.get(block.date) ?? [];
+    list.push(block);
+    blocksByDate.set(block.date, list);
   }
 
   const total = daysInMonth(year, month);
@@ -72,8 +62,8 @@ export default async function AvailabilityPage({
     <div>
       <h1 className="a-h1">Beschikbaarheid</h1>
       <p className="a-subtitle">
-        Standaard is elk dagdeel beschikbaar voor reserveringen. Klik op een dagdeel om het te blokkeren
-        (bijvoorbeeld bij een personeelsuitje of sluiting), klik nogmaals om de blokkade op te heffen.
+        Standaard is elke dag volledig beschikbaar voor reserveringen. Klik op een dag om deze (deels) te
+        blokkeren, bijvoorbeeld bij een vakantie, feestdag of besloten evenement.
       </p>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "1.5rem 0" }}>
@@ -88,7 +78,7 @@ export default async function AvailabilityPage({
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
               <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-danger-soft)", border: "1px solid var(--a-danger)", display: "inline-block" }} />
-              Geblokkeerd
+              (Deels) geblokkeerd
             </span>
           </div>
           <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -115,22 +105,23 @@ export default async function AvailabilityPage({
 
         {days.map((day) => {
           const dateStr = `${year}-${pad(month)}-${pad(day)}`;
-          const blockedSet = blockedByDate.get(dateStr) ?? new Set<Daypart>();
+          const dayBlocks = blocksByDate.get(dateStr) ?? [];
+          const isFullDay = dayBlocks.some((b) => b.isFullDay);
+          const slotLabels = dayBlocks.filter((b) => !b.isFullDay).map((b) => b.label ?? "");
 
           return (
-            <div key={dateStr} className="a-cal-day">
+            <Link key={dateStr} href={`/admin/availability/${dateStr}`} className="a-cal-day a-cal-day-link">
               <div className="a-cal-day-num">{day}</div>
-              {DAYPARTS.map((daypart) => {
-                const blocked = blockedSet.has(daypart);
-                return (
-                  <form key={daypart} action={toggleAvailability.bind(null, dateStr, daypart, undefined)}>
-                    <button type="submit" className={`a-cal-toggle${blocked ? " is-blocked" : ""}`}>
-                      {DAYPART_LABELS[daypart]}
-                    </button>
-                  </form>
-                );
-              })}
-            </div>
+              {isFullDay ? (
+                <span className="a-cal-toggle is-blocked">Hele dag dicht</span>
+              ) : slotLabels.length > 0 ? (
+                slotLabels.map((label, i) => (
+                  <span key={i} className="a-cal-toggle is-blocked" title={label}>
+                    {label}
+                  </span>
+                ))
+              ) : null}
+            </Link>
           );
         })}
       </div>

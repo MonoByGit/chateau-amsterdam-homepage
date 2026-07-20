@@ -5,7 +5,8 @@ import { db } from "@/lib/db/client";
 import { availabilityBlocks } from "@/lib/db/schema";
 
 export type AvailabilityBlock = InferSelectModel<typeof availabilityBlocks>;
-export type Daypart = AvailabilityBlock["daypart"];
+
+export const MAX_SLOTS_PER_DAY = 4;
 
 function pad(n: number): string {
   return n.toString().padStart(2, "0");
@@ -23,22 +24,29 @@ export async function listBlocksForMonth(year: number, month: number): Promise<A
     .where(and(gte(availabilityBlocks.date, start), lt(availabilityBlocks.date, end)));
 }
 
-export async function toggleBlock(
-  date: string,
-  daypart: Daypart,
-  reason?: string
-): Promise<{ blocked: boolean }> {
-  const [existing] = await db
-    .select()
-    .from(availabilityBlocks)
-    .where(and(eq(availabilityBlocks.date, date), eq(availabilityBlocks.daypart, daypart)))
-    .limit(1);
+export async function getDayBlocks(date: string): Promise<AvailabilityBlock[]> {
+  return db.select().from(availabilityBlocks).where(eq(availabilityBlocks.date, date));
+}
 
-  if (existing) {
-    await db.delete(availabilityBlocks).where(eq(availabilityBlocks.id, existing.id));
-    return { blocked: false };
+// Replaces the full set of blocks for a date in one go, mirroring the day
+// editor form: a full-day toggle plus up to MAX_SLOTS_PER_DAY free-text time
+// slots. Passing isFullDay clears any slots; slots with isFullDay false
+// clear any full-day block. Saving with nothing set clears the date
+// entirely (day fully open again).
+export async function saveDayBlocks(date: string, input: { isFullDay: boolean; slots: string[] }): Promise<void> {
+  await db.delete(availabilityBlocks).where(eq(availabilityBlocks.date, date));
+
+  if (input.isFullDay) {
+    await db.insert(availabilityBlocks).values({ date, isFullDay: true, label: null });
+    return;
   }
 
-  await db.insert(availabilityBlocks).values({ date, daypart, reason });
-  return { blocked: true };
+  const cleanSlots = input.slots
+    .map((slot) => slot.trim())
+    .filter(Boolean)
+    .slice(0, MAX_SLOTS_PER_DAY);
+
+  if (cleanSlots.length === 0) return;
+
+  await db.insert(availabilityBlocks).values(cleanSlots.map((label) => ({ date, isFullDay: false, label })));
 }

@@ -488,6 +488,24 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
+.a-cal-day-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.a-cal-day-link:hover {
+  border-color: var(--a-border-strong);
+  background: var(--a-surface-2);
+}
+
+.a-cal-day-link .a-cal-toggle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 /* Badges, reserved for system-set status, not user-entered data (a filter
    chip is the right component for that instead, see .a-chip above). */
 

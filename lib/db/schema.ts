@@ -91,14 +91,15 @@ export const reservations = pgTable("reservations", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-export const availabilityDaypartEnum = pgEnum("availability_daypart", ["ochtend", "middag", "avond", "hele_dag"]);
-
+// A block is either the whole day (isFullDay, label unused) or a specific
+// free-text time slot (e.g. "14:00-17:00 - besloten feest"). The team works
+// variable hours, so slots are free text rather than fixed morning/afternoon
+// buckets - the admin UI caps a day at 4 slot rows, but nothing here enforces
+// that limit at the data level.
 export const availabilityBlocks = pgTable("availability_blocks", {
   id: uuid("id").primaryKey().defaultRandom(),
   date: date("date").notNull(),
-  daypart: availabilityDaypartEnum("daypart").notNull().default("hele_dag"),
-  reason: text("reason"),
+  isFullDay: boolean("is_full_day").notNull().default(false),
+  label: text("label"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}, (table) => ({
-  uniqueBlock: uniqueIndex("availability_blocks_date_daypart_idx").on(table.date, table.daypart),
-}));
+});

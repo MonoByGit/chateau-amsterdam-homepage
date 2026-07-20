@@ -19,13 +19,6 @@ const STATUS_BADGE_VARIANT: Record<string, string> = {
   afgewezen: "a-badge--danger",
 };
 
-const DAYPART_LABELS: Record<string, string> = {
-  ochtend: "Ochtend",
-  middag: "Middag",
-  avond: "Avond",
-  hele_dag: "Hele dag",
-};
-
 function pad(n: number): string {
   return n.toString().padStart(2, "0");
 }
@@ -49,9 +42,16 @@ export default async function DashboardPage() {
   ]);
 
   const todayStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-  const upcomingBlocks = [...thisMonthBlocks, ...nextMonthBlocks]
-    .filter((b) => b.date >= todayStr)
-    .sort((a, b) => a.date.localeCompare(b.date))
+  const upcomingByDate = new Map<string, { isFullDay: boolean; labels: string[] }>();
+  for (const b of [...thisMonthBlocks, ...nextMonthBlocks]) {
+    if (b.date < todayStr) continue;
+    const entry = upcomingByDate.get(b.date) ?? { isFullDay: false, labels: [] };
+    if (b.isFullDay) entry.isFullDay = true;
+    else if (b.label) entry.labels.push(b.label);
+    upcomingByDate.set(b.date, entry);
+  }
+  const upcomingBlocks = [...upcomingByDate.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
     .slice(0, 5);
 
   const activeWines = allWines.filter((w) => w.isActive).length;
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
         </div>
         <div className="a-stat-card">
           <div className="a-stat-value">{upcomingBlocks.length}</div>
-          <div className="a-stat-label">Geblokkeerde dagdelen (komende periode)</div>
+          <div className="a-stat-label">Geblokkeerde dagen (komende periode)</div>
         </div>
       </div>
 
@@ -127,13 +127,20 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="a-card">
-            {upcomingBlocks.map((b) => (
-              <div key={b.id} className="a-card-row" style={{ display: "flex", justifyContent: "space-between" }}>
+            {upcomingBlocks.map(([date, entry]) => (
+              <Link
+                key={date}
+                href={`/admin/availability/${date}`}
+                className="a-card-row"
+                style={{ display: "flex", justifyContent: "space-between", textDecoration: "none" }}
+              >
                 <span className="a-label" style={{ color: "var(--a-text)" }}>
-                  {formatAdminDate(b.date)}
+                  {formatAdminDate(date)}
                 </span>
-                <span style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }}>{DAYPART_LABELS[b.daypart]}</span>
-              </div>
+                <span style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }}>
+                  {entry.isFullDay ? "Hele dag dicht" : entry.labels.join(", ")}
+                </span>
+              </Link>
             ))}
           </div>
         )}
