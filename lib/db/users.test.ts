@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { db } from "./client";
 import { users } from "./schema";
-import { createUser, findUserByEmail, findUserById } from "./users";
+import { countUsers, createUser, deleteUser, findUserByEmail, findUserById, listUsers } from "./users";
 
 beforeEach(async () => {
   await db.delete(users);
@@ -45,5 +45,25 @@ describe("users repository", () => {
   it("rejects a second user with the same email", async () => {
     await createUser("duplicate@chateau.amsterdam", "hashed-password");
     await expect(createUser("duplicate@chateau.amsterdam", "another-hash")).rejects.toThrow();
+  });
+
+  it("listUsers orders by createdAt", async () => {
+    const a = await createUser("a@chateau.amsterdam", "hash");
+    const b = await createUser("b@chateau.amsterdam", "hash");
+    const rows = await listUsers();
+    expect(rows.map((u) => u.id)).toEqual([a.id, b.id]);
+  });
+
+  it("countUsers reflects the number of accounts", async () => {
+    expect(await countUsers()).toBe(0);
+    await createUser("a@chateau.amsterdam", "hash");
+    await createUser("b@chateau.amsterdam", "hash");
+    expect(await countUsers()).toBe(2);
+  });
+
+  it("deleteUser removes the row", async () => {
+    const user = await createUser("a@chateau.amsterdam", "hash");
+    await deleteUser(user.id);
+    expect(await findUserById(user.id)).toBeNull();
   });
 });

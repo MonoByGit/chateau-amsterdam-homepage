@@ -825,6 +825,16 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
+.a-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.a-icon-btn:disabled:hover {
+  background: none;
+  color: var(--a-text-2);
+}
+
 /* Filter bar */
 
 .a-filter-bar {
