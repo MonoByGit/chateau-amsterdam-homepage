@@ -98,23 +98,24 @@ gecontroleerd, en bevestig de live Railway-URL.
 ## Geparkeerd voor later (expliciet niet nu, niet belangrijk voor oplevering aan de klant)
 
 Dusty gaat het hele pakketje ooit overdragen aan de hostingpartij van de klant, zodra zij
-akkoord zijn. Drie open vragen daarvoor, met voorbereide vragen voor hun hoster:
+akkoord zijn. De klant is een heel klein, niet-technisch team — dus zo min mogelijk van hen
+vragen, en wat er gevraagd wordt moet 1-op-1 door te sturen zijn naar hun hostingpartij zonder
+dat zij het zelf hoeven te snappen.
 
-- **Media-opslag** (S3-compatible bucket, nu waarschijnlijk op Dusty's eigen account,
-  `lib/storage/s3.ts`): check of de klant via dezelfde Google-organisatie **Google Cloud
-  Storage** kan inzetten (S3-interoperabiliteitsmodus bestaat, dan werkt de huidige code door
-  met alleen andere env-var-waardes, geen codewijziging). Zo niet: een losse S3-compatible
-  bucket op hun eigen account (bijv. Cloudflare R2) is de simpelste vervanging.
+- **Media-opslag: besloten.** Wordt **Cloudflare R2** (Dusty gebruikt dit zelf al, eenvoudig
+  op te zetten, S3-compatible dus geen enkele codewijziging nodig in `lib/storage/s3.ts` —
+  alleen `AWS_ENDPOINT_URL`/`AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`/`AWS_S3_BUCKET_NAME`
+  aanpassen naar de R2-waardes). Nog te bepalen: bucket op Dusty's eigen Cloudflare-account
+  (zoals Umami — blijft gewoon bij hem) of een nieuw account voor de klant. Kan bij de
+  daadwerkelijke overdracht besloten worden, hoeft nu niet.
 - **Database** (Postgres, nu op Railway): moet op enig moment gedumpt en hersteld worden naar
-  een database die de klant zelf beheert.
-- **Vragen om aan hun hostingpartij voor te leggen:**
-  1. Kunnen jullie Node.js/Next.js-apps direct draaien, of moet het gecontaineriseerd (Docker)?
-  2. Kunnen jullie een beheerde PostgreSQL-database leveren voor migratie van onze data?
-  3. Hebben jullie S3-compatible objectopslag (AWS S3, Google Cloud Storage, Cloudflare R2,
-     Azure Blob), of moet daar een los account voor komen?
-  4. Wie beheert de DNS van chateau.amsterdam, en kunnen jullie die zelf ompointen zodra de
-     omgeving klaarstaat?
-  5. Is er een bestaande CI/CD-flow, of is een kant-en-klaar Docker-image/buildinstructies nodig?
+  een database die de klant zelf beheert. Enige echte openstaande vraag hiervoor.
+- **Vragen om kant-en-klaar door te sturen naar hun hostingpartij** (bewust kort en simpel
+  gehouden, puur om te forwarden, de klant hoeft de antwoorden niet zelf te begrijpen):
+  1. Kunnen jullie een Node.js-website hosten?
+  2. Hebben jullie een PostgreSQL-database beschikbaar, of kunnen jullie die toevoegen?
+  3. Wie kan de DNS-instellingen van chateau.amsterdam aanpassen zodra de website bij jullie
+     moet komen?
 
 Dit hoeft pas opgepakt te worden zodra de klant akkoord is — nu ligt de prioriteit bij een
 volledig werkende site die naar de klant kan voor review.
