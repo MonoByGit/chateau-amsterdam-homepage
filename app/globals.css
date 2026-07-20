@@ -772,6 +772,61 @@ select.bd-input option { color: var(--ink); }
 .tastings-form-error { font-size: 14px; color: #b3261e; margin-bottom: 4px; }
 @media (max-width: 700px) { .tastings-form-row { grid-template-columns: 1fr; } }
 
+/* party size stepper */
+.tastings-stepper { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--line); padding: 6px 0; }
+.tastings-stepper:focus-within { border-color: var(--accent-badge); }
+.tastings-stepper-btn {
+  width: 28px; height: 28px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 2px; background: transparent; color: var(--ink);
+  font-size: 15px; line-height: 1; cursor: pointer; transition: border-color 0.25s, background-color 0.25s;
+}
+.tastings-stepper-btn:hover:not(:disabled) { border-color: var(--accent-badge); background: rgba(255,204,0,.1); }
+.tastings-stepper-btn:disabled { opacity: 0.35; cursor: default; }
+.tastings-stepper-value {
+  flex: 1; text-align: center; border: none; background: transparent; color: var(--ink);
+  font-size: 14.5px; font-family: inherit; padding: 6px 2px; -moz-appearance: textfield;
+}
+.tastings-stepper-value:focus { outline: none; }
+.tastings-stepper-value::-webkit-inner-spin-button, .tastings-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* custom date field */
+.tastings-field-date { position: relative; }
+.tastings-date-trigger { text-align: left; cursor: pointer; }
+.tastings-date-placeholder { color: rgba(23,20,14,.4); }
+.tastings-calendar {
+  position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: 300px; max-width: calc(100vw - 2 * var(--gutter));
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 2px;
+  box-shadow: 0 24px 50px -20px rgba(23,20,14,.35); padding: 16px;
+}
+.tastings-calendar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.tastings-calendar-month { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+.tastings-calendar-nav {
+  width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 2px; background: transparent; color: var(--ink); cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.tastings-calendar-nav:hover { border-color: var(--accent-badge); background: rgba(255,204,0,.1); }
+.tastings-calendar-weekdays, .tastings-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.tastings-calendar-weekdays span {
+  text-align: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  color: rgba(23,20,14,.5); padding-bottom: 8px;
+}
+.tastings-calendar-day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px;
+  border: none; background: transparent; color: var(--ink); border-radius: 2px; cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.tastings-calendar-day:hover:not(:disabled) { background: rgba(255,204,0,.18); }
+.tastings-calendar-day:disabled { color: rgba(23,20,14,.25); cursor: default; }
+.tastings-calendar-day.is-today { font-weight: 700; }
+.tastings-calendar-day.is-selected { background: var(--accent); color: var(--ink); font-weight: 700; }
+.tastings-calendar-today {
+  margin-top: 10px; width: 100%; text-align: center; font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-badge); background: transparent;
+  border: none; padding: 8px 0; cursor: pointer;
+}
+.tastings-calendar-today:hover { text-decoration: underline; }
+
 /* ============================================================
    CART — trigger, overlay, slide-in drawer
    ============================================================ */
