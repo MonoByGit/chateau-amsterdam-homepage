@@ -3,6 +3,7 @@ import Link from "next/link";
 import { listReservations } from "@/lib/db/reservations";
 import { listBlocksForMonth } from "@/lib/db/availability";
 import { listWines } from "@/lib/db/wines";
+import { formatAdminDate } from "@/lib/format-date";
 
 const STATUS_LABELS: Record<string, string> = {
   nieuw: "Nieuw",
@@ -97,7 +98,8 @@ export default async function DashboardPage() {
                     {r.contactName}
                   </div>
                   <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                    {r.track === "standaard" ? "Standaard" : "Zakelijk"} · {r.requestedDate}
+                    {r.track === "standaard" ? "Standaard" : "Zakelijk"} ·{" "}
+                    {r.requestedDate ? formatAdminDate(r.requestedDate) : "-"}
                   </div>
                 </div>
                 <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
@@ -128,7 +130,7 @@ export default async function DashboardPage() {
             {upcomingBlocks.map((b) => (
               <div key={b.id} className="a-card-row" style={{ display: "flex", justifyContent: "space-between" }}>
                 <span className="a-label" style={{ color: "var(--a-text)" }}>
-                  {b.date}
+                  {formatAdminDate(b.date)}
                 </span>
                 <span style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }}>{DAYPART_LABELS[b.daypart]}</span>
               </div>
@@ -145,8 +147,8 @@ export default async function DashboardPage() {
       <div className="a-dashboard-section">
         <h2>Bezoekersstatistieken</h2>
         <div className="a-placeholder-card">
-          Analytics via Umami zijn nog niet gekoppeld, dit verschijnt hier zodra dat is ingericht (gepland voor
-          een latere fase).
+          Umami is gekoppeld voor bezoekersstatistieken; dit dashboard-blok toont die cijfers nog niet — gepland
+          voor een latere fase.
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getReservation, isValidTransition, type ReservationStatus } from "@/lib/db/reservations";
 import { updateStatus } from "../actions";
+import { formatAdminDate } from "@/lib/format-date";
 
 const STATUS_LABELS: Record<ReservationStatus, string> = {
   nieuw: "Nieuw",
@@ -61,7 +62,7 @@ export default async function ReservationDetailPage({
         <Row label="Groepsgrootte" value={reservation.groupSize ?? "-"} />
         <Row label="Bedrijf" value={reservation.companyName ?? "-"} />
         <Row label="Gelegenheid" value={reservation.occasion ?? "-"} />
-        <Row label="Gewenste datum" value={reservation.requestedDate ?? "-"} />
+        <Row label="Gewenste datum" value={reservation.requestedDate ? formatAdminDate(reservation.requestedDate) : "-"} />
         <Row label="Gewenste periode" value={reservation.preferredPeriod ?? "-"} />
         <Row label="Notities" value={reservation.notes ?? "-"} />
       </div>
