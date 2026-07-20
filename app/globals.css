@@ -772,8 +772,9 @@ select.bd-input option { color: var(--ink); }
 .tastings-form-error { font-size: 14px; color: #b3261e; margin-bottom: 4px; }
 @media (max-width: 700px) { .tastings-form-row { grid-template-columns: 1fr; } }
 
-/* party size stepper */
-.tastings-stepper { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--line); padding: 6px 0; }
+/* party size stepper — height matches .tastings-input's natural box so its
+   border-bottom lines up exactly with the date field next to it */
+.tastings-stepper { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--line); height: 49px; box-sizing: border-box; }
 .tastings-stepper:focus-within { border-color: var(--accent-badge); }
 .tastings-stepper-btn {
   width: 28px; height: 28px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
@@ -791,7 +792,7 @@ select.bd-input option { color: var(--ink); }
 
 /* custom date field */
 .tastings-field-date { position: relative; }
-.tastings-date-trigger { text-align: left; cursor: pointer; }
+.tastings-date-trigger { text-align: left; cursor: pointer; height: 49px; box-sizing: border-box; display: flex; align-items: center; }
 .tastings-date-placeholder { color: rgba(23,20,14,.4); }
 .tastings-calendar {
   position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: 300px; max-width: calc(100vw - 2 * var(--gutter));
