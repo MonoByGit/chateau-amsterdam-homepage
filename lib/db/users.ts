@@ -18,3 +18,7 @@ export async function findUserById(id: string): Promise<User | null> {
   const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1);
   return user ?? null;
 }
+
+export async function updateUserPassword(id: string, passwordHash: string): Promise<void> {
+  await db.update(users).set({ passwordHash }).where(eq(users.id, id));
+}

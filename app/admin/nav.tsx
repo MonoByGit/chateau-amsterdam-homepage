@@ -83,6 +83,16 @@ export const SECONDARY_ITEMS: NavItem[] = [
       </svg>
     ),
   },
+  {
+    href: "/admin/account",
+    label: "Account",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" />
+      </svg>
+    ),
+  },
 ];
 
 export function isActive(pathname: string | null, href: string): boolean {
