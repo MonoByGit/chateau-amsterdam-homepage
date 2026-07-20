@@ -4,6 +4,11 @@ export type ShopifyMoney = {
   currencyCode: string;
 };
 
+export type ShopifyProductImage = {
+  url: string;
+  altText: string | null;
+};
+
 export type ShopifyProductVariant = {
   id: string;
   title: string;

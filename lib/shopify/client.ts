@@ -28,9 +28,14 @@ function getConfig(): { domain: string; token: string; apiVersion: string } {
 export async function shopifyFetch<T>({
   query,
   variables,
+  revalidateSeconds,
 }: {
   query: string;
   variables?: Record<string, unknown>;
+  // Cart/checkout/inventory calls must stay uncached (default: no-store).
+  // Pass this for data that's fine to be a little stale, e.g. product
+  // photos, so we're not round-tripping to Shopify on every page render.
+  revalidateSeconds?: number;
 }): Promise<T> {
   const { domain, token, apiVersion } = getConfig();
 
@@ -41,7 +46,7 @@ export async function shopifyFetch<T>({
       "X-Shopify-Storefront-Access-Token": token,
     },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    ...(revalidateSeconds !== undefined ? { next: { revalidate: revalidateSeconds } } : { cache: "no-store" }),
   });
 
   if (!response.ok) {

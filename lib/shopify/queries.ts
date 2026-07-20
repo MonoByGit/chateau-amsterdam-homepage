@@ -51,6 +51,14 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
+export const PRODUCT_IMAGE_BY_HANDLE_QUERY = `
+  query ProductImageByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      featuredImage { url altText }
+    }
+  }
+`;
+
 export const CART_QUERY = `
   query Cart($cartId: ID!) {
     cart(id: $cartId) {

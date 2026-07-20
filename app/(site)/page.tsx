@@ -15,7 +15,7 @@ import {
   WINES_DEFAULTS,
 } from "@/lib/content/defaults";
 import { getWinesForHomepage } from "@/lib/db/wines";
-import { getObjectUrl } from "@/lib/storage/s3";
+import { resolveWineImageUrl } from "@/lib/wines/image";
 
 // Forces this route to render per-request instead of being statically
 // prerendered at build time. Without this, `next build` tries to execute
@@ -48,7 +48,7 @@ export default async function HomePage() {
       name: wine.name,
       nlTag: wine.tagNl,
       enTag: wine.tagEn,
-      img: wine.imageStorageKey ? await getObjectUrl(wine.imageStorageKey) : "/assets/wine-1.png",
+      img: await resolveWineImageUrl(wine),
       alt: wine.imageAltNl || wine.name,
       delay: index * 0.08,
     }))
