@@ -93,18 +93,6 @@ export const SECONDARY_ITEMS: NavItem[] = [
       </svg>
     ),
   },
-  {
-    href: "/admin/users",
-    label: "Gebruikers",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="8.5" cy="8" r="3" />
-        <path d="M2.5 20c1-3.2 3.4-5 6-5s5 1.8 6 5" />
-        <circle cx="17" cy="8.5" r="2.4" />
-        <path d="M15.5 12.5c2 .3 3.6 1.8 4.4 4.3" />
-      </svg>
-    ),
-  },
 ];
 
 export function isActive(pathname: string | null, href: string): boolean {
