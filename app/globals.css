@@ -902,7 +902,7 @@ select.bd-input option { color: var(--ink); }
 .cookie-banner p a { color: var(--theme-accent-text); text-decoration: underline; }
 .cookie-banner-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .cookie-banner-actions .btn { padding: 13px 24px; font-size: 12px; }
-@media (max-width: 600px) { .cookie-banner { flex-direction: column; align-items: stretch; } .cookie-banner-actions { justify-content: stretch; } .cookie-banner-actions .btn { flex: 1; justify-content: center; } }
+@media (max-width: 600px) { .cookie-banner { flex-direction: column; align-items: stretch; } .cookie-banner p { flex-basis: auto; } .cookie-banner-actions { justify-content: stretch; } .cookie-banner-actions .btn { flex: 1; justify-content: center; } }
 
 .age-gate {
   position: fixed; inset: 0; z-index: 600;
