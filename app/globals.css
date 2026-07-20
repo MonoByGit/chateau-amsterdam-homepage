@@ -114,23 +114,43 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px var(--gutter);
-  mix-blend-mode: difference; color: #fff;
   transition: padding 0.5s var(--ease-out);
 }
 .site-header.is-scrolled {
   padding: 12px var(--gutter);
-  mix-blend-mode: normal;
   background: rgba(23, 20, 14, 0.85);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  color: var(--paper);
   border-bottom: 1px solid var(--line-light);
 }
+/* The invert-over-photo trick lives only on the brand mark and nav text
+   (.brand, nav links, lang selector) below, not on .site-header itself.
+   Putting mix-blend-mode on the header used to also swallow the solid
+   yellow CTA button into its difference-blend group — isolation on the
+   button doesn't opt it out of an ancestor's blend mode, only out of
+   blending among its own descendants — turning the yellow into whatever
+   color the difference math produced against the page behind it. */
 @media (prefers-color-scheme: dark) {
   .site-header.is-scrolled {
     background: rgba(10, 8, 5, 0.9);
     border-bottom: 1px solid rgba(241, 236, 225, 0.1);
   }
+}
+
+.site-header .brand,
+.site-header .site-nav a:not(.nav-cta),
+.site-header .lang-selector,
+.site-header .cart-trigger svg,
+.site-header .menu-toggle {
+  mix-blend-mode: difference; color: #fff;
+  transition: color 0.5s var(--ease-out);
+}
+.site-header.is-scrolled .brand,
+.site-header.is-scrolled .site-nav a:not(.nav-cta),
+.site-header.is-scrolled .lang-selector,
+.site-header.is-scrolled .cart-trigger svg,
+.site-header.is-scrolled .menu-toggle {
+  mix-blend-mode: normal; color: var(--paper);
 }
 
 .brand { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
@@ -167,13 +187,6 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   background: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 12px 26px;
   color: var(--ink);
   transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
-  /* .site-header uses mix-blend-mode: difference so its white text/logo
-     read against any hero photo; without this, that same blending would
-     eat the CTA's solid yellow and turn it into whatever color the
-     difference math produces against the photo underneath. Isolating it
-     into its own stacking context keeps it a plain, unblended yellow. */
-  isolation: isolate;
-  mix-blend-mode: normal;
 }
 .nav-cta:hover { background: transparent; color: var(--accent); }
 .nav-cta::after { display: none; }
