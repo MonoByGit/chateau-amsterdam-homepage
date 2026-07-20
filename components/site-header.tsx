@@ -23,14 +23,14 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   const pathname = usePathname();
   // The invert-over-photo header trick (mix-blend-mode against whatever's
   // behind it) only makes sense where the top of the page is a genuine dark
-  // full-bleed photo — the homepage hero and tours-tastings' hero. Every
-  // other page just has the plain light page background up there, where
-  // that same trick reads as illegible/wrong-colored nav text (confirmed on
-  // /wijnen), so those get the standard solid header instead. Default to
-  // solid and opt in the two photo-hero pages, rather than the other way
-  // around, so newly added pages are safe by default.
-  const hasPhotoHero = pathname === "/" || (pathname?.startsWith("/tours-tastings") ?? false);
-  const forceSolid = !hasPhotoHero;
+  // full-bleed photo. Confirmed via .hero's own CSS (app/globals.css) that
+  // the homepage hero has no background image or color of its own — it's
+  // the plain light page background like everywhere else, so white nav
+  // text there is just as illegible as it was on /wijnen (confirmed on a
+  // real phone). Only tours-tastings has an actual <img> hero background
+  // (.tastings-hero-media). Default to solid and opt in only that page, so
+  // newly added pages are safe by default.
+  const forceSolid = !(pathname?.startsWith("/tours-tastings") ?? false);
   const magneticRef = useMagnetic();
   const { cart, openCart } = useCart();
   const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu } = useMobileNav();
