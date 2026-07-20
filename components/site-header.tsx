@@ -21,16 +21,12 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  // The invert-over-photo header trick (mix-blend-mode against whatever's
-  // behind it) only makes sense where the top of the page is a genuine dark
-  // full-bleed photo. Confirmed via .hero's own CSS (app/globals.css) that
-  // the homepage hero has no background image or color of its own — it's
-  // the plain light page background like everywhere else, so white nav
-  // text there is just as illegible as it was on /wijnen (confirmed on a
-  // real phone). Only tours-tastings has an actual <img> hero background
-  // (.tastings-hero-media). Default to solid and opt in only that page, so
-  // newly added pages are safe by default.
-  const forceSolid = !(pathname?.startsWith("/tours-tastings") ?? false);
+  // Header stays transparent (no background bar) until scrolled — only the
+  // text/logo color adapts to what's behind it. Every page has the plain
+  // light page background at the top except tours-tastings, which has a
+  // genuine dark full-bleed photo (.tastings-hero-media's <img>); that one
+  // page gets light text instead of the default dark ink.
+  const isPhotoHero = pathname?.startsWith("/tours-tastings") ?? false;
   const magneticRef = useMagnetic();
   const { cart, openCart } = useCart();
   const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu } = useMobileNav();
@@ -46,7 +42,10 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   }, []);
 
   return (
-    <header className={`site-header${isScrolled || forceSolid ? " is-scrolled" : ""}`} id="header">
+    <header
+      className={`site-header${isScrolled ? " is-scrolled" : ""}${isPhotoHero ? " site-header--photo-hero" : ""}`}
+      id="header"
+    >
       <a className="brand" href="/">
         <img className="brand-logo" src="/assets/chateau-logo.png" alt="Chateau Amsterdam Logo" />
         <small>Urban&nbsp;Winery&nbsp;·&nbsp;aan&nbsp;het&nbsp;IJ</small>

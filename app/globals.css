@@ -114,22 +114,29 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px var(--gutter);
-  transition: padding 0.5s var(--ease-out);
+  /* Default: floating, transparent, over a page whose top is the plain
+     light background — so plain dark ink text/logo, no bar behind it.
+     Children (nav links, lang selector, cart icon, hamburger) don't set
+     their own color, they just inherit this — one source of truth, no
+     mix-blend-mode. That trick technically works but turned out to be
+     unreliable for solid accent colors (see .nav-cta below) and, in some
+     browser/layer combinations, didn't invert at all. Not worth the risk
+     for something this should just be: read the page, pick a color. */
+  color: var(--ink);
+  transition: padding 0.5s var(--ease-out), color 0.5s var(--ease-out);
 }
+/* The one page with a genuine dark full-bleed photo at the top (see
+   .tastings-hero-media's <img>) — light text/logo there instead, still
+   with no background bar; the photo itself gives the contrast. */
+.site-header.site-header--photo-hero:not(.is-scrolled) { color: #fff; }
 .site-header.is-scrolled {
   padding: 12px var(--gutter);
   background: rgba(23, 20, 14, 0.85);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+  color: var(--paper);
   border-bottom: 1px solid var(--line-light);
 }
-/* The invert-over-photo trick lives only on the brand mark and nav text
-   (.brand, nav links, lang selector) below, not on .site-header itself.
-   Putting mix-blend-mode on the header used to also swallow the solid
-   yellow CTA button into its difference-blend group — isolation on the
-   button doesn't opt it out of an ancestor's blend mode, only out of
-   blending among its own descendants — turning the yellow into whatever
-   color the difference math produced against the page behind it. */
 @media (prefers-color-scheme: dark) {
   .site-header.is-scrolled {
     background: rgba(10, 8, 5, 0.9);
@@ -137,24 +144,16 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   }
 }
 
-.site-header .brand,
-.site-header .site-nav a:not(.nav-cta),
-.site-header .lang-selector,
-.site-header .cart-trigger svg,
-.site-header .menu-toggle {
-  mix-blend-mode: difference; color: #fff;
-  transition: color 0.5s var(--ease-out);
-}
-.site-header.is-scrolled .brand,
-.site-header.is-scrolled .site-nav a:not(.nav-cta),
-.site-header.is-scrolled .lang-selector,
-.site-header.is-scrolled .cart-trigger svg,
-.site-header.is-scrolled .menu-toggle {
-  mix-blend-mode: normal; color: var(--paper);
-}
-
 .brand { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-.brand-logo { display: block; height: 34px; width: auto; filter: invert(1); }
+/* The source logo asset is solid black; invert it to white only when the
+   header is showing light text (scrolled, or over the photo hero) —
+   default state wants the logo in its native black, matching the ink text
+   next to it. */
+.brand-logo { display: block; height: 34px; width: auto; transition: filter 0.5s var(--ease-out); }
+.site-header.is-scrolled .brand-logo,
+.site-header.site-header--photo-hero:not(.is-scrolled) .brand-logo {
+  filter: invert(1);
+}
 .brand small {
   font-family: var(--font-mono); font-weight: 400; text-transform: uppercase;
   font-size: 7.5px; letter-spacing: 0.02em; margin-top: 7px; opacity: 0.7;
