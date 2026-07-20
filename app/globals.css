@@ -164,11 +164,18 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 
 .nav-cta {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-  border: 1px solid currentColor; border-radius: 999px; padding: 12px 26px;
-  transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
+  background: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 12px 26px;
+  color: var(--ink);
+  transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+  /* .site-header uses mix-blend-mode: difference so its white text/logo
+     read against any hero photo; without this, that same blending would
+     eat the CTA's solid yellow and turn it into whatever color the
+     difference math produces against the photo underneath. Isolating it
+     into its own stacking context keeps it a plain, unblended yellow. */
+  isolation: isolate;
+  mix-blend-mode: normal;
 }
-.nav-cta:hover { background: #fff; color: #000; }
-.site-header.is-scrolled .nav-cta:hover { background: var(--paper); color: var(--ink); }
+.nav-cta:hover { background: transparent; color: var(--accent); }
 .nav-cta::after { display: none; }
 
 /* ---------- mobile menu (hamburger + overlay nav) ---------- */
