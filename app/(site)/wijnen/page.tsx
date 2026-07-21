@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { WijnenOverview } from "@/components/wijnen-overview";
-import { listActiveWines } from "@/lib/db/wines";
-import { resolveWineImageUrl } from "@/lib/wines/image";
+import { getWineCatalog, wineTypeLabel } from "@/lib/wines/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -22,23 +21,19 @@ export const metadata: Metadata = {
 };
 
 export default async function WijnenOverviewPage() {
-  const wineRows = await listActiveWines();
-  const wines = await Promise.all(
-    wineRows.map(async (wine, index) => ({
-      n: `N°${String(index + 1).padStart(2, "0")}`,
-      // See app/(site)/page.tsx's identical assertion: slug is nullable in
-      // the DB only for migration-safety reasons, never actually empty.
-      slug: wine.slug!,
-      metaNl: wine.metaNl,
-      metaEn: wine.metaEn,
-      name: wine.name,
-      nlTag: wine.tagNl,
-      enTag: wine.tagEn,
-      img: await resolveWineImageUrl(wine),
-      altNl: wine.imageAltNl || wine.name,
-      altEn: wine.imageAltEn || wine.name,
-    }))
-  );
+  const wineRows = await getWineCatalog();
+  const wines = wineRows.map((wine, index) => ({
+    n: `N°${String(index + 1).padStart(2, "0")}`,
+    slug: wine.handle,
+    metaNl: wineTypeLabel(wine.productType, "nl"),
+    metaEn: wineTypeLabel(wine.productType, "en"),
+    name: wine.title,
+    nlTag: wine.fieldsNl.oneliner ?? wineTypeLabel(wine.productType, "nl"),
+    enTag: wine.fieldsEn.oneliner ?? wineTypeLabel(wine.productType, "en"),
+    img: wine.image?.url ?? "/assets/wine-1.png",
+    altNl: wine.image?.altText || wine.title,
+    altEn: wine.image?.altText || wine.title,
+  }));
 
   return <WijnenOverview wines={wines} />;
 }
