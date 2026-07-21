@@ -1,76 +1,82 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WijnDetail, type WijnDetailRelated } from "@/components/wijn-detail";
-import { getRelatedWines, getWineBySlug } from "@/lib/db/wines";
-import { listMedia } from "@/lib/db/media";
-import { resolveWineImageUrl } from "@/lib/wines/image";
+import { getWineByHandle, getWineCatalog, wineTypeLabel } from "@/lib/wines/catalog";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const wine = await getWineBySlug(slug);
-  if (!wine || !wine.isActive) {
+  const wine = await getWineByHandle(slug);
+  if (!wine) {
     return { title: "Wijnen · Chateau Amsterdam" };
   }
 
-  const description = (wine.descriptionNl ?? "").split("\n\n")[0] || `${wine.name} · ${wine.tagNl}`;
-  const media = await listMedia();
-  const image = media.find((m) => m.id === wine.imageId);
-  const resolvedImageUrl = await resolveWineImageUrl({
-    shopifyHandle: wine.shopifyHandle,
-    imageStorageKey: image?.storageKey ?? null,
-  });
-  // OG/Twitter images must be absolute URLs; the resolver's placeholder
-  // fallback is a relative site path, so make sure it's absolute here.
-  const imageUrl = resolvedImageUrl.startsWith("/")
-    ? `https://chateau.amsterdam${resolvedImageUrl}`
-    : resolvedImageUrl;
+  const description = (wine.descriptionNl ?? "").split("\n\n")[0] || wine.title;
+  const imageUrl = wine.image?.url ?? "https://chateau.amsterdam/assets/wine-1.png";
 
   return {
-    title: `${wine.name} · Chateau Amsterdam`,
+    title: `${wine.title} · Chateau Amsterdam`,
     description,
-    openGraph: { title: `${wine.name} · Chateau Amsterdam`, description, images: [imageUrl] },
-    twitter: { card: "summary_large_image", title: `${wine.name} · Chateau Amsterdam`, description, images: [imageUrl] },
+    openGraph: { title: `${wine.title} · Chateau Amsterdam`, description, images: [imageUrl] },
+    twitter: { card: "summary_large_image", title: `${wine.title} · Chateau Amsterdam`, description, images: [imageUrl] },
   };
 }
 
 export default async function WijnDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const wine = await getWineBySlug(slug);
-  if (!wine || !wine.isActive) {
+  const wine = await getWineByHandle(slug);
+  if (!wine) {
     notFound();
   }
 
-  const [media, relatedRows] = await Promise.all([listMedia(), getRelatedWines(wine.id)]);
-  const image = media.find((m) => m.id === wine.imageId);
-  const imageUrl = await resolveWineImageUrl({
-    shopifyHandle: wine.shopifyHandle,
-    imageStorageKey: image?.storageKey ?? null,
-  });
+  // The catalog list is already fetched with its Shopify collection order —
+  // reuse it for "related wines" instead of a second query, same as before
+  // when this was a Postgres sortOrder column.
+  const catalog = await getWineCatalog();
+  const relatedRows = catalog.filter((w) => w.handle !== wine.handle).slice(0, 4);
 
-  const related: WijnDetailRelated[] = await Promise.all(
-    relatedRows.map(async (r, index) => {
-      const relatedImage = media.find((m) => m.id === r.imageId);
-      return {
-        n: `N°${String(index + 1).padStart(2, "0")}`,
-        // Same nullable-in-the-DB-only assertion as the other two pages.
-        slug: r.slug!,
-        metaNl: r.metaNl,
-        metaEn: r.metaEn,
-        name: r.name,
-        nlTag: r.tagNl,
-        enTag: r.tagEn,
-        img: await resolveWineImageUrl({
-          shopifyHandle: r.shopifyHandle,
-          imageStorageKey: relatedImage?.storageKey ?? null,
-        }),
-        altNl: relatedImage?.altTextNl || r.name,
-        altEn: relatedImage?.altTextEn || r.name,
-        delay: 0,
-      };
-    })
+  const related: WijnDetailRelated[] = relatedRows.map((r, index) => ({
+    n: `N°${String(index + 1).padStart(2, "0")}`,
+    slug: r.handle,
+    metaNl: wineTypeLabel(r.productType, "nl"),
+    metaEn: wineTypeLabel(r.productType, "en"),
+    name: r.title,
+    nlTag: r.fieldsNl.oneliner ?? wineTypeLabel(r.productType, "nl"),
+    enTag: r.fieldsEn.oneliner ?? wineTypeLabel(r.productType, "en"),
+    img: r.image?.url ?? "/assets/wine-1.png",
+    altNl: r.image?.altText || r.title,
+    altEn: r.image?.altText || r.title,
+    delay: 0,
+  }));
+
+  return (
+    <WijnDetail
+      wine={{
+        name: wine.title,
+        metaNl: wineTypeLabel(wine.productType, "nl"),
+        metaEn: wineTypeLabel(wine.productType, "en"),
+        tagNl: wine.tagNl ?? wineTypeLabel(wine.productType, "nl"),
+        tagEn: wine.tagEn ?? wineTypeLabel(wine.productType, "en"),
+        descriptionNl: wine.descriptionNl,
+        descriptionEn: wine.descriptionEn,
+        vintage: null,
+        grapes: wine.grapes,
+        abv: null,
+        wineTypeNl: wineTypeLabel(wine.productType, "nl"),
+        wineTypeEn: wineTypeLabel(wine.productType, "en"),
+        regionNl: wine.regionNl,
+        regionEn: wine.regionEn,
+        farmingMethodNl: null,
+        farmingMethodEn: null,
+        vinificationNl: null,
+        vinificationEn: null,
+        foodPairingNl: wine.foodPairingNl,
+        foodPairingEn: wine.foodPairingEn,
+        shopifyHandle: wine.handle,
+      }}
+      imageUrl={wine.image?.url ?? "/assets/wine-1.png"}
+      related={related}
+    />
   );
-
-  return <WijnDetail wine={wine} imageUrl={imageUrl} related={related} />;
 }
