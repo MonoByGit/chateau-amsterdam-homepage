@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { listReservations } from "@/lib/db/reservations";
 import { listBlocksForMonth } from "@/lib/db/availability";
-import { listWines } from "@/lib/db/wines";
 import { formatAdminDate } from "@/lib/format-date";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -24,10 +23,9 @@ function pad(n: number): string {
 }
 
 export default async function DashboardPage() {
-  const [nieuw, inBehandeling, allWines] = await Promise.all([
+  const [nieuw, inBehandeling] = await Promise.all([
     listReservations({ status: "nieuw" }),
     listReservations({ status: "in_behandeling" }),
-    listWines({}),
   ]);
 
   const openReservations = [...nieuw, ...inBehandeling]
@@ -54,8 +52,6 @@ export default async function DashboardPage() {
     .sort(([a], [b]) => a.localeCompare(b))
     .slice(0, 5);
 
-  const activeWines = allWines.filter((w) => w.isActive).length;
-
   return (
     <div>
       <h1 className="a-h1">Overzicht</h1>
@@ -65,10 +61,6 @@ export default async function DashboardPage() {
         <div className="a-stat-card">
           <div className="a-stat-value">{nieuw.length + inBehandeling.length}</div>
           <div className="a-stat-label">Openstaande reserveringen</div>
-        </div>
-        <div className="a-stat-card">
-          <div className="a-stat-value">{activeWines}</div>
-          <div className="a-stat-label">Actieve wijnen ({allWines.length} totaal)</div>
         </div>
         <div className="a-stat-card">
           <div className="a-stat-value">{upcomingBlocks.length}</div>

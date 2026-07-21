@@ -45,16 +45,6 @@ export const PRIMARY_ITEMS: NavItem[] = [
     ),
   },
   {
-    href: "/admin/wines",
-    label: "Wijnen",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 3h8l-1.2 8.2a3.6 3.6 0 0 1-3.6 3.1v0a3.6 3.6 0 0 1-3.6-3.1L8 3z" />
-        <path d="M12 14.3V21M8.5 21h7" />
-      </svg>
-    ),
-  },
-  {
     href: "/admin/content",
     label: "Content",
     icon: (

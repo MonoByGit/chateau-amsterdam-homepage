@@ -24,11 +24,6 @@ export default function HelpPage() {
             <p>Per dag tot 4 vrije tijdslots instellen, of de hele dag op niet-beschikbaar zetten. Voor vakanties, feestdagen, privé-events.</p>
           </div>
           <div className="a-card a-help-card">
-            <span className="a-eyebrow">Wijnen</span>
-            <h3>De collectie</h3>
-            <p>Namen, teksten en volgorde van de wijnen op de site. Foto&apos;s en prijzen komen automatisch uit de webshop.</p>
-          </div>
-          <div className="a-card a-help-card">
             <span className="a-eyebrow">Content</span>
             <h3>Teksten op de site</h3>
             <p>Koppen, intro&apos;s en labels per sectie van de homepage, zonder dat er iets herbouwd hoeft te worden.</p>
@@ -79,16 +74,22 @@ export default function HelpPage() {
             <summary>Een wijn bijwerken</summary>
             <div className="a-help-howto-body">
               <p>
-                Foto en prijs komen automatisch uit de webshop zodra een wijn daaraan gekoppeld is (via de
-                Shopify-handle). Zelf aan te passen in <strong>Wijnen</strong>:
+                De wijnenpagina en de wijndetailpagina&apos;s zijn een spiegel van Shopify: alles wat je in Shopify
+                aanpast (foto, prijs, voorraad, tekstvelden onder &ldquo;Productmetavelden&rdquo;) verschijnt
+                automatisch op de site, meestal binnen 5 minuten. Er is nergens meer een aparte plek waar je een wijn
+                nogmaals moet invoeren.
               </p>
               <ul>
-                <li>Naam, tagline en korte omschrijving</li>
-                <li>Uitgebreide beschrijving, druif, jaargang, streek</li>
-                <li>Volgorde op de site (sleep de rijen)</li>
-                <li>&ldquo;Toon op homepage&rdquo;: maximaal 5 tegelijk, de rest blijft gewoon zichtbaar op de wijnenpagina</li>
+                <li>Wijn op de site tonen/verbergen: zet 'm in/uit de collectie <strong>All our wines</strong> in Shopify.</li>
+                <li>
+                  De 5 uitgelichte wijnen op de homepage: beheer je via de collectie <strong>Homepage</strong> in
+                  Shopify (Producten → Collecties). Sleep daar de volgorde, of voeg een wijn toe/verwijder er een.
+                </li>
+                <li>
+                  Tekstvelden zoals het verhaal, wijn-spijs advies, druif en streek staan onder &ldquo;Productmetavelden&rdquo;
+                  op de productpagina in Shopify.
+                </li>
               </ul>
-              <p>Staat een wijn niet in de webshop (bijv. alleen te proeven in de tasting room)? Upload dan zelf een foto bij die wijn.</p>
             </div>
           </details>
           <details className="a-help-howto">
