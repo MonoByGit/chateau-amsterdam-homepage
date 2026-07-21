@@ -1,4 +1,6 @@
 // lib/shopify/types.ts
+export type ShopifyLanguage = "EN" | "NL";
+
 export type ShopifyMoney = {
   amount: string;
   currencyCode: string;

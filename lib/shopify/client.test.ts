@@ -1,6 +1,7 @@
 // lib/shopify/client.test.ts
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ShopifyConfigError, isShopifyConfigured, shopifyFetch } from "./client";
+import type { ShopifyLanguage } from "./types";
 
 describe("isShopifyConfigured", () => {
   afterEach(() => {
@@ -73,5 +74,12 @@ describe("shopifyFetch", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 401, statusText: "Unauthorized" }));
 
     await expect(shopifyFetch({ query: "query {}" })).rejects.toThrow(/401/);
+  });
+});
+
+describe("ShopifyLanguage", () => {
+  it("accepts EN and NL as valid values", () => {
+    const langs: ShopifyLanguage[] = ["EN", "NL"];
+    expect(langs).toHaveLength(2);
   });
 });
