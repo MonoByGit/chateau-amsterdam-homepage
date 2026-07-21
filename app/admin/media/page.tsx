@@ -28,8 +28,7 @@ export default async function MediaPage({
         <UploadModalTrigger error={error} />
       </div>
       <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>
-        Alle geüploade foto&apos;s. Bij een wijn kun je meestal direct uploaden, deze pagina is voor het
-        overzicht, of voor een foto die je nog niet bij een wijn hebt gekozen.
+        Alle geüploade foto&apos;s op één plek, te gebruiken bij teksten en content elders in het CMS.
       </p>
 
       <MediaGrid items={itemsWithUrls} />

@@ -1,3 +1,9 @@
+// Dead code as of the Shopify wine-catalog migration (see
+// docs/superpowers/plans/2026-07-21-shopify-wine-catalog-mirror.md): the
+// admin UI that called this was removed, and the public site pages now
+// read from lib/wines/catalog.ts instead. Kept only until that plan's
+// migration script (Task 9) has copied this table's content into Shopify
+// and the table itself is dropped (Task 10/11).
 import { and, asc, eq, ne, sql } from "drizzle-orm";
 import { db } from "./client";
 import { media, wines } from "./schema";
@@ -88,8 +94,8 @@ export async function deleteWine(id: string): Promise<void> {
 
 // The homepage's wine teaser is a hand-picked handful, not "whatever's in
 // the catalog" — this caps how many wines can have showOnHomepage set at
-// once, enforced by the caller (see app/admin/wines/actions.ts) before it
-// writes a wine with showOnHomepage: true.
+// once. Formerly enforced by the now-deleted admin UI before it wrote a
+// wine with showOnHomepage: true.
 export const MAX_HOMEPAGE_WINES = 5;
 
 export async function countHomepageWines(excludeId?: string): Promise<number> {

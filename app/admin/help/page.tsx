@@ -31,7 +31,7 @@ export default function HelpPage() {
           <div className="a-card a-help-card">
             <span className="a-eyebrow">Media</span>
             <h3>Foto-bibliotheek</h3>
-            <p>Alle geüploade foto&apos;s op één plek, ook te gebruiken als je een wijn zonder webshop-koppeling een eigen foto wilt geven.</p>
+            <p>Alle geüploade foto&apos;s op één plek, te gebruiken bij teksten en content elders in het CMS.</p>
           </div>
           <div className="a-card a-help-card">
             <span className="a-eyebrow">Account</span>

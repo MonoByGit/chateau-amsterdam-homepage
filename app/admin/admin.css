@@ -295,10 +295,9 @@ a.a-card-row:hover {
   color: var(--a-text-3);
   margin-top: -0.125rem;
   /* Reserved for up to two lines, even when a field has no hint text at
-     all (see the empty <span className="a-hint" /> placeholders in
-     wine-form-wizard.tsx) — so every field's input lands at the same
-     vertical position within its row, whether or not its neighbor has a
-     hint, and whether a hint wraps to one line or two. */
+     all, so every field's input lands at the same vertical position
+     within its row, whether or not its neighbor has a hint, and whether
+     a hint wraps to one line or two. */
   min-height: 2.025rem;
 }
 
