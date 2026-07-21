@@ -48,3 +48,14 @@ export type Cart = {
 };
 
 export type CartActionResult = { ok: true; cart: Cart | null } | { ok: false; error: string };
+
+export type ShopifyWineProduct = {
+  id: string;
+  handle: string;
+  title: string;
+  productType: string;
+  descriptionHtml: string;
+  featuredImage: ShopifyProductImage | null;
+  priceRange: { minVariantPrice: ShopifyMoney };
+  metafields: ({ key: string; value: string } | null)[];
+};
