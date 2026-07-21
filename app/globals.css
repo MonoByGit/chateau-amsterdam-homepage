@@ -115,14 +115,19 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px var(--gutter);
   /* Default: floating, transparent, over a page whose top is the plain
-     light background — so plain dark ink text/logo, no bar behind it.
+     theme background — so plain theme-foreground text/logo, no bar behind
+     it. Uses the same --theme-fg the rest of the page reads, so it follows
+     the site's light/dark-OS-mode flip automatically (--theme-fg is ink on
+     the light paper background, paper on the dark-mode ink background) —
+     hardcoding --ink here went invisible in dark-OS-mode, where the page
+     background flips dark but the header text wouldn't have.
      Children (nav links, lang selector, cart icon, hamburger) don't set
      their own color, they just inherit this — one source of truth, no
      mix-blend-mode. That trick technically works but turned out to be
      unreliable for solid accent colors (see .nav-cta below) and, in some
      browser/layer combinations, didn't invert at all. Not worth the risk
      for something this should just be: read the page, pick a color. */
-  color: var(--ink);
+  color: var(--theme-fg);
   transition: padding 0.5s var(--ease-out), color 0.5s var(--ease-out);
 }
 /* The one page with a genuine dark full-bleed photo at the top (see
@@ -145,14 +150,21 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 }
 
 .brand { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-/* The source logo asset is solid black; invert it to white only when the
-   header is showing light text (scrolled, or over the photo hero) —
-   default state wants the logo in its native black, matching the ink text
-   next to it. */
+/* The source logo asset is solid black; invert it to white whenever the
+   header is showing light text — scrolled, over the photo hero, or (see
+   the dark-OS-mode block below) the default state when the visitor's
+   system is in dark mode and the page background has flipped dark under
+   it. Default light-mode state keeps the logo in its native black,
+   matching the ink text next to it. */
 .brand-logo { display: block; height: 34px; width: auto; transition: filter 0.5s var(--ease-out); }
 .site-header.is-scrolled .brand-logo,
 .site-header.site-header--photo-hero:not(.is-scrolled) .brand-logo {
   filter: invert(1);
+}
+@media (prefers-color-scheme: dark) {
+  .site-header:not(.is-scrolled):not(.site-header--photo-hero) .brand-logo {
+    filter: invert(1);
+  }
 }
 .brand small {
   font-family: var(--font-mono); font-weight: 400; text-transform: uppercase;
