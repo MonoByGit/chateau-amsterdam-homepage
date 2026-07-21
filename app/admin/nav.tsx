@@ -7,9 +7,9 @@ import type { ReactNode } from "react";
 export type NavItem = { href: string; label: string; icon: ReactNode };
 
 // Ordered by how often a small team actually opens each section, not by
-// concept: reservations and availability change daily, wines occasionally,
-// homepage copy rarely. Landing on the least-used section first was itself
-// part of the problem.
+// concept: reservations and availability change daily, homepage copy
+// rarely. Landing on the least-used section first was itself part of the
+// problem.
 export const PRIMARY_ITEMS: NavItem[] = [
   {
     href: "/admin",
@@ -57,10 +57,10 @@ export const PRIMARY_ITEMS: NavItem[] = [
   },
 ];
 
-// Media isn't a task teams open on its own, it's only ever used to supply
-// a photo for a wine (which now has its own inline upload). Kept as a
-// secondary, lower-priority link for the rare case of browsing everything
-// that's been uploaded, not promoted alongside the daily-use sections.
+// Media isn't a task teams open on its own — it's a supporting library for
+// content elsewhere in the CMS. Kept as a secondary, lower-priority link
+// for the rare case of browsing everything that's been uploaded, not
+// promoted alongside the daily-use sections.
 export const SECONDARY_ITEMS: NavItem[] = [
   {
     href: "/admin/media",
