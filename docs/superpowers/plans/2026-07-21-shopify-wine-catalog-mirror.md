@@ -4,14 +4,14 @@
 
 **Goal:** Make `/wijnen` and `/wijnen/[handle]` a live mirror of the Shopify product catalog (all ~20-45 active wines, not just the 5 hand-typed CMS rows), source the 5-wine homepage teaser from a Shopify collection instead of a database flag, and retire the bespoke CMS "Wijnen" admin section so wine content has exactly one home: Shopify.
 
-**Architecture:** Two new Storefront API queries (collection-of-wines, wine-by-handle) pull title/image/price/productType plus a fixed set of already-populated Shopify metafields (`custom.oneliner`, `custom.wine_profile`, `custom.story`, `custom.pairing`, `custom.grape_variety`, `custom.region_of_origin`, `custom.country_of_origin`, `custom.tasting_notes`, `custom.flavor`, `custom.origin`). A new `lib/wines/catalog.ts` module fetches both languages in parallel (Storefront's `@inContext(language:)` directive) and shapes the result into the exact prop contracts `WijnenOverview`, `WineCard`, `WijnDetail`, and `WinesPreview` already expect — so those presentational components need **zero changes**. The catalog list comes from the existing Shopify collection `all-wines` (47 products, confirmed live 2026-07-21); the homepage teaser comes from a new manual collection the client curates directly in Shopify (drag-to-reorder built in, so no bespoke "showOnHomepage" admin UI is needed). The `wines` Postgres table and its whole admin CRUD flow are retired once the 5 existing hand-authored wines are copied into Shopify metafields.
+**Architecture:** Two new Storefront API queries (collection-of-wines, wine-by-handle) pull title/image/price/productType plus a fixed set of already-populated Shopify metafields (`custom.oneliner`, `custom.wine_profile`, `custom.story`, `custom.pairing`, `specs.grape_variety`, `specs.region_of_origin`, `specs.country`, `custom.tasting_notes`, `custom.flavor`, `custom.origin`). A new `lib/wines/catalog.ts` module fetches both languages in parallel (Storefront's `@inContext(language:)` directive) and shapes the result into the exact prop contracts `WijnenOverview`, `WineCard`, `WijnDetail`, and `WinesPreview` already expect — so those presentational components need **zero changes**. The catalog list comes from the existing Shopify collection `all-wines` (47 products, confirmed live 2026-07-21); the homepage teaser comes from a new manual collection the client curates directly in Shopify (drag-to-reorder built in, so no bespoke "showOnHomepage" admin UI is needed). The `wines` Postgres table and its whole admin CRUD flow are retired once the 5 existing hand-authored wines are copied into Shopify metafields.
 
 **Tech Stack:** Next.js 16 (App Router, Server Components), Shopify Storefront API 2025-10 (GraphQL), Vitest, Drizzle ORM/PostgreSQL (for the table-drop migration only).
 
 **Confirmed live in Shopify (2026-07-21, checked via the admin UI at `chateau-amsterdam-winery`):**
 - Collection **`all-wines`** ("All our wines") already exists: a smart collection matching `productType` ∈ `White wine, Red wine, Orange wine, Pet nat, Piquette, Rose wine`, 47 products total (mix of active/concept/archived — Storefront API automatically excludes anything not active+published, so no extra status filtering is needed in code).
-- Metafield definitions already exist under namespace `custom` on Product, populated on 24-40 products each: `oneliner`, `wine_profile`, `flavor`, `region_of_origin`, `grape_variety`, `country_of_origin`, `tasting_notes`, `pairing`, `story`, `origin` (plus a few we're deliberately not using: `unique`, `experimental`, `type`, `grape_variety_old`, `vivino_rating`, `vivino_url` — `type` is redundant with the product's own `productType` field, the rest are too sparse/unclear to build on today).
-- **Storefront API access is inconsistent per field right now**: confirmed ON for `oneliner` and `wine_profile`, confirmed OFF for `story`. Task 0 below is a manual pass to turn this on for every field this plan reads.
+- Metafield definitions already exist on Product, populated on 24-40 products each. **Namespace is not uniform** — checked one by one in the admin UI, not assumed: `custom.oneliner`, `custom.wine_profile`, `custom.flavor`, `custom.tasting_notes`, `custom.pairing`, `custom.story`, `custom.origin` live under `custom`; region/grape/country live under a different namespace, `specs`, with one key that doesn't match its display name: `specs.region_of_origin`, `specs.grape_variety`, **`specs.country`** (the field is labeled "Country of origin" in the admin but its actual key is just `country`). Deliberately not using: `unique`, `experimental`, `type`, `grape_variety_old`, `vivino_rating`, `vivino_url` — `type` is redundant with the product's own `productType` field, the rest are too sparse/unclear to build on today.
+- **Storefront API access was inconsistent per field** (confirmed ON for `oneliner`/`wine_profile`, OFF for the other 8) — this has already been fixed as part of writing this plan: all 10 fields above now have Storefront API access enabled (done manually in the admin UI, 2026-07-21). Task 0 below documents what was done; nothing left to do there.
 - Both **English** (default) and **Nederlands** are published languages in Shopify already, so `@inContext(language: EN | NL)` works without any Markets setup.
 - No metafield covers vintage, ABV, farming method, or vinification technique today. This plan does not invent fake sources for those — the detail page simply omits those specific facts until the client adds fields for them in Shopify (their existing UI already supports adding new metafield definitions any time).
 
@@ -23,18 +23,18 @@
 
 **Files:** none — this happens in the Shopify admin at `https://admin.shopify.com/store/chateau-amsterdam-winery`.
 
-- [ ] **Step 1: Enable Storefront API access on the 10 metafields this plan reads**
+- [x] **Step 1: Enable Storefront API access on the 10 metafields this plan reads — DONE 2026-07-21**
 
-  Go to **Instellingen → Metavelden en metaobjecten → Product**. For each of these, open it and turn on the **"Storefront API-toegang"** toggle if it isn't already on (confirmed already on: `Oneliner`, `Wine Profile` — skip those two):
-  `Flavor`, `Region of origin`, `Grape variety`, `Country of origin`, `Tasting notes`, `Pairing`, `Story`, `Origin`.
+  Done directly in the Shopify admin (Instellingen → Metavelden en metaobjecten → Product) while writing this plan. All 10 fields now have Storefront API access on, with their real namespace/key confirmed by opening each one (several didn't match the guess-from-label pattern):
+  `custom.oneliner`, `custom.wine_profile`, `custom.flavor`, `specs.region_of_origin`, `specs.grape_variety`, `specs.country`, `custom.tasting_notes`, `custom.pairing`, `custom.story`, `custom.origin`.
 
-- [ ] **Step 2: Create the homepage-featured collection**
+- [x] **Step 2: Create the homepage-featured collection — DONE 2026-07-21**
 
-  Go to **Collecties → Collectie toevoegen**. Title it exactly `Homepage` (so its auto-generated handle is `homepage` — Task 3's code hardcodes that handle). Collection type: **Handmatig** (manual, not smart — a manual collection is what gives the client Shopify's built-in drag-to-reorder UI). Leave it empty for now; the client adds up to 5 wines and drags them into order whenever they want to change the homepage teaser. Confirm the handle by scrolling to "Zoekmachinevermelding" after saving — if it's not exactly `homepage`, edit it there.
+  Created a manual (not smart) collection titled `Homepage`, confirmed handle is exactly `homepage` via its Zoekmachinevermelding (`https://shop.chateau.amsterdam > collecties > homepage`). Left empty — adding up to 5 wines and dragging them into order is the client's call, not something to decide on their behalf.
 
-- [ ] **Step 3: Confirm sales channel availability**
+- [x] **Step 3: Confirm sales channel availability — DONE 2026-07-21**
 
-  Open the new `Homepage` collection and check its channel list matches `all-wines`' (10 channels including Online Store) so the Storefront API token can read it. New collections default to available everywhere, so this should already be correct — just a sanity check.
+  New collection shows 9 sales channels (one fewer than `all-wines`' 10). Online Store is included, which is what the Storefront API token needs — the difference is very likely one channel `all-wines` happens to also be published to (e.g. an app-specific channel) and doesn't affect this plan. Re-check in Task 12 if the Homepage collection's wines don't show up on the site.
 
 ---
 
@@ -111,9 +111,9 @@ import { describe, expect, it } from "vitest";
 import { WINE_METAFIELD_IDENTIFIERS, metafieldsToRecord } from "./wine-fields";
 
 describe("WINE_METAFIELD_IDENTIFIERS", () => {
-  it("only uses the custom namespace", () => {
+  it("only uses the custom and specs namespaces", () => {
     for (const id of WINE_METAFIELD_IDENTIFIERS) {
-      expect(id.namespace).toBe("custom");
+      expect(["custom", "specs"]).toContain(id.namespace);
     }
   });
 
@@ -152,15 +152,19 @@ Create `lib/shopify/wine-fields.ts`:
 // lib/shopify/wine-fields.ts
 // The fixed set of already-populated Shopify metafields this site reads for
 // wine editorial content (see docs/superpowers/plans/2026-07-21-shopify-wine-catalog-mirror.md
-// for which fields exist in Shopify and why these were picked). All live
-// under the `custom` namespace Shopify's admin UI auto-assigns.
+// for which fields exist in Shopify and why these were picked). Namespace is
+// NOT uniform — checked one by one in the Shopify admin (Instellingen >
+// Metavelden en metaobjecten > Product): most live under `custom`, but the
+// region/grape/country trio live under `specs`, and "Country of origin"'s
+// actual key is just `country`, not `country_of_origin` as its label
+// suggests. Don't "clean this up" to be consistent — it'd break the fetch.
 export const WINE_METAFIELD_IDENTIFIERS = [
   { namespace: "custom", key: "oneliner" },
   { namespace: "custom", key: "wine_profile" },
   { namespace: "custom", key: "flavor" },
-  { namespace: "custom", key: "region_of_origin" },
-  { namespace: "custom", key: "grape_variety" },
-  { namespace: "custom", key: "country_of_origin" },
+  { namespace: "specs", key: "region_of_origin" },
+  { namespace: "specs", key: "grape_variety" },
+  { namespace: "specs", key: "country" },
   { namespace: "custom", key: "tasting_notes" },
   { namespace: "custom", key: "pairing" },
   { namespace: "custom", key: "story" },
@@ -590,7 +594,7 @@ function pickDescription(fields: WineFields, descriptionHtml: string): string | 
 }
 
 function combineRegion(fields: WineFields): string | null {
-  const parts = [fields.region_of_origin, fields.country_of_origin].filter(Boolean);
+  const parts = [fields.region_of_origin, fields.country].filter(Boolean);
   return parts.length > 0 ? parts.join(", ") : null;
 }
 
@@ -1008,8 +1012,8 @@ async function main() {
     console.log(`custom.oneliner (NL):        ${wine.tagNl}`);
     console.log(`custom.oneliner (EN):        ${wine.tagEn} -- pick ONE language for oneliner, see note below`);
     console.log(`custom.wine_profile:         ${wine.descriptionNl ?? "(none)"}`);
-    console.log(`custom.grape_variety:        ${wine.grapes ?? "(none)"}`);
-    console.log(`custom.region_of_origin:     ${wine.regionNl ?? "(none)"}`);
+    console.log(`specs.grape_variety:         ${wine.grapes ?? "(none)"}`);
+    console.log(`specs.region_of_origin:      ${wine.regionNl ?? "(none)"}`);
     console.log(`custom.pairing:              ${wine.foodPairingNl ?? "(none)"}`);
     console.log(`Vintage/ABV/farming/vinification have no Shopify field yet: ${wine.vintage ?? "-"} / ${wine.abv ?? "-"} / ${wine.farmingMethodNl ?? "-"} / ${wine.vinificationNl ?? "-"}`);
   }
