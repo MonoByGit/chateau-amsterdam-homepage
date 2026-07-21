@@ -1047,6 +1047,8 @@ git commit -m "chore(wines): add one-time worksheet script for migrating CMS win
 
 **⚠ Do not run the actual migration against the real database without explicit confirmation from Dusty — this is a destructive, irreversible operation on data Task 9 needs to have already been copied out of. Generate and review the migration first; apply it only after Task 9 is confirmed done and Dusty has said go.**
 
+**⚠ Ordering bug found during execution, fixed here: run Task 11 (delete `lib/db/wines.ts` and friends) BEFORE this task's Step 1, not after, despite the numbering. `lib/db/wines.ts` imports `wines` from `lib/db/schema.ts` — removing that export first would break the build while `lib/db/wines.ts` still exists. Task 11's own file list doesn't touch `scripts/export-wines-for-shopify-migration.ts`, so that script (which also imports `lib/db/wines.ts`) will fail to compile/run after Task 11 — that's fine, its one-time job is done by the time Task 11 runs (Task 9's migration must be confirmed complete before Task 10/11 start at all, see the warning above), it doesn't need to keep working.**
+
 **Files:**
 - Modify: `lib/db/schema.ts`
 - Create (generated): a new file under `drizzle/`
@@ -1083,6 +1085,8 @@ git commit -m "feat(db): drop the wines table, wine content now lives entirely i
 ---
 
 ## Task 11: Remove now-dead code
+
+**⚠ Run this task BEFORE Task 10's Step 1, despite the numbering — see the ordering note at the top of Task 10.**
 
 **Files:**
 - Delete: `lib/db/wines.ts`, `lib/db/wines.test.ts`, `lib/validation/wine-input.ts`, `lib/validation/wine-input.test.ts`, `lib/wines/image.ts`
