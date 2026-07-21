@@ -71,7 +71,7 @@ export default function HelpPage() {
             </div>
           </details>
           <details className="a-help-howto">
-            <summary>Een wijn bijwerken</summary>
+            <summary>Een wijn toevoegen, verbergen of op de homepage zetten</summary>
             <div className="a-help-howto-body">
               <p>
                 De wijnenpagina en de wijndetailpagina&apos;s zijn een spiegel van Shopify: alles wat je in Shopify
@@ -79,17 +79,28 @@ export default function HelpPage() {
                 automatisch op de site, meestal binnen 5 minuten. Er is nergens meer een aparte plek waar je een wijn
                 nogmaals moet invoeren.
               </p>
-              <ul>
-                <li>Wijn op de site tonen/verbergen: zet 'm in/uit de collectie <strong>All our wines</strong> in Shopify.</li>
-                <li>
-                  De 5 uitgelichte wijnen op de homepage: beheer je via de collectie <strong>Homepage</strong> in
-                  Shopify (Producten → Collecties). Sleep daar de volgorde, of voeg een wijn toe/verwijder er een.
-                </li>
-                <li>
-                  Tekstvelden zoals het verhaal, wijn-spijs advies, druif en streek staan onder &ldquo;Productmetavelden&rdquo;
-                  op de productpagina in Shopify.
-                </li>
-              </ul>
+              <p>
+                <strong>Nieuwe wijn toevoegen:</strong> maak 'm aan als product in Shopify (Producten → Product
+                toevoegen), met Categorie &ldquo;Wijn&rdquo; en het juiste Type (Rood/Wit/Oranje/Rosé/Pét-Nat/Piquette).
+                Zodra het Type klopt en de status op &ldquo;Actief&rdquo; staat, verschijnt de wijn vanzelf op de
+                wijnenpagina, zonder dat je 'm ergens handmatig hoeft toe te voegen.
+              </p>
+              <p>
+                <strong>Wijn (tijdelijk) van de site halen:</strong> zet de status in Shopify op &ldquo;Concept&rdquo;
+                of &ldquo;Gearchiveerd&rdquo;. Wil je 'm laten staan als verkoopbaar product maar wel van de
+                wijnenpagina weren, klik dan in de collectie <strong>All our wines</strong> op &ldquo;Uitsluiten&rdquo;
+                voor die specifieke wijn.
+              </p>
+              <p>
+                <strong>Op de homepage uitlichten:</strong> voeg de wijn toe aan de collectie{" "}
+                <strong>Homepage</strong> in Shopify (Producten → Collecties). Maximaal 5 tegelijk, sleep daar de
+                volgorde.
+              </p>
+              <p>
+                Tekstvelden zoals het verhaal, wijn-spijs advies, druif en streek staan onder &ldquo;Productmetavelden&rdquo;
+                op de productpagina in Shopify — niet verplicht om te vullen, maar zorgen wel voor een rijkere
+                detailpagina.
+              </p>
             </div>
           </details>
           <details className="a-help-howto">
