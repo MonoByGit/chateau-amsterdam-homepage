@@ -38,6 +38,9 @@ export default async function HomePage() {
   const wines: WineCardData[] = wineRows.map((wine, index) => ({
     n: `N°${String(index + 1).padStart(2, "0")}`,
     slug: wine.handle,
+    // NL-only, doesn't follow the language toggle — pre-existing behavior
+    // carried forward as-is (WineCardData.meta is a single resolved string
+    // picked server-side, unlike the overview page's separate metaNl/metaEn).
     meta: wineTypeLabel(wine.productType, "nl"),
     name: wine.title,
     nlTag: wine.fieldsNl.oneliner ?? wineTypeLabel(wine.productType, "nl"),
