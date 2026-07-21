@@ -1,7 +1,7 @@
 // lib/shopify/product.ts
 import { shopifyFetch } from "./client";
-import { PRODUCT_BY_HANDLE_QUERY } from "./queries";
-import type { ShopifyProduct, ShopifyProductVariant } from "./types";
+import { PRODUCT_BY_HANDLE_QUERY, PRODUCT_IMAGE_BY_HANDLE_QUERY } from "./queries";
+import type { ShopifyProduct, ShopifyProductImage, ShopifyProductVariant } from "./types";
 
 type RawVariantEdge = { node: ShopifyProductVariant };
 type RawProduct = {
@@ -26,6 +26,20 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
     variables: { handle },
   });
   return data.productByHandle ? mapProduct(data.productByHandle) : null;
+}
+
+// Product photos live in Shopify already (that's where the client manages
+// the catalog), so wine cards pull them straight from here instead of
+// requiring a second, duplicate upload in the CMS. Cached for an hour since
+// a product photo changing mid-hour isn't worth a Shopify round-trip on
+// every page render — unlike price/inventory, which stay uncached.
+export async function getProductImageByHandle(handle: string): Promise<ShopifyProductImage | null> {
+  const data = await shopifyFetch<{ productByHandle: { featuredImage: ShopifyProductImage | null } | null }>({
+    query: PRODUCT_IMAGE_BY_HANDLE_QUERY,
+    variables: { handle },
+    revalidateSeconds: 3600,
+  });
+  return data.productByHandle?.featuredImage ?? null;
 }
 
 // Most wines are single-variant products (no size/format options), so the

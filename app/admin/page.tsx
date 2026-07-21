@@ -3,6 +3,7 @@ import Link from "next/link";
 import { listReservations } from "@/lib/db/reservations";
 import { listBlocksForMonth } from "@/lib/db/availability";
 import { listWines } from "@/lib/db/wines";
+import { formatAdminDate } from "@/lib/format-date";
 
 const STATUS_LABELS: Record<string, string> = {
   nieuw: "Nieuw",
@@ -16,13 +17,6 @@ const STATUS_BADGE_VARIANT: Record<string, string> = {
   in_behandeling: "a-badge--warning",
   bevestigd: "a-badge--success",
   afgewezen: "a-badge--danger",
-};
-
-const DAYPART_LABELS: Record<string, string> = {
-  ochtend: "Ochtend",
-  middag: "Middag",
-  avond: "Avond",
-  hele_dag: "Hele dag",
 };
 
 function pad(n: number): string {
@@ -48,9 +42,16 @@ export default async function DashboardPage() {
   ]);
 
   const todayStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-  const upcomingBlocks = [...thisMonthBlocks, ...nextMonthBlocks]
-    .filter((b) => b.date >= todayStr)
-    .sort((a, b) => a.date.localeCompare(b.date))
+  const upcomingByDate = new Map<string, { isFullDay: boolean; labels: string[] }>();
+  for (const b of [...thisMonthBlocks, ...nextMonthBlocks]) {
+    if (b.date < todayStr) continue;
+    const entry = upcomingByDate.get(b.date) ?? { isFullDay: false, labels: [] };
+    if (b.isFullDay) entry.isFullDay = true;
+    else if (b.label) entry.labels.push(b.label);
+    upcomingByDate.set(b.date, entry);
+  }
+  const upcomingBlocks = [...upcomingByDate.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
     .slice(0, 5);
 
   const activeWines = allWines.filter((w) => w.isActive).length;
@@ -71,7 +72,7 @@ export default async function DashboardPage() {
         </div>
         <div className="a-stat-card">
           <div className="a-stat-value">{upcomingBlocks.length}</div>
-          <div className="a-stat-label">Geblokkeerde dagdelen (komende periode)</div>
+          <div className="a-stat-label">Geblokkeerde dagen (komende periode)</div>
         </div>
       </div>
 
@@ -97,7 +98,8 @@ export default async function DashboardPage() {
                     {r.contactName}
                   </div>
                   <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                    {r.track === "standaard" ? "Standaard" : "Zakelijk"} · {r.requestedDate}
+                    {r.track === "standaard" ? "Standaard" : "Zakelijk"} ·{" "}
+                    {r.requestedDate ? formatAdminDate(r.requestedDate) : "-"}
                   </div>
                 </div>
                 <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
@@ -125,13 +127,20 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="a-card">
-            {upcomingBlocks.map((b) => (
-              <div key={b.id} className="a-card-row" style={{ display: "flex", justifyContent: "space-between" }}>
+            {upcomingBlocks.map(([date, entry]) => (
+              <Link
+                key={date}
+                href={`/admin/availability/${date}`}
+                className="a-card-row"
+                style={{ display: "flex", justifyContent: "space-between", textDecoration: "none" }}
+              >
                 <span className="a-label" style={{ color: "var(--a-text)" }}>
-                  {b.date}
+                  {formatAdminDate(date)}
                 </span>
-                <span style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }}>{DAYPART_LABELS[b.daypart]}</span>
-              </div>
+                <span style={{ fontSize: "0.8125rem", color: "var(--a-text-2)" }}>
+                  {entry.isFullDay ? "Hele dag dicht" : entry.labels.join(", ")}
+                </span>
+              </Link>
             ))}
           </div>
         )}
@@ -145,8 +154,8 @@ export default async function DashboardPage() {
       <div className="a-dashboard-section">
         <h2>Bezoekersstatistieken</h2>
         <div className="a-placeholder-card">
-          Analytics via Umami zijn nog niet gekoppeld, dit verschijnt hier zodra dat is ingericht (gepland voor
-          een latere fase).
+          Umami is gekoppeld voor bezoekersstatistieken; dit dashboard-blok toont die cijfers nog niet — gepland
+          voor een latere fase.
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { db } from "@/lib/db/client";
 import { availabilityBlocks } from "@/lib/db/schema";
-import { listBlocksForMonth, toggleBlock } from "./availability";
+import { getDayBlocks, listBlocksForMonth, saveDayBlocks } from "./availability";
 
 describe("availability repository", () => {
   beforeEach(async () => {
@@ -12,11 +12,11 @@ describe("availability repository", () => {
   describe("listBlocksForMonth", () => {
     it("returns only blocks within the given month", async () => {
       await db.insert(availabilityBlocks).values([
-        { date: "2026-07-31", daypart: "avond", reason: "Voor de maand" },
-        { date: "2026-08-01", daypart: "ochtend", reason: "Eerste dag" },
-        { date: "2026-08-15", daypart: "middag", reason: "Midden" },
-        { date: "2026-08-31", daypart: "hele_dag", reason: "Laatste dag" },
-        { date: "2026-09-01", daypart: "ochtend", reason: "Na de maand" },
+        { date: "2026-07-31", isFullDay: false, label: "Avond dicht" },
+        { date: "2026-08-01", isFullDay: false, label: "Ochtend levering" },
+        { date: "2026-08-15", isFullDay: false, label: "14:00-17:00 besloten feest" },
+        { date: "2026-08-31", isFullDay: true },
+        { date: "2026-09-01", isFullDay: false, label: "Na de maand" },
       ]);
 
       const blocks = await listBlocksForMonth(2026, 8);
@@ -31,35 +31,62 @@ describe("availability repository", () => {
     });
   });
 
-  describe("toggleBlock", () => {
-    it("creates a block when none exists for that date and daypart", async () => {
-      const result = await toggleBlock("2026-08-10", "avond", "Personeelsfeest");
-      expect(result).toEqual({ blocked: true });
+  describe("saveDayBlocks", () => {
+    it("creates a full-day block and clears any prior slots", async () => {
+      await saveDayBlocks("2026-08-10", { isFullDay: false, slots: ["09:00-12:00"] });
+      await saveDayBlocks("2026-08-10", { isFullDay: true, slots: [] });
 
-      const blocks = await listBlocksForMonth(2026, 8);
+      const blocks = await getDayBlocks("2026-08-10");
       expect(blocks).toHaveLength(1);
-      expect(blocks[0]).toMatchObject({ date: "2026-08-10", daypart: "avond" });
+      expect(blocks[0]).toMatchObject({ isFullDay: true, label: null });
     });
 
-    it("removes the block when toggled again for the same date and daypart", async () => {
-      const first = await toggleBlock("2026-08-10", "avond");
-      expect(first).toEqual({ blocked: true });
+    it("creates one row per non-empty slot, ignoring blanks", async () => {
+      await saveDayBlocks("2026-08-10", {
+        isFullDay: false,
+        slots: ["09:00-11:00 levering", "", "  ", "16:00-18:00 besloten"],
+      });
 
-      const second = await toggleBlock("2026-08-10", "avond");
-      expect(second).toEqual({ blocked: false });
+      const blocks = await getDayBlocks("2026-08-10");
+      const labels = blocks.map((b) => b.label).sort();
+      expect(labels).toEqual(["09:00-11:00 levering", "16:00-18:00 besloten"]);
+      expect(blocks.every((b) => b.isFullDay === false)).toBe(true);
+    });
 
-      const blocks = await listBlocksForMonth(2026, 8);
+    it("caps slots at 4 even if more are passed", async () => {
+      await saveDayBlocks("2026-08-10", {
+        isFullDay: false,
+        slots: ["slot 1", "slot 2", "slot 3", "slot 4", "slot 5"],
+      });
+
+      const blocks = await getDayBlocks("2026-08-10");
+      expect(blocks).toHaveLength(4);
+    });
+
+    it("clears the date entirely when saved with nothing set", async () => {
+      await saveDayBlocks("2026-08-10", { isFullDay: false, slots: ["09:00-12:00"] });
+      await saveDayBlocks("2026-08-10", { isFullDay: false, slots: [] });
+
+      const blocks = await getDayBlocks("2026-08-10");
       expect(blocks).toEqual([]);
     });
 
-    it("keeps dayparts independent for the same date", async () => {
-      await toggleBlock("2026-08-10", "ochtend");
-      await toggleBlock("2026-08-10", "avond");
+    it("replaces existing slots rather than appending to them", async () => {
+      await saveDayBlocks("2026-08-10", { isFullDay: false, slots: ["09:00-12:00"] });
+      await saveDayBlocks("2026-08-10", { isFullDay: false, slots: ["14:00-17:00"] });
+
+      const blocks = await getDayBlocks("2026-08-10");
+      expect(blocks).toHaveLength(1);
+      expect(blocks[0].label).toEqual("14:00-17:00");
+    });
+
+    it("keeps other dates untouched", async () => {
+      await saveDayBlocks("2026-08-10", { isFullDay: true, slots: [] });
+      await saveDayBlocks("2026-08-11", { isFullDay: false, slots: ["09:00-12:00"] });
 
       const blocks = await listBlocksForMonth(2026, 8);
-      const dayparts = blocks.map((b) => b.daypart).sort();
-
-      expect(dayparts).toEqual(["avond", "ochtend"]);
+      const dates = blocks.map((b) => b.date).sort();
+      expect(dates).toEqual(["2026-08-10", "2026-08-11"]);
     });
   });
 });

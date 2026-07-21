@@ -14,12 +14,12 @@ import {
   PLACE_DEFAULTS,
   WINES_DEFAULTS,
 } from "@/lib/content/defaults";
-import { getWinesForHomepage } from "@/lib/db/wines";
-import { getObjectUrl } from "@/lib/storage/s3";
+import { getFeaturedWines } from "@/lib/db/wines";
+import { resolveWineImageUrl } from "@/lib/wines/image";
 
 // Forces this route to render per-request instead of being statically
 // prerendered at build time. Without this, `next build` tries to execute
-// getContent()/getWinesForHomepage() during the build step to produce
+// getContent()/getFeaturedWines() during the build step to produce
 // static HTML — but Railway's build environment can't reach the private
 // `postgres.railway.internal` hostname (only the deployed runtime can),
 // so the build fails. Per-request rendering also means CMS content edits
@@ -35,7 +35,7 @@ export default async function HomePage() {
   const placeContent = await getContent("home", "place", PLACE_DEFAULTS);
   const winesContent = await getContent("home", "wines", WINES_DEFAULTS);
 
-  const wineRows = await getWinesForHomepage();
+  const wineRows = await getFeaturedWines();
   const wines: WineCardData[] = await Promise.all(
     wineRows.map(async (wine, index) => ({
       n: `N°${String(index + 1).padStart(2, "0")}`,
@@ -48,7 +48,7 @@ export default async function HomePage() {
       name: wine.name,
       nlTag: wine.tagNl,
       enTag: wine.tagEn,
-      img: wine.imageStorageKey ? await getObjectUrl(wine.imageStorageKey) : "/assets/wine-1.png",
+      img: await resolveWineImageUrl(wine),
       alt: wine.imageAltNl || wine.name,
       delay: index * 0.08,
     }))

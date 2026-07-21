@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { submitTastingInquiry } from "@/app/(site)/tours-tastings/actions";
 import { OCCASIONS, PREFERRED_PERIODS, TASTING_ERROR_MESSAGES, TOURS_TASTINGS_COPY as C } from "@/lib/content/tours-tastings";
+import { PartySizeField } from "@/components/tastings-party-size-field";
+import { DateField } from "@/components/tastings-date-field";
 
 export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; fout?: string }) {
   const { t } = useLanguage();
@@ -115,36 +117,8 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
               <form action={submitTastingInquiry}>
                 {errorPair ? <p className="tastings-form-error">{t(errorPair.nl, errorPair.en)}</p> : null}
                 <div className="tastings-form-row">
-                  <div className="tastings-field">
-                    <label htmlFor="partySize">
-                      <span className="fn">01</span>
-                      <span className="fl">{t(C.fieldPartySize.nl, C.fieldPartySize.en)}</span>
-                    </label>
-                    <input
-                      required
-                      id="partySize"
-                      type="number"
-                      name="partySize"
-                      min={1}
-                      max={20}
-                      defaultValue={2}
-                      className="tastings-input"
-                    />
-                  </div>
-                  <div className="tastings-field">
-                    <label htmlFor="requestedDate">
-                      <span className="fn">02</span>
-                      <span className="fl">{t(C.fieldDate.nl, C.fieldDate.en)}</span>
-                    </label>
-                    <input
-                      required
-                      id="requestedDate"
-                      type="date"
-                      name="requestedDate"
-                      min={new Date().toISOString().slice(0, 10)}
-                      className="tastings-input"
-                    />
-                  </div>
+                  <PartySizeField />
+                  <DateField />
                 </div>
                 <div className="tastings-form-row">
                   <div className="tastings-field">

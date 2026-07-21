@@ -488,6 +488,24 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
+.a-cal-day-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.a-cal-day-link:hover {
+  border-color: var(--a-border-strong);
+  background: var(--a-surface-2);
+}
+
+.a-cal-day-link .a-cal-toggle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 /* Badges, reserved for system-set status, not user-entered data (a filter
    chip is the right component for that instead, see .a-chip above). */
 
@@ -807,6 +825,16 @@ a.a-card-row:hover {
   color: var(--a-danger);
 }
 
+.a-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.a-icon-btn:disabled:hover {
+  background: none;
+  color: var(--a-text-2);
+}
+
 /* Filter bar */
 
 .a-filter-bar {
@@ -1042,4 +1070,107 @@ a.a-card-row:hover {
 
 .a-modal-body {
   padding: 1.25rem;
+}
+
+/* Help page */
+
+.a-help-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--a-border);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-r-sharp);
+  overflow: hidden;
+}
+
+.a-help-card {
+  border: none;
+  border-radius: 0;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.a-help-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--a-text);
+}
+
+.a-help-card p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--a-text-2);
+}
+
+.a-help-howto {
+  border-bottom: 1px solid var(--a-border);
+}
+
+.a-help-howto:last-child {
+  border-bottom: none;
+}
+
+.a-help-howto summary {
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 590;
+  color: var(--a-text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.a-help-howto summary::-webkit-details-marker {
+  display: none;
+}
+
+.a-help-howto summary::after {
+  content: "+";
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  color: var(--a-text-3);
+  font-size: 1.125rem;
+  flex: 0 0 auto;
+}
+
+.a-help-howto[open] summary::after {
+  content: "\2013";
+}
+
+.a-help-howto-body {
+  padding: 0 1.25rem 1.125rem;
+  max-width: 62ch;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--a-text-2);
+}
+
+.a-help-howto-body p {
+  margin: 0 0 0.5rem;
+}
+
+.a-help-howto-body p:last-child {
+  margin-bottom: 0;
+}
+
+.a-help-howto-body ol,
+.a-help-howto-body ul {
+  margin: 0 0 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.a-help-howto-body li {
+  margin-bottom: 0.25rem;
+}
+
+.a-help-howto-body strong {
+  color: var(--a-text);
+  font-weight: 590;
 }

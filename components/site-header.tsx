@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/language";
 import { useMagnetic } from "@/lib/use-magnetic";
 import { useCart } from "@/lib/cart/context";
@@ -11,7 +12,7 @@ import type { HeaderContent } from "@/lib/content/defaults";
 export const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> = [
   { href: "/#verhaal", fieldKey: "nav_1_label" },
   { href: "/#proces", fieldKey: "nav_2_label" },
-  { href: "/#wijnen", fieldKey: "nav_3_label" },
+  { href: "/wijnen", fieldKey: "nav_3_label" },
   { href: "/voor-bedrijven", fieldKey: "nav_4_label" },
   { href: "/#bezoek", fieldKey: "nav_5_label" },
 ];
@@ -19,6 +20,13 @@ export const NAV_LINKS: Array<{ href: string; fieldKey: keyof HeaderContent }> =
 export function SiteHeader({ content }: { content: HeaderContent }) {
   const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  // Header stays transparent (no background bar) until scrolled — only the
+  // text/logo color adapts to what's behind it. Every page has the plain
+  // light page background at the top except tours-tastings, which has a
+  // genuine dark full-bleed photo (.tastings-hero-media's <img>); that one
+  // page gets light text instead of the default dark ink.
+  const isPhotoHero = pathname?.startsWith("/tours-tastings") ?? false;
   const magneticRef = useMagnetic();
   const { cart, openCart } = useCart();
   const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu } = useMobileNav();
@@ -34,7 +42,10 @@ export function SiteHeader({ content }: { content: HeaderContent }) {
   }, []);
 
   return (
-    <header className={`site-header${isScrolled ? " is-scrolled" : ""}`} id="header">
+    <header
+      className={`site-header${isScrolled ? " is-scrolled" : ""}${isPhotoHero ? " site-header--photo-hero" : ""}`}
+      id="header"
+    >
       <a className="brand" href="/">
         <img className="brand-logo" src="/assets/chateau-logo.png" alt="Chateau Amsterdam Logo" />
         <small>Urban&nbsp;Winery&nbsp;·&nbsp;aan&nbsp;het&nbsp;IJ</small>

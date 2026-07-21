@@ -1,6 +1,6 @@
 // app/admin/wines/wine-form.tsx
 import { listMedia } from "@/lib/db/media";
-import type { Wine } from "@/lib/db/wines";
+import { MAX_HOMEPAGE_WINES, type Wine } from "@/lib/db/wines";
 import { getObjectUrl } from "@/lib/storage/s3";
 import { WineFormWizard } from "./wine-form-wizard";
 
@@ -15,5 +15,5 @@ export async function WineForm({ wine, error }: { wine: Wine | null; error?: str
     }))
   );
 
-  return <WineFormWizard wine={wine} error={error} media={media} />;
+  return <WineFormWizard wine={wine} error={error} media={media} maxHomepageWines={MAX_HOMEPAGE_WINES} />;
 }

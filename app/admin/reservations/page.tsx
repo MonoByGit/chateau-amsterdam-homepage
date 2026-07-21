@@ -7,6 +7,7 @@ import {
   type ReservationTrack,
 } from "@/lib/db/reservations";
 import { updateStatus } from "./actions";
+import { formatAdminDate } from "@/lib/format-date";
 
 const STATUS_LABELS: Record<ReservationStatus, string> = {
   nieuw: "Nieuw",
@@ -111,7 +112,7 @@ export default async function ReservationsPage({
                     {r.contactName}
                   </div>
                   <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                    {TRACK_LABELS[r.track]} · {r.requestedDate}
+                    {TRACK_LABELS[r.track]} · {r.requestedDate ? formatAdminDate(r.requestedDate) : "-"}
                     {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
                   </div>
                 </Link>

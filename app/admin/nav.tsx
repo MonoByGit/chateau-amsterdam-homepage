@@ -83,6 +83,27 @@ export const SECONDARY_ITEMS: NavItem[] = [
       </svg>
     ),
   },
+  {
+    href: "/admin/account",
+    label: "Account",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/help",
+    label: "Handleiding",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.5 9.3a2.5 2.5 0 0 1 4.85.9c0 1.7-2.35 2-2.35 3.3" />
+        <path d="M12 17.2v.05" />
+      </svg>
+    ),
+  },
 ];
 
 export function isActive(pathname: string | null, href: string): boolean {

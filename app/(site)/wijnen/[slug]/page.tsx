@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WijnDetail, type WijnDetailRelated } from "@/components/wijn-detail";
 import { getRelatedWines, getWineBySlug } from "@/lib/db/wines";
-import { getObjectUrl } from "@/lib/storage/s3";
 import { listMedia } from "@/lib/db/media";
+import { resolveWineImageUrl } from "@/lib/wines/image";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +17,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const description = (wine.descriptionNl ?? "").split("\n\n")[0] || `${wine.name} · ${wine.tagNl}`;
   const media = await listMedia();
   const image = media.find((m) => m.id === wine.imageId);
-  const imageUrl = image ? await getObjectUrl(image.storageKey) : "https://chateau.amsterdam/assets/wine-1.png";
+  const resolvedImageUrl = await resolveWineImageUrl({
+    shopifyHandle: wine.shopifyHandle,
+    imageStorageKey: image?.storageKey ?? null,
+  });
+  // OG/Twitter images must be absolute URLs; the resolver's placeholder
+  // fallback is a relative site path, so make sure it's absolute here.
+  const imageUrl = resolvedImageUrl.startsWith("/")
+    ? `https://chateau.amsterdam${resolvedImageUrl}`
+    : resolvedImageUrl;
 
   return {
     title: `${wine.name} · Chateau Amsterdam`,
@@ -36,7 +44,10 @@ export default async function WijnDetailPage({ params }: { params: Promise<{ slu
 
   const [media, relatedRows] = await Promise.all([listMedia(), getRelatedWines(wine.id)]);
   const image = media.find((m) => m.id === wine.imageId);
-  const imageUrl = image ? await getObjectUrl(image.storageKey) : "/assets/wine-1.png";
+  const imageUrl = await resolveWineImageUrl({
+    shopifyHandle: wine.shopifyHandle,
+    imageStorageKey: image?.storageKey ?? null,
+  });
 
   const related: WijnDetailRelated[] = await Promise.all(
     relatedRows.map(async (r, index) => {
@@ -50,7 +61,10 @@ export default async function WijnDetailPage({ params }: { params: Promise<{ slu
         name: r.name,
         nlTag: r.tagNl,
         enTag: r.tagEn,
-        img: relatedImage ? await getObjectUrl(relatedImage.storageKey) : "/assets/wine-1.png",
+        img: await resolveWineImageUrl({
+          shopifyHandle: r.shopifyHandle,
+          imageStorageKey: relatedImage?.storageKey ?? null,
+        }),
         altNl: relatedImage?.altTextNl || r.name,
         altEn: relatedImage?.altTextEn || r.name,
         delay: 0,

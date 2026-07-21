@@ -4,12 +4,14 @@ import { db } from "./client";
 import { media, wines } from "./schema";
 import { createMedia } from "./media";
 import {
+  countHomepageWines,
   createWine,
   deleteWine,
+  getFeaturedWines,
   getRelatedWines,
   getWine,
   getWineBySlug,
-  getWinesForHomepage,
+  listActiveWines,
   listWines,
   reorderWines,
   updateWine,
@@ -26,6 +28,7 @@ function wineInput(overrides: Partial<WineInput> = {}): WineInput {
     imageId: null,
     shopifyHandle: `test-handle-${Math.random().toString(36).slice(2)}`,
     isActive: true,
+    showOnHomepage: true,
     ...overrides,
   };
 }
@@ -152,7 +155,7 @@ describe("getRelatedWines", () => {
   });
 });
 
-describe("getWinesForHomepage", () => {
+describe("listActiveWines", () => {
   afterEach(async () => {
     await db.delete(wines);
     await db.delete(media);
@@ -169,7 +172,7 @@ describe("getWinesForHomepage", () => {
     const active = await createWine(wineInput({ name: "Actief", imageId: image.id, isActive: true }));
     await createWine(wineInput({ name: "Inactief", isActive: false }));
 
-    const rows = await getWinesForHomepage();
+    const rows = await listActiveWines();
 
     expect(rows).toHaveLength(1);
     expect(rows[0].id).toBe(active.id);
@@ -177,8 +180,50 @@ describe("getWinesForHomepage", () => {
     expect(rows[0].imageAltNl).toBe("Riesling fles");
   });
 
+  it("includes wines regardless of showOnHomepage", async () => {
+    await createWine(wineInput({ name: "Niet op homepage", showOnHomepage: false }));
+    expect(await listActiveWines()).toHaveLength(1);
+  });
+
   it("returns an empty array when there are no active wines", async () => {
     await createWine(wineInput({ isActive: false }));
-    expect(await getWinesForHomepage()).toEqual([]);
+    expect(await listActiveWines()).toEqual([]);
+  });
+});
+
+describe("getFeaturedWines", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+    await db.delete(media);
+  });
+
+  it("only returns active wines with showOnHomepage set", async () => {
+    const featured = await createWine(wineInput({ name: "Uitgelicht", showOnHomepage: true }));
+    await createWine(wineInput({ name: "Niet uitgelicht", showOnHomepage: false }));
+    await createWine(wineInput({ name: "Inactief", isActive: false, showOnHomepage: true }));
+
+    const rows = await getFeaturedWines();
+    expect(rows.map((w) => w.id)).toEqual([featured.id]);
+  });
+});
+
+describe("countHomepageWines", () => {
+  afterEach(async () => {
+    await db.delete(wines);
+  });
+
+  it("counts only wines with showOnHomepage set", async () => {
+    await createWine(wineInput({ showOnHomepage: true }));
+    await createWine(wineInput({ showOnHomepage: true }));
+    await createWine(wineInput({ showOnHomepage: false }));
+
+    expect(await countHomepageWines()).toBe(2);
+  });
+
+  it("excludes the given id, so a wine doesn't count against its own cap check", async () => {
+    const a = await createWine(wineInput({ showOnHomepage: true }));
+    await createWine(wineInput({ showOnHomepage: true }));
+
+    expect(await countHomepageWines(a.id)).toBe(1);
   });
 });

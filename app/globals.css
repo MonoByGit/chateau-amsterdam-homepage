@@ -114,12 +114,23 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px var(--gutter);
-  mix-blend-mode: difference; color: #fff;
-  transition: padding 0.5s var(--ease-out);
+  /* Default: floating, transparent, over a page whose top is the plain
+     light background — so plain dark ink text/logo, no bar behind it.
+     Children (nav links, lang selector, cart icon, hamburger) don't set
+     their own color, they just inherit this — one source of truth, no
+     mix-blend-mode. That trick technically works but turned out to be
+     unreliable for solid accent colors (see .nav-cta below) and, in some
+     browser/layer combinations, didn't invert at all. Not worth the risk
+     for something this should just be: read the page, pick a color. */
+  color: var(--ink);
+  transition: padding 0.5s var(--ease-out), color 0.5s var(--ease-out);
 }
+/* The one page with a genuine dark full-bleed photo at the top (see
+   .tastings-hero-media's <img>) — light text/logo there instead, still
+   with no background bar; the photo itself gives the contrast. */
+.site-header.site-header--photo-hero:not(.is-scrolled) { color: #fff; }
 .site-header.is-scrolled {
   padding: 12px var(--gutter);
-  mix-blend-mode: normal;
   background: rgba(23, 20, 14, 0.85);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
@@ -134,7 +145,15 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 }
 
 .brand { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-.brand-logo { display: block; height: 34px; width: auto; filter: invert(1); }
+/* The source logo asset is solid black; invert it to white only when the
+   header is showing light text (scrolled, or over the photo hero) —
+   default state wants the logo in its native black, matching the ink text
+   next to it. */
+.brand-logo { display: block; height: 34px; width: auto; transition: filter 0.5s var(--ease-out); }
+.site-header.is-scrolled .brand-logo,
+.site-header.site-header--photo-hero:not(.is-scrolled) .brand-logo {
+  filter: invert(1);
+}
 .brand small {
   font-family: var(--font-mono); font-weight: 400; text-transform: uppercase;
   font-size: 7.5px; letter-spacing: 0.02em; margin-top: 7px; opacity: 0.7;
@@ -164,11 +183,11 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 
 .nav-cta {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-  border: 1px solid currentColor; border-radius: 999px; padding: 12px 26px;
-  transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
+  background: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 12px 26px;
+  color: var(--ink);
+  transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
 }
-.nav-cta:hover { background: #fff; color: #000; }
-.site-header.is-scrolled .nav-cta:hover { background: var(--paper); color: var(--ink); }
+.nav-cta:hover { background: transparent; color: var(--accent); }
 .nav-cta::after { display: none; }
 
 /* ---------- mobile menu (hamburger + overlay nav) ---------- */
@@ -772,6 +791,62 @@ select.bd-input option { color: var(--ink); }
 .tastings-form-error { font-size: 14px; color: #b3261e; margin-bottom: 4px; }
 @media (max-width: 700px) { .tastings-form-row { grid-template-columns: 1fr; } }
 
+/* party size stepper — height matches .tastings-input's natural box so its
+   border-bottom lines up exactly with the date field next to it */
+.tastings-stepper { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--line); height: 49px; box-sizing: border-box; }
+.tastings-stepper:focus-within { border-color: var(--accent-badge); }
+.tastings-stepper-btn {
+  width: 28px; height: 28px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 2px; background: transparent; color: var(--ink);
+  font-size: 15px; line-height: 1; cursor: pointer; transition: border-color 0.25s, background-color 0.25s;
+}
+.tastings-stepper-btn:hover:not(:disabled) { border-color: var(--accent-badge); background: rgba(255,204,0,.1); }
+.tastings-stepper-btn:disabled { opacity: 0.35; cursor: default; }
+.tastings-stepper-value {
+  flex: 1; text-align: center; border: none; background: transparent; color: var(--ink);
+  font-size: 14.5px; font-family: inherit; padding: 6px 2px; -moz-appearance: textfield;
+}
+.tastings-stepper-value:focus { outline: none; }
+.tastings-stepper-value::-webkit-inner-spin-button, .tastings-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* custom date field */
+.tastings-field-date { position: relative; }
+.tastings-date-trigger { text-align: left; cursor: pointer; height: 49px; box-sizing: border-box; display: flex; align-items: center; }
+.tastings-date-placeholder { color: rgba(23,20,14,.4); }
+.tastings-calendar {
+  position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: 300px; max-width: calc(100vw - 2 * var(--gutter));
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 2px;
+  box-shadow: 0 24px 50px -20px rgba(23,20,14,.35); padding: 16px;
+}
+.tastings-calendar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.tastings-calendar-month { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+.tastings-calendar-nav {
+  width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 2px; background: transparent; color: var(--ink); cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.tastings-calendar-nav:hover { border-color: var(--accent-badge); background: rgba(255,204,0,.1); }
+.tastings-calendar-weekdays, .tastings-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.tastings-calendar-weekdays span {
+  text-align: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  color: rgba(23,20,14,.5); padding-bottom: 8px;
+}
+.tastings-calendar-day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px;
+  border: none; background: transparent; color: var(--ink); border-radius: 2px; cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.tastings-calendar-day:hover:not(:disabled) { background: rgba(255,204,0,.18); }
+.tastings-calendar-day:disabled { color: rgba(23,20,14,.25); cursor: default; }
+.tastings-calendar-day.is-today { font-weight: 700; }
+.tastings-calendar-day.is-selected { background: var(--accent); color: var(--ink); font-weight: 700; }
+.tastings-calendar-today {
+  margin-top: 10px; width: 100%; text-align: center; font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-badge); background: transparent;
+  border: none; padding: 8px 0; cursor: pointer;
+}
+.tastings-calendar-today:hover { text-decoration: underline; }
+
 /* ============================================================
    CART — trigger, overlay, slide-in drawer
    ============================================================ */
@@ -846,7 +921,7 @@ select.bd-input option { color: var(--ink); }
 .cookie-banner p a { color: var(--theme-accent-text); text-decoration: underline; }
 .cookie-banner-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .cookie-banner-actions .btn { padding: 13px 24px; font-size: 12px; }
-@media (max-width: 600px) { .cookie-banner { flex-direction: column; align-items: stretch; } .cookie-banner-actions { justify-content: stretch; } .cookie-banner-actions .btn { flex: 1; justify-content: center; } }
+@media (max-width: 600px) { .cookie-banner { flex-direction: column; align-items: stretch; } .cookie-banner p { flex-basis: auto; } .cookie-banner-actions { justify-content: stretch; } .cookie-banner-actions .btn { flex: 1; justify-content: center; } }
 
 .age-gate {
   position: fixed; inset: 0; z-index: 600;
