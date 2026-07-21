@@ -14,8 +14,7 @@ import {
   PLACE_DEFAULTS,
   WINES_DEFAULTS,
 } from "@/lib/content/defaults";
-import { getFeaturedWines } from "@/lib/db/wines";
-import { resolveWineImageUrl } from "@/lib/wines/image";
+import { getFeaturedWines, wineTypeLabel } from "@/lib/wines/catalog";
 
 // Forces this route to render per-request instead of being statically
 // prerendered at build time. Without this, `next build` tries to execute
@@ -36,23 +35,17 @@ export default async function HomePage() {
   const winesContent = await getContent("home", "wines", WINES_DEFAULTS);
 
   const wineRows = await getFeaturedWines();
-  const wines: WineCardData[] = await Promise.all(
-    wineRows.map(async (wine, index) => ({
-      n: `N°${String(index + 1).padStart(2, "0")}`,
-      // slug is nullable in the DB only because Postgres can't add a NOT
-      // NULL column to a populated table; createWine always sets one for
-      // new wines, and the migration's backfill script sets one for every
-      // existing wine, so this is never actually null once code runs.
-      slug: wine.slug!,
-      meta: wine.metaNl,
-      name: wine.name,
-      nlTag: wine.tagNl,
-      enTag: wine.tagEn,
-      img: await resolveWineImageUrl(wine),
-      alt: wine.imageAltNl || wine.name,
-      delay: index * 0.08,
-    }))
-  );
+  const wines: WineCardData[] = wineRows.map((wine, index) => ({
+    n: `N°${String(index + 1).padStart(2, "0")}`,
+    slug: wine.handle,
+    meta: wineTypeLabel(wine.productType, "nl"),
+    name: wine.title,
+    nlTag: wine.fieldsNl.oneliner ?? wineTypeLabel(wine.productType, "nl"),
+    enTag: wine.fieldsEn.oneliner ?? wineTypeLabel(wine.productType, "en"),
+    img: wine.image?.url ?? "/assets/wine-1.png",
+    alt: wine.image?.altText || wine.title,
+    delay: index * 0.08,
+  }));
 
   return (
     <>
