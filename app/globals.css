@@ -580,11 +580,16 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
 .place-inner .label { color: var(--theme-accent-text); }
 .place-inner h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: clamp(40px, 6.4vw, 110px); line-height: 0.92; margin-top: 28px; max-width: 14ch; }
 .place-inner h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent-text); }
-.place-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)) auto; gap: clamp(20px, 3vw, 48px); align-items: end; margin-top: clamp(36px, 6vh, 64px); border-top: 1px solid var(--line-light); padding-top: 28px; }
+.place-grid { display: grid; grid-template-columns: repeat(3, minmax(210px, 1fr)) auto; gap: clamp(20px, 3vw, 48px); align-items: end; margin-top: clamp(36px, 6vh, 64px); border-top: 1px solid var(--line-light); padding-top: 28px; }
 .place-grid > div { pointer-events: auto; }
 .place-grid h4 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--theme-accent-text); margin-bottom: 12px; }
 .place-grid p { font-size: 15px; line-height: 1.7; color: rgba(241,236,225,0.85); }
-@media (max-width: 860px) { .place-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1024px) {
+  .place-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 32px; align-items: start; }
+}
+@media (max-width: 580px) {
+  .place-grid { grid-template-columns: 1fr; gap: 24px; }
+}
 
 /* ============================================================
    FOOTER
