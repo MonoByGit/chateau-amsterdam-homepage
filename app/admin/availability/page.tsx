@@ -62,8 +62,7 @@ export default async function AvailabilityPage({
     <div>
       <h1 className="a-h1">Beschikbaarheid</h1>
       <p className="a-subtitle">
-        Standaard is elke dag volledig beschikbaar voor reserveringen. Klik op een dag om deze (deels) te
-        blokkeren, bijvoorbeeld bij een vakantie, feestdag of besloten evenement.
+        Standaard zijn de tours en tastings geopend op donderdag, vrijdag en zaterdag (vaste slots: 15:00, 17:00 en 19:00 uur). Klik op een dag om uitzonderingen, extra openingen of sluitingen in te stellen.
       </p>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "1.5rem 0" }}>
@@ -74,11 +73,11 @@ export default async function AvailabilityPage({
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.75rem", color: "var(--a-text-2)" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
               <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-success-soft)", border: "1px solid var(--a-success)", display: "inline-block" }} />
-              Beschikbaar
+              Open voor tasting
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
               <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "var(--a-r-sharp)", background: "var(--a-danger-soft)", border: "1px solid var(--a-danger)", display: "inline-block" }} />
-              (Deels) geblokkeerd
+              Geblokkeerd / gesloten
             </span>
           </div>
           <div style={{ display: "flex", gap: "0.5rem" }}>
