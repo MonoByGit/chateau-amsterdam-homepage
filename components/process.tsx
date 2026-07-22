@@ -59,7 +59,15 @@ function Step({
       <div className="idx">{meta.idx}</div>
       <div>
         <h3>
-          {title.nl} <small>{title.en}</small>
+          {lang === "nl" ? (
+            <>
+              {title.nl} <small>{title.en}</small>
+            </>
+          ) : (
+            <>
+              {title.en} <small>{title.nl}</small>
+            </>
+          )}
         </h3>
         <p>{lang === "nl" ? content[meta.bodyKey].nl : content[meta.bodyKey].en}</p>
       </div>

@@ -210,6 +210,8 @@ export type PlaceContent = {
   heading_line1: ContentPair;
   heading_line2: ContentPair;
   address_heading: ContentPair;
+  address_line1: ContentPair;
+  address_line2: ContentPair;
   hours_heading: ContentPair;
   hours_line1: ContentPair;
   hours_line2: ContentPair;
@@ -223,6 +225,8 @@ export const PLACE_DEFAULTS: PlaceContent = {
   heading_line1: { nl: "Een machinefabriek", en: "A machine factory" },
   heading_line2: { nl: "aan het IJ.", en: "on the IJ." },
   address_heading: { nl: "Adres", en: "Address" },
+  address_line1: { nl: "Johan van Hasseltweg", en: "Johan van Hasseltweg" },
+  address_line2: { nl: "Amsterdam-Noord", en: "Amsterdam-Noord" },
   hours_heading: { nl: "Open", en: "Hours" },
   hours_line1: { nl: "Wo t/m zo", en: "Wed thru Sun" },
   hours_line2: { nl: "12.00 tot 18.30", en: "12:00 to 18:30" },

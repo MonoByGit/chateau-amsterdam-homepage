@@ -45,9 +45,9 @@ export function Place({ content }: { content: PlaceContent }) {
           <div ref={address.ref as React.RefObject<HTMLDivElement>} className={`rv${address.isVisible ? " in" : ""}`}>
             <h4>{t(content.address_heading.nl, content.address_heading.en)}</h4>
             <p>
-              Johan van Hasseltweg
+              {t(content.address_line1.nl, content.address_line1.en)}
               <br />
-              Amsterdam-Noord
+              {t(content.address_line2.nl, content.address_line2.en)}
             </p>
           </div>
           <div ref={hours.ref as React.RefObject<HTMLDivElement>} className={`rv${hours.isVisible ? " in" : ""}`}>
