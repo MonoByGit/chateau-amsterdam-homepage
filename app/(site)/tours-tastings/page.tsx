@@ -1,6 +1,8 @@
 // app/(site)/tours-tastings/page.tsx
 import type { Metadata } from "next";
 import { ToursTastingsContent } from "@/components/tours-tastings-content";
+import { getContent } from "@/lib/content/get-content";
+import { TOURS_TASTINGS_PAGE_DEFAULTS } from "@/lib/content/defaults";
 
 export const dynamic = "force-dynamic";
 
@@ -20,9 +22,6 @@ export const metadata: Metadata = {
     images: ["/assets/hero-winery.jpg"],
   },
 };
-
-import { getContent } from "@/lib/content/get-content";
-import { TOURS_TASTINGS_PAGE_DEFAULTS } from "@/lib/content/defaults";
 
 export default async function ToursTastingsPage({
   searchParams,

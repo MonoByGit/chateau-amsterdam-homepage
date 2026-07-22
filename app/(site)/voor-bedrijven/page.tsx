@@ -1,6 +1,8 @@
 // app/(site)/voor-bedrijven/page.tsx
 import type { Metadata } from "next";
 import { VoorBedrijvenContent } from "@/components/voor-bedrijven-content";
+import { getContent } from "@/lib/content/get-content";
+import { VOOR_BEDRIJVEN_PAGE_DEFAULTS } from "@/lib/content/defaults";
 
 export const dynamic = "force-dynamic";
 
@@ -20,9 +22,6 @@ export const metadata: Metadata = {
     images: ["/assets/path-pour.jpg"],
   },
 };
-
-import { getContent } from "@/lib/content/get-content";
-import { VOOR_BEDRIJVEN_PAGE_DEFAULTS } from "@/lib/content/defaults";
 
 export default async function VoorBedrijvenPage({
   searchParams,
