@@ -29,6 +29,7 @@ export type HeroContent = {
   cta_primary: ContentPair;
   cta_secondary: ContentPair;
   media_caption: ContentPair;
+  hero_image_url: ContentPair;
 };
 
 export const HERO_DEFAULTS: HeroContent = {
@@ -45,6 +46,7 @@ export const HERO_DEFAULTS: HeroContent = {
     nl: "↳ De makerij, Johan van Hasseltweg, Noord",
     en: "↳ The winery, Johan van Hasseltweg, Amsterdam-Noord",
   },
+  hero_image_url: { nl: "/assets/hero-winery.jpg", en: "/assets/hero-winery.jpg" },
 };
 
 export type MarqueeContent = {
@@ -114,41 +116,49 @@ export type ProcessContent = {
   sub_text: ContentPair;
   step_1_title: ContentPair;
   step_1_body: ContentPair;
+  step_1_image_url: ContentPair;
   step_2_title: ContentPair;
   step_2_body: ContentPair;
+  step_2_image_url: ContentPair;
   step_3_title: ContentPair;
   step_3_body: ContentPair;
+  step_3_image_url: ContentPair;
   step_4_title: ContentPair;
   step_4_body: ContentPair;
+  step_4_image_url: ContentPair;
 };
 
 export const PROCESS_DEFAULTS: ProcessContent = {
-  heading_lead: { nl: "Van boer tot fles, ", en: "From farmer to bottle, " },
-  heading_em: { nl: "dwars door de stad.", en: "straight through the city." },
+  heading_lead: { nl: "Van boer tot fles, ", en: "From farm to bottle, " },
+  heading_em: { nl: "dwars door de stad.", en: "right through the city." },
   sub_text: {
-    nl: "Wij verplaatsen de druif, niet de wijn. Daardoor zie je hier van dichtbij hoe wijn écht gemaakt wordt.",
+    nl: "Wij verplaatsen de druif, niet de wijn. Daardoor kan je hier van dichtbij meemaken hoe wijn écht gemaakt wordt.",
     en: "We move the grape, not the wine. This lets you experience close-up how wine is truly made.",
   },
   step_1_title: { nl: "De druif", en: "The grape" },
   step_1_body: {
-    nl: "Geselecteerde boeren en families in Frankrijk, Duitsland, Italië, Spanje en Nederland. Biologisch geteeld, op het juiste moment met de hand geplukt.",
-    en: "Selected farmers and families in France, Germany, Italy, Spain, and the Netherlands. Organically grown, hand-picked at the perfect moment.",
+    nl: "In September en Oktober plukken de boeren onze druiven in Europa. Met de hand, in kratjes van 15 kilo. Zodat ze heel blijven.",
+    en: "In September and October, farmers pick our grapes across Europe. By hand, in 15kg crates, to keep them whole.",
   },
+  step_1_image_url: { nl: "/assets/step-druif.jpg", en: "/assets/step-druif.jpg" },
   step_2_title: { nl: "De reis", en: "The journey" },
   step_2_body: {
-    nl: "Gekoeld transport naar Noord. Onderweg weken de schillen al. De eerste meters van de wijn worden op de snelweg gemaakt.",
-    en: "Chilled transport to North. The skins are already macerating along the way. The wine's first meters are made on the highway.",
+    nl: "Direct na de pluk gaan de druiven de koelwagen in. Binnen 24 tot 48 uur staan ze bij ons op de stoep in Amsterdam-Noord.",
+    en: "Immediately after picking, grapes enter refrigerated trucks. Within 24-48 hours they arrive at our doorstep in Amsterdam-Noord.",
   },
+  step_2_image_url: { nl: "/assets/step-reis.png", en: "/assets/step-reis.png" },
   step_3_title: { nl: "De makerij", en: "The winery" },
   step_3_body: {
-    nl: "Staal, beton, amfora of eik: er is weinig dat hier niet kan. Ons eigen lab waakt over elke liter, van most tot botteling.",
-    en: "Steel, concrete, amphora, or oak: there is little that isn't possible here. Our own lab watches over every liter, from must to bottling.",
+    nl: "Hier ontmoeten traditie en stad elkaar. We persen, vergisten en rijpen onder één dak, in ons eigen tempo en op onze eigen manier.",
+    en: "Here tradition meets the city. We press, ferment, and age under one roof, at our own pace and in our own way.",
   },
+  step_3_image_url: { nl: "/assets/step-makerij.jpg", en: "/assets/step-makerij.jpg" },
   step_4_title: { nl: "De fles", en: "The bottle" },
   step_4_body: {
     nl: "Gebotteld aan het IJ. En zero waste: schillen en pitten worden bier, grappa en onze eigen Piquette d'Amsterdam.",
     en: "Bottled on the IJ. And zero waste: skins and seeds become beer, grappa, and our own Piquette d'Amsterdam.",
   },
+  step_4_image_url: { nl: "/assets/step-fles.jpg", en: "/assets/step-fles.jpg" },
 };
 
 export type PathsContent = {
@@ -218,6 +228,7 @@ export type PlaceContent = {
   route_line1: ContentPair;
   route_line2: ContentPair;
   cta_label: ContentPair;
+  place_image_url: ContentPair;
 };
 
 export const PLACE_DEFAULTS: PlaceContent = {
@@ -233,6 +244,7 @@ export const PLACE_DEFAULTS: PlaceContent = {
   route_line1: { nl: "Pont vanaf CS, 10 min fietsen", en: "Ferry from Central Station, 10 min bike" },
   route_line2: { nl: "of metro 52 → Noorderpark", en: "or metro 52 → Noorderpark" },
   cta_label: { nl: "Plan je bezoek", en: "Plan your visit" },
+  place_image_url: { nl: "/assets/place-hal.jpg", en: "/assets/place-hal.jpg" },
 };
 
 export type WijnenPageContent = {

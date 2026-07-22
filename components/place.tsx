@@ -23,7 +23,7 @@ export function Place({ content }: { content: PlaceContent }) {
     <section className="place on-dark" id="bezoek">
       <div ref={parallaxRef as React.RefObject<HTMLDivElement>} className="place-media">
         <img
-          src="/assets/place-hal.jpg"
+          src={content.place_image_url ? t(content.place_image_url.nl, content.place_image_url.en) : "/assets/place-hal.jpg"}
           alt="Chateau Amsterdam Winery exterior at waterfront in Amsterdam-Noord during evening blue hour"
         />
       </div>

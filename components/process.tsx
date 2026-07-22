@@ -9,35 +9,40 @@ const STEP_META: Array<{
   idx: string;
   titleKey: keyof ProcessContent;
   bodyKey: keyof ProcessContent;
-  img: string;
+  imgKey: keyof ProcessContent;
+  fallbackImg: string;
   alt: string;
 }> = [
   {
     idx: "01",
     titleKey: "step_1_title",
     bodyKey: "step_1_body",
-    img: "/assets/step-druif.jpg",
+    imgKey: "step_1_image_url",
+    fallbackImg: "/assets/step-druif.jpg",
     alt: "Close-up of hands picking organic red wine grapes into a rustic wooden box",
   },
   {
     idx: "02",
     titleKey: "step_2_title",
     bodyKey: "step_2_body",
-    img: "/assets/step-reis.png",
+    imgKey: "step_2_image_url",
+    fallbackImg: "/assets/step-reis.png",
     alt: "Crates of fresh grapes inside a cold storage delivery truck with condensation",
   },
   {
     idx: "03",
     titleKey: "step_3_title",
     bodyKey: "step_3_body",
-    img: "/assets/step-makerij.jpg",
+    imgKey: "step_3_image_url",
+    fallbackImg: "/assets/step-makerij.jpg",
     alt: "Winemaker measuring wine levels near large stainless steel fermentation tanks",
   },
   {
     idx: "04",
     titleKey: "step_4_title",
     bodyKey: "step_4_body",
-    img: "/assets/step-fles.jpg",
+    imgKey: "step_4_image_url",
+    fallbackImg: "/assets/step-fles.jpg",
     alt: "Automated bottling and labeling machine with wine bottles in a row",
   },
 ];
@@ -53,6 +58,7 @@ function Step({
 }) {
   const reveal = useReveal();
   const title = content[meta.titleKey];
+  const imgSrc = (content[meta.imgKey] && typeof content[meta.imgKey] === "object" ? content[meta.imgKey].nl : null) || meta.fallbackImg;
 
   return (
     <article ref={reveal.ref as React.RefObject<HTMLElement>} className={`step rv${reveal.isVisible ? " in" : ""}`}>
@@ -72,7 +78,7 @@ function Step({
         <p>{lang === "nl" ? content[meta.bodyKey].nl : content[meta.bodyKey].en}</p>
       </div>
       <div className="slotwrap">
-        <img src={meta.img} alt={meta.alt} className="step-img" />
+        <img src={imgSrc} alt={meta.alt} className="step-img" />
       </div>
     </article>
   );

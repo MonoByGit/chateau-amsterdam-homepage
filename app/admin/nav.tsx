@@ -46,7 +46,7 @@ export const PRIMARY_ITEMS: NavItem[] = [
   },
   {
     href: "/admin/content",
-    label: "Content",
+    label: "Content & Foto's",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 3h9l4 4v14H6z" />
