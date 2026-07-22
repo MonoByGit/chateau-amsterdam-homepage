@@ -8,7 +8,17 @@ import { OCCASIONS, PREFERRED_PERIODS, TASTING_ERROR_MESSAGES, TOURS_TASTINGS_CO
 import { PartySizeField } from "@/components/tastings-party-size-field";
 import { DateField } from "@/components/tastings-date-field";
 
-export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; fout?: string }) {
+import { TOURS_TASTINGS_PAGE_DEFAULTS, type ToursTastingsPageContent } from "@/lib/content/defaults";
+
+export function ToursTastingsContent({
+  verzonden,
+  fout,
+  content = TOURS_TASTINGS_PAGE_DEFAULTS,
+}: {
+  verzonden?: string;
+  fout?: string;
+  content?: ToursTastingsPageContent;
+}) {
   const { t } = useLanguage();
   const errorPair = fout ? TASTING_ERROR_MESSAGES[fout] : null;
 
@@ -27,11 +37,11 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
           <div>Amsterdam</div>
         </nav>
         <div className="tastings-hero-body">
-          <div className="tastings-label">{t(C.heroLabel.nl, C.heroLabel.en)}</div>
+          <div className="tastings-label">{t(content.hero_label.nl, content.hero_label.en)}</div>
           <h1 className="tastings-hero-title">
-            {t(C.heroTitleLead.nl, C.heroTitleLead.en)} <em>{t(C.heroTitleEm.nl, C.heroTitleEm.en)}</em>
+            {t(content.hero_title_lead.nl, content.hero_title_lead.en)} <em>{t(content.hero_title_em.nl, content.hero_title_em.en)}</em>
           </h1>
-          <p className="tastings-hero-sub">{t(C.heroSub.nl, C.heroSub.en)}</p>
+          <p className="tastings-hero-sub">{t(content.hero_sub.nl, content.hero_sub.en)}</p>
         </div>
         <div className="tastings-scroll-cue">
           <span>{t(C.scroll.nl, C.scroll.en)}</span>
@@ -40,15 +50,15 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
       </section>
 
       <section className="tastings-opening">
-        <p>{t(C.openingLine1.nl, C.openingLine1.en)} {t(C.openingLine2.nl, C.openingLine2.en)}</p>
+        <p>{t(content.opening_line1.nl, content.opening_line1.en)} {t(content.opening_line2.nl, content.opening_line2.en)}</p>
       </section>
 
       <section className="tastings-gang">
         <div className="tastings-gang-grid">
           <div className="tastings-gang-text">
             <div className="num">{t(C.tourNum.nl, C.tourNum.en)}</div>
-            <h2>{t(C.tourHeading.nl, C.tourHeading.en)}</h2>
-            <p>{t(C.tourBody.nl, C.tourBody.en)}</p>
+            <h2>{t(content.tour_heading.nl, content.tour_heading.en)}</h2>
+            <p>{t(content.tour_body.nl, content.tour_body.en)}</p>
           </div>
           <div className="tastings-gang-cluster">
             <div className="main">
@@ -73,8 +83,8 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
           </div>
           <div className="tastings-gang-text">
             <div className="num">{t(C.tastingNum.nl, C.tastingNum.en)}</div>
-            <h2>{t(C.tastingHeading.nl, C.tastingHeading.en)}</h2>
-            <p>{t(C.tastingBody.nl, C.tastingBody.en)}</p>
+            <h2>{t(content.tasting_heading.nl, content.tasting_heading.en)}</h2>
+            <p>{t(content.tasting_body.nl, content.tasting_body.en)}</p>
           </div>
         </div>
       </section>
@@ -82,20 +92,20 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
       <section className="tastings-strip">
         <div className="tastings-strip-inner">
           <div className="tastings-strip-item">
-            <div className="n">{t(C.stripDuration.nl, C.stripDuration.en)}</div>
-            <div className="d">{t(C.stripDurationLabel.nl, C.stripDurationLabel.en)}</div>
+            <div className="n">{t(content.strip_duration.nl, content.strip_duration.en)}</div>
+            <div className="d">{t(content.strip_duration_label.nl, content.strip_duration_label.en)}</div>
           </div>
           <div className="tastings-strip-item">
-            <div className="n">{t(C.stripWines.nl, C.stripWines.en)}</div>
-            <div className="d">{t(C.stripWinesLabel.nl, C.stripWinesLabel.en)}</div>
+            <div className="n">{t(content.strip_wines.nl, content.strip_wines.en)}</div>
+            <div className="d">{t(content.strip_wines_label.nl, content.strip_wines_label.en)}</div>
           </div>
           <div className="tastings-strip-item">
-            <div className="n">{t(C.stripDiscount.nl, C.stripDiscount.en)}</div>
-            <div className="d">{t(C.stripDiscountLabel.nl, C.stripDiscountLabel.en)}</div>
+            <div className="n">{t(content.strip_discount.nl, content.strip_discount.en)}</div>
+            <div className="d">{t(content.strip_discount_label.nl, content.strip_discount_label.en)}</div>
           </div>
           <div className="tastings-strip-item">
-            <div className="n">{t(C.stripPrice.nl, C.stripPrice.en)}</div>
-            <div className="d">{t(C.stripPriceLabel.nl, C.stripPriceLabel.en)}</div>
+            <div className="n">{t(content.strip_price.nl, content.strip_price.en)}</div>
+            <div className="d">{t(content.strip_price_label.nl, content.strip_price_label.en)}</div>
           </div>
         </div>
       </section>
@@ -106,9 +116,9 @@ export function ToursTastingsContent({ verzonden, fout }: { verzonden?: string; 
         </div>
         <div className="tastings-reserve-inner">
           <div className="tastings-reserve-head">
-            <div className="tastings-label">{t(C.reserveLabel.nl, C.reserveLabel.en)}</div>
-            <h2>{t(C.reserveHeading.nl, C.reserveHeading.en)}</h2>
-            <p>{t(C.reserveSub.nl, C.reserveSub.en)}</p>
+            <div className="tastings-label">{t(content.reserve_label.nl, content.reserve_label.en)}</div>
+            <h2>{t(content.reserve_heading.nl, content.reserve_heading.en)}</h2>
+            <p>{t(content.reserve_sub.nl, content.reserve_sub.en)}</p>
           </div>
           <div className="tastings-form-wrap">
             {verzonden ? (

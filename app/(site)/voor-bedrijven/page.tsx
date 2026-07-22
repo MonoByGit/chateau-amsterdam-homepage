@@ -21,12 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
+import { getContent } from "@/lib/content/get-content";
+import { VOOR_BEDRIJVEN_PAGE_DEFAULTS } from "@/lib/content/defaults";
+
 export default async function VoorBedrijvenPage({
   searchParams,
 }: {
   searchParams: Promise<{ verzonden?: string; fout?: string }>;
 }) {
   const { verzonden, fout } = await searchParams;
+  const content = await getContent("voor-bedrijven", "main", VOOR_BEDRIJVEN_PAGE_DEFAULTS);
 
-  return <VoorBedrijvenContent verzonden={verzonden} fout={fout} />;
+  return <VoorBedrijvenContent verzonden={verzonden} fout={fout} content={content} />;
 }

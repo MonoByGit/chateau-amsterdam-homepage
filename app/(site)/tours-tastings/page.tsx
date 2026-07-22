@@ -21,12 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
+import { getContent } from "@/lib/content/get-content";
+import { TOURS_TASTINGS_PAGE_DEFAULTS } from "@/lib/content/defaults";
+
 export default async function ToursTastingsPage({
   searchParams,
 }: {
   searchParams: Promise<{ verzonden?: string; fout?: string }>;
 }) {
   const { verzonden, fout } = await searchParams;
+  const content = await getContent("tours-tastings", "main", TOURS_TASTINGS_PAGE_DEFAULTS);
 
-  return <ToursTastingsContent verzonden={verzonden} fout={fout} />;
+  return <ToursTastingsContent verzonden={verzonden} fout={fout} content={content} />;
 }

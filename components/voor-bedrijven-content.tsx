@@ -6,7 +6,17 @@ import { useLanguage } from "@/lib/language";
 import { BusinessInquiry } from "@/components/business-inquiry";
 import { VOOR_BEDRIJVEN_COPY as C } from "@/lib/content/voor-bedrijven";
 
-export function VoorBedrijvenContent({ verzonden, fout }: { verzonden?: string; fout?: string }) {
+import { VOOR_BEDRIJVEN_PAGE_DEFAULTS, type VoorBedrijvenPageContent } from "@/lib/content/defaults";
+
+export function VoorBedrijvenContent({
+  verzonden,
+  fout,
+  content = VOOR_BEDRIJVEN_PAGE_DEFAULTS,
+}: {
+  verzonden?: string;
+  fout?: string;
+  content?: VoorBedrijvenPageContent;
+}) {
   const { t } = useLanguage();
 
   return (
@@ -19,12 +29,11 @@ export function VoorBedrijvenContent({ verzonden, fout }: { verzonden?: string; 
         </nav>
         <div className="bd-intro-grid">
           <div className="bd-intro-text">
-            <div className="bd-label">{t(C.introLabel.nl, C.introLabel.en)}</div>
+            <div className="bd-label">{t(content.intro_label.nl, content.intro_label.en)}</div>
             <h1>
-              {t(C.introHeadingLead.nl, C.introHeadingLead.en)} <em>{t(C.introHeadingEm.nl, C.introHeadingEm.en)}</em>{" "}
-              {t(C.introHeadingTail.nl, C.introHeadingTail.en)}
+              {t(content.intro_heading_lead.nl, content.intro_heading_lead.en)} <em>{t(content.intro_heading_em.nl, content.intro_heading_em.en)}</em>
             </h1>
-            <p>{t(C.introBody.nl, C.introBody.en)}</p>
+            <p>{t(content.intro_body.nl, content.intro_body.en)}</p>
           </div>
           <div className="bd-intro-photo">
             <img src="/assets/path-pour.jpg" alt={t(C.introPhotoAlt.nl, C.introPhotoAlt.en)} fetchPriority="high" />
@@ -40,15 +49,15 @@ export function VoorBedrijvenContent({ verzonden, fout }: { verzonden?: string; 
         <div className="bd-strip-inner">
           <div className="bd-strip-item">
             <div className="n">1</div>
-            <div className="d">{t(C.stripContactLabel.nl, C.stripContactLabel.en)}</div>
+            <div className="d">{t(content.strip_contact_label.nl, content.strip_contact_label.en)}</div>
           </div>
           <div className="bd-strip-item">
-            <div className="n">{t(C.stripDistance.nl, C.stripDistance.en)}</div>
-            <div className="d">{t(C.stripDistanceLabel.nl, C.stripDistanceLabel.en)}</div>
+            <div className="n">{t(content.strip_distance.nl, content.strip_distance.en)}</div>
+            <div className="d">{t(content.strip_distance_label.nl, content.strip_distance_label.en)}</div>
           </div>
           <div className="bd-strip-item">
             <div className="n">100%</div>
-            <div className="d">{t(C.stripProducedLabel.nl, C.stripProducedLabel.en)}</div>
+            <div className="d">{t(content.strip_produced_label.nl, content.strip_produced_label.en)}</div>
           </div>
         </div>
       </section>
