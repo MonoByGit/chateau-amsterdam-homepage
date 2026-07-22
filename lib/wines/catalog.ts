@@ -80,7 +80,10 @@ export async function getWineCatalog(): Promise<WineSummary[]> {
 }
 
 export async function getFeaturedWines(): Promise<WineSummary[]> {
-  return fetchBilingualCollection(FEATURED_COLLECTION_HANDLE);
+  const featured = await fetchBilingualCollection(FEATURED_COLLECTION_HANDLE);
+  if (featured.length > 0) return featured.slice(0, 5);
+  const catalog = await fetchBilingualCollection(WINE_COLLECTION_HANDLE);
+  return catalog.slice(0, 5);
 }
 
 // Preference order for the detail page's main copy: a hand-written wine

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { WijnenOverview } from "@/components/wijnen-overview";
 import { getWineCatalog, wineTypeLabel } from "@/lib/wines/catalog";
+import { getContent } from "@/lib/content/get-content";
+import { WIJNEN_PAGE_DEFAULTS } from "@/lib/content/defaults";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WijnenOverviewPage() {
+  const content = await getContent("wijnen", "overview", WIJNEN_PAGE_DEFAULTS);
   const wineRows = await getWineCatalog();
   const wines = wineRows.map((wine, index) => ({
     n: `N°${String(index + 1).padStart(2, "0")}`,
@@ -35,5 +38,5 @@ export default async function WijnenOverviewPage() {
     altEn: wine.image?.altText || wine.title,
   }));
 
-  return <WijnenOverview wines={wines} />;
+  return <WijnenOverview wines={wines} content={content} />;
 }

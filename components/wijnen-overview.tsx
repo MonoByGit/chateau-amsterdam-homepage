@@ -18,7 +18,7 @@ export type WijnenOverviewWine = {
   altEn: string;
 };
 
-export function WijnenOverview({ wines }: { wines: WijnenOverviewWine[] }) {
+export function WijnenOverview({ wines, content = WIJNEN_PAGE_DEFAULTS }: { wines: WijnenOverviewWine[]; content?: WijnenPageContent }) {
   const { lang, t } = useLanguage();
 
   const cards: WineCardData[] = wines.map((wine) => ({
@@ -43,16 +43,13 @@ export function WijnenOverview({ wines }: { wines: WijnenOverviewWine[] }) {
 
       <div className="wijnen-intro">
         <div className="label">
-          <span>{t("De collectie", "The collection")}</span>
+          <span>{t(content.label.nl, content.label.en)}</span>
         </div>
         <h1>
-          {t("Van klassiek", "From classic")} <em>{t("tot rebels", "to rebellious")}</em>
+          {t(content.heading_lead.nl, content.heading_lead.en)} <em>{t(content.heading_em.nl, content.heading_em.en)}</em>
         </h1>
         <p>
-          {t(
-            `${wines.length} wijnen, allemaal gevinifieerd middenin Amsterdam-Noord. Klik op een fles voor het volledige verhaal.`,
-            `${wines.length} wines, all vinified in the heart of Amsterdam-Noord. Click a bottle for the full story.`
-          )}
+          {`${wines.length} ${t(content.sub_text.nl, content.sub_text.en)}`}
         </p>
       </div>
 

@@ -6,13 +6,13 @@ import { saveSection } from "./actions";
 
 type Block = { fieldKey: string; valueNl: string; valueEn: string };
 
-async function submitSection(section: string, _prevState: string | null, formData: FormData): Promise<string> {
-  await saveSection(section, formData);
+async function submitSection(section: string, page: string, _prevState: string | null, formData: FormData): Promise<string> {
+  await saveSection(section, page, formData);
   return "Opgeslagen";
 }
 
-export function ContentForm({ section, blocks }: { section: string; blocks: Block[] }) {
-  const [status, formAction, isPending] = useActionState(submitSection.bind(null, section), null);
+export function ContentForm({ section, page = "home", blocks }: { section: string; page?: string; blocks: Block[] }) {
+  const [status, formAction, isPending] = useActionState(submitSection.bind(null, section, page), null);
 
   return (
     <form action={formAction} style={{ marginTop: "1.5rem" }}>

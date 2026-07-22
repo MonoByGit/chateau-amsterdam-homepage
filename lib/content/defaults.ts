@@ -235,6 +235,143 @@ export const PLACE_DEFAULTS: PlaceContent = {
   cta_label: { nl: "Plan je bezoek", en: "Plan your visit" },
 };
 
+export type WijnenPageContent = {
+  label: ContentPair;
+  heading_lead: ContentPair;
+  heading_em: ContentPair;
+  sub_text: ContentPair;
+};
+
+export const WIJNEN_PAGE_DEFAULTS: WijnenPageContent = {
+  label: { nl: "De collectie", en: "The collection" },
+  heading_lead: { nl: "Van klassiek", en: "From classic" },
+  heading_em: { nl: "tot rebels", en: "to rebellious" },
+  sub_text: {
+    nl: "Wijnen, allemaal gevinifieerd middenin Amsterdam-Noord. Klik op een fles voor het volledige verhaal.",
+    en: "Wines, all vinified in the heart of Amsterdam-Noord. Click a bottle for the full story.",
+  },
+};
+
+export type ToursTastingsPageContent = {
+  hero_label: ContentPair;
+  hero_title_lead: ContentPair;
+  hero_title_em: ContentPair;
+  hero_sub: ContentPair;
+  opening_line1: ContentPair;
+  opening_line2: ContentPair;
+  tour_heading: ContentPair;
+  tour_body: ContentPair;
+  tasting_heading: ContentPair;
+  tasting_body: ContentPair;
+  strip_duration: ContentPair;
+  strip_duration_label: ContentPair;
+  strip_wines: ContentPair;
+  strip_wines_label: ContentPair;
+  strip_discount: ContentPair;
+  strip_discount_label: ContentPair;
+  strip_price: ContentPair;
+  strip_price_label: ContentPair;
+  reserve_label: ContentPair;
+  reserve_heading: ContentPair;
+  reserve_sub: ContentPair;
+};
+
+export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
+  hero_label: { nl: "Ontdek Chateau", en: "Discover Chateau" },
+  hero_title_lead: { nl: "Tour &", en: "Tour &" },
+  hero_title_em: { nl: "tasting", en: "tasting" },
+  hero_sub: {
+    nl: "70 minuten tussen de tanks. Zes wijnen op tafel. Een middag die je proeft in plaats van leest.",
+    en: "70 minutes between the tanks. Six wines on the table. An afternoon you taste, not read.",
+  },
+  opening_line1: { nl: "Midden in de stad wordt hier wijn gemaakt, van tank tot glas.", en: "In the middle of the city, wine is made here, from tank to glass." },
+  opening_line2: { nl: "Wij laten je proeven wat er ontstaat.", en: "We let you taste what it becomes." },
+  tour_heading: { nl: "Tussen de tanks", en: "Between the tanks" },
+  tour_body: {
+    nl: "Een tour van 70 minuten door de winery. Je ziet hoe de druiven hier worden verwerkt tot wijn, van tank tot fles, en hoort het verhaal achter Chateau Amsterdam.",
+    en: "A 70-minute tour through the winery. See how the grapes here become wine, from tank to bottle, and hear the story behind Chateau Amsterdam.",
+  },
+  tasting_heading: { nl: "Zes wijnen, één tafel", en: "Six wines, one table" },
+  tasting_body: {
+    nl: "Na de tour proef je 6 wijnen met een kleine snack erbij. Dieetwensen of allergieën? Laat het weten bij je aanvraag, dan houden we er rekening mee.",
+    en: "After the tour you taste 6 wines with a small bite alongside. Dietary needs or allergies? Let us know in your request and we'll take care of it.",
+  },
+  strip_duration: { nl: "70 min", en: "70 min" },
+  strip_duration_label: { nl: "Tour & tasting samen", en: "Tour & tasting together" },
+  strip_wines: { nl: "6", en: "6" },
+  strip_wines_label: { nl: "Wijnen om te proeven", en: "Wines to taste" },
+  strip_discount: { nl: "20%", en: "20%" },
+  strip_discount_label: { nl: "Korting in de winkel nadien", en: "Discount in the shop afterwards" },
+  strip_price: { nl: "€55", en: "€55" },
+  strip_price_label: { nl: "Per persoon", en: "Per person" },
+  reserve_label: { nl: "Reserveren", en: "Reserve" },
+  reserve_heading: { nl: "Boek je plek tussen de tanks.", en: "Book your spot between the tanks." },
+  reserve_sub: { nl: "We bevestigen je aanvraag persoonlijk.", en: "We confirm your request personally." },
+};
+
+export type VoorBedrijvenPageContent = {
+  intro_label: ContentPair;
+  intro_heading_lead: ContentPair;
+  intro_heading_em: ContentPair;
+  intro_body: ContentPair;
+  strip_contact_label: ContentPair;
+  strip_distance: ContentPair;
+  strip_distance_label: ContentPair;
+  strip_produced_label: ContentPair;
+  index_label: ContentPair;
+  service_1_title: ContentPair;
+  service_1_body: ContentPair;
+  service_2_title: ContentPair;
+  service_2_body: ContentPair;
+  service_3_title: ContentPair;
+  service_3_body: ContentPair;
+  service_4_title: ContentPair;
+  service_4_body: ContentPair;
+  form_label: ContentPair;
+  form_heading: ContentPair;
+  form_intro: ContentPair;
+  form_note: ContentPair;
+};
+
+export const VOOR_BEDRIJVEN_PAGE_DEFAULTS: VoorBedrijvenPageContent = {
+  intro_label: { nl: "Zakelijk & horeca", en: "Business & hospitality" },
+  intro_heading_lead: { nl: "Wijn die je bedrijf een", en: "Wine that gives your business a" },
+  intro_heading_em: { nl: "verhaal geeft", en: "story" },
+  intro_body: {
+    nl: "Van de borrel tussen de tanks tot je naam op de fles. Eén partner, geproduceerd tien minuten van Amsterdam CS. Kies hieronder waar je aan denkt, wij nemen het van daar over.",
+    en: "From drinks between the tanks to your name on the bottle. One partner, produced ten minutes from Amsterdam Central. Pick what you're thinking of below, we'll take it from there.",
+  },
+  strip_contact_label: { nl: "Aanspreekpunt, van begin tot levering", en: "One point of contact, from start to delivery" },
+  strip_distance: { nl: "10 min", en: "10 min" },
+  strip_distance_label: { nl: "Van Amsterdam CS, midden in Noord", en: "From Amsterdam Central, in the heart of Noord" },
+  strip_produced_label: { nl: "Geproduceerd in de eigen winery", en: "Produced in our own winery" },
+  index_label: { nl: "Vier manieren, één aanspreekpunt", en: "Four ways, one point of contact" },
+  service_1_title: { nl: "Tastings & borrels", en: "Tastings & drinks" },
+  service_1_body: {
+    nl: "Zet je team tussen de tanks. Van 10 tot 60 personen, met of zonder bites erbij.",
+    en: "Put your team between the tanks. From 10 to 60 guests, with or without bites.",
+  },
+  service_2_title: { nl: "Private label & relatiegeschenken", en: "Private label & corporate gifts" },
+  service_2_body: {
+    nl: "Jullie naam op de fles. Wij vinifiëren, jij bepaalt het etiket en het verhaal erachter.",
+    en: "Your name on the bottle. We vinify, you decide the label and the story behind it.",
+  },
+  service_3_title: { nl: "Events & locatieverhuur", en: "Events & venue rental" },
+  service_3_body: {
+    nl: "De winery als decor. 20 tot 150 gasten, inclusief bar, geluid en sfeer.",
+    en: "The winery as your backdrop. 20 to 150 guests, including bar, sound and atmosphere.",
+  },
+  service_4_title: { nl: "Groothandel voor horeca", en: "Wholesale for hospitality" },
+  service_4_body: {
+    nl: "Vaste plek op de kaart. Staffelkorting vanaf de eerste doos, altijd op voorraad.",
+    en: "A permanent spot on the menu. Volume discount from the first case, always in stock.",
+  },
+  form_label: { nl: "Aanvraag", en: "Request" },
+  form_heading: { nl: "Vertel ons waar je aan denkt.", en: "Tell us what you have in mind." },
+  form_intro: { nl: "Eén formulier, rechtstreeks bij het team.", en: "One form, straight to the team." },
+  form_note: { nl: "We reageren binnen 1 werkdag.", en: "We respond within 1 business day." },
+};
+
 export type FooterContent = {
   footer_note: ContentPair;
   discover_heading: ContentPair;
