@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { WineCard, type WineCardData } from "@/components/wine-card";
+import { WIJNEN_PAGE_DEFAULTS, type WijnenPageContent } from "@/lib/content/defaults";
 
 export type WijnenOverviewWine = {
   n: string;
