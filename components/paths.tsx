@@ -28,7 +28,7 @@ const PATH_META: Array<{
   },
   {
     idx: "02",
-    word: "Business",
+    word: "B2B",
     href: "/voor-bedrijven",
     titleKey: "path_2_title",
     bodyKey: "path_2_body",
