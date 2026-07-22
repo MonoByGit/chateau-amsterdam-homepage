@@ -18,7 +18,7 @@ const PATH_META: Array<{
 }> = [
   {
     idx: "01",
-    word: "Taste",
+    word: "Tour",
     href: "/tours-tastings",
     titleKey: "path_1_title",
     bodyKey: "path_1_body",
@@ -28,7 +28,7 @@ const PATH_META: Array<{
   },
   {
     idx: "02",
-    word: "Pour",
+    word: "Business",
     href: "/voor-bedrijven",
     titleKey: "path_2_title",
     bodyKey: "path_2_body",
@@ -38,13 +38,13 @@ const PATH_META: Array<{
   },
   {
     idx: "03",
-    word: "Drink",
-    href: "#wijnen",
+    word: "Shop",
+    href: "/wijnen",
     titleKey: "path_3_title",
     bodyKey: "path_3_body",
     img: "/assets/path-drink.png",
     alt: "Hand pulling a red wine bottle out of a stylish cardboard box",
-    ariaLabel: "Naar de webshop",
+    ariaLabel: "Naar de wijnen overzichtspagina",
   },
 ];
 
