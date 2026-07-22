@@ -38,7 +38,7 @@ export function WinesPreview({ content, wines }: { content: WinesContent; wines:
       <div className="wines-head">
         <div>
           <div className="label rv in">
-            {t(content.label.nl, content.label.en)} <span className="en">· made in Noord</span>
+            {content.label.nl} <span className="en">· {content.label.en === "Our wines" ? "made in Noord" : content.label.en}</span>
           </div>
           <h2>
             <span ref={heading1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading1.isVisible ? " in" : ""}`}>

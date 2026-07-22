@@ -29,7 +29,7 @@ export function Place({ content }: { content: PlaceContent }) {
       </div>
       <div className="place-inner">
         <div ref={label.ref as React.RefObject<HTMLDivElement>} className={`label rv${label.isVisible ? " in" : ""}`}>
-          {t(content.label.nl, content.label.en)} <span className="en">· visit us</span>
+          {content.label.nl} <span className="en">· {content.label.en === "The venue" ? "visit us" : content.label.en}</span>
         </div>
         <h2>
           <span ref={heading1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${heading1.isVisible ? " in" : ""}`}>

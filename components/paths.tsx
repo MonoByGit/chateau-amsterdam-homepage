@@ -104,7 +104,7 @@ export function Paths({ content }: { content: PathsContent }) {
   return (
     <section className="paths" id="paden">
       <div className="label rv in">
-        {t(content.label.nl, content.label.en)} <span className="en">· choose your glass</span>
+        {content.label.nl} <span className="en">· {content.label.en === "Three paths" ? "choose your glass" : content.label.en}</span>
       </div>
       <div className="paths-intro">
         <h2>

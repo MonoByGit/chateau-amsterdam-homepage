@@ -53,7 +53,7 @@ export function Manifest({ content }: { content: ManifestContent }) {
   return (
     <section className="manifest on-dark" id="verhaal">
       <div ref={label.ref as React.RefObject<HTMLDivElement>} className={`label rv${label.isVisible ? " in" : ""}`}>
-        {t(content.label.nl, content.label.en)} <span className="en">· no vineyard, still wine</span>
+        {content.label.nl} <span className="en">· {content.label.en === "The story" ? "no vineyard, still wine" : content.label.en}</span>
       </div>
       <h2 className="manifest-title">
         <span ref={title1.ref as React.RefObject<HTMLSpanElement>} className={`rv-line${title1.isVisible ? " in" : ""}`}>
