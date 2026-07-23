@@ -20,8 +20,8 @@ export default function HelpPage() {
           </div>
           <div className="a-card a-help-card">
             <span className="a-eyebrow">Beschikbaarheid</span>
-            <h3>Kalender</h3>
-            <p>Per dag tot 4 vrije tijdslots instellen, of de hele dag op niet-beschikbaar zetten. Voor vakanties, feestdagen, privé-events.</p>
+            <h3>Kalender & iCal Sync</h3>
+            <p>Vaste tijdslots (15:00, 17:00, 19:00) of hele dagen blokkeren. Automatisch gekoppeld aan Google Workspace Calendar.</p>
           </div>
           <div className="a-card a-help-card">
             <span className="a-eyebrow">Content</span>
@@ -58,16 +58,50 @@ export default function HelpPage() {
             </div>
           </details>
           <details className="a-help-howto">
-            <summary>Een dag (deels) blokkeren</summary>
+            <summary>Een dag of tijdslot (deels) blokkeren via het CMS</summary>
             <div className="a-help-howto-body">
               <ol>
-                <li>Ga naar <strong>Beschikbaarheid</strong> en klik op de datum in de kalender.</li>
+                <li>Ga naar <strong>Beschikbaarheid</strong> en klik op de gewenste datum in de kalender.</li>
                 <li>
-                  Zet <strong>hele dag dicht</strong> aan voor een vakantiedag, of vink specifieke tijdslots aan/uit
-                  voor een gedeeltelijke sluiting.
+                  Vink <strong>Deze hele dag niet beschikbaar (volledig gesloten)</strong> aan voor een vakantiedag of feestdag.
                 </li>
-                <li>Opslaan: dit is direct zichtbaar op de site, boekingen op geblokkeerde tijden zijn niet meer mogelijk.</li>
+                <li>
+                  Of vink een specifiek tijdslot aan (bijv. <strong>15:00 uur</strong>, <strong>17:00 uur</strong> of <strong>19:00 uur</strong>) om uitsluitend dat moment te blokkeren voor boekingen.
+                </li>
+                <li>Klik op <strong>Opslaan</strong>. Geblokkeerde dagen/slots worden direct op de reserveringspagina uitgeschakeld.</li>
               </ol>
+            </div>
+          </details>
+
+          <details className="a-help-howto" open>
+            <summary>📅 Google Workspace Calendar koppelen & gebruiken (iCal Sync)</summary>
+            <div className="a-help-howto-body">
+              <p>
+                Je kunt de beschikbaarheid op de website automatisch laten synchroniseren met de Google Calendar van Chateau Amsterdam. Zodra er afspraken of sluitingen in Google Agenda staan, blokkeert de site die momenten vanzelf.
+              </p>
+              
+              <h4>1. Eenmalige Initiële Set-up:</h4>
+              <ol>
+                <li>Open <strong>Google Calendar</strong> in de browser (ingelogd met het Chateau Google Workspace account).</li>
+                <li>Zoek aan de linkerkant de agenda op (bijv. <em>&ldquo;Chateau Tastings & Events&rdquo;</em>) en klik op de 3 puntjes → <strong>Instellingen en delen</strong>.</li>
+                <li>Scroll in het linkermenu naar het kopje <strong>Agenda integreren</strong>.</li>
+                <li>Zoek de regel <strong>&ldquo;Geheim adres in iCal-indeling&rdquo;</strong> en kopieer de geheime URL (deze eindigt op <code>.ics</code>).</li>
+                <li>Ga in dit CMS naar <strong>Beschikbaarheid</strong>, plak de gekopieerde URL in het vak onder <em>Google Workspace Calendar Koppeling</em> en klik op <strong>URL Opslaan</strong>.</li>
+                <li>Klik daarna op de knop <strong>🔄 Nu Synchroniseren</strong> om de eerste sync uit te voeren.</li>
+              </ol>
+
+              <h4>2. Dagelijks gebruik via Google Calendar:</h4>
+              <ul>
+                <li>
+                  <strong>Hele dag sluiten:</strong> Maak een dag-evenement aan in Google Calendar met de titel <em>&ldquo;Dicht&rdquo;</em>, <em>&ldquo;Gesloten&rdquo;</em> of <em>&ldquo;Volgeboekt&rdquo;</em>. De site sluit die dag automatisch volledig voor reserveringen.
+                </li>
+                <li>
+                  <strong>Specifiek tijdslot blokkeren:</strong> Maak een afspraak aan op het desbetreffende tijdstip (bijv. om 15:00, 17:00 of 19:00 uur) met een titel zoals <em>&ldquo;Besloten feest&rdquo;</em> of <em>&ldquo;Groepsboeking&rdquo;</em>. De site schakelt uitsluitend dat tijdslot uit voor bezoekers.
+                </li>
+                <li>
+                  <strong>Handmatige verversing:</strong> Heb je zojuist iets aangepast in Google Calendar en wil je dat het nú op de site staat? Ga in het CMS naar <strong>Beschikbaarheid</strong> en klik op <strong>🔄 Nu Synchroniseren</strong>.
+                </li>
+              </ul>
             </div>
           </details>
           <details className="a-help-howto">
