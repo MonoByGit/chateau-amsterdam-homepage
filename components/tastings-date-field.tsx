@@ -49,7 +49,13 @@ function isOpenDay(date: Date): boolean {
   return day === 4 || day === 5 || day === 6;
 }
 
-export function DateField() {
+export function DateField({
+  blockedFullDays = [],
+  onSelectDate,
+}: {
+  blockedFullDays?: string[];
+  onSelectDate?: (dateIso: string) => void;
+}) {
   const { t, lang } = useLanguage();
   const today = startOfDay(new Date());
 
@@ -138,9 +144,11 @@ export function DateField() {
           <div className="tastings-calendar-grid">
             {cells.map((cell, index) => {
               if (!cell) return <span key={index} />;
-              const disabled = cell < today || !isOpenDay(cell);
-              const isSelected = selected ? toIsoDate(selected) === toIsoDate(cell) : false;
-              const isToday = toIsoDate(cell) === toIsoDate(today);
+              const iso = toIsoDate(cell);
+              const isBlocked = blockedFullDays.includes(iso);
+              const disabled = cell < today || !isOpenDay(cell) || isBlocked;
+              const isSelected = selected ? toIsoDate(selected) === iso : false;
+              const isToday = iso === toIsoDate(today);
               return (
                 <button
                   key={index}
@@ -149,6 +157,7 @@ export function DateField() {
                   className={`tastings-calendar-day${isSelected ? " is-selected" : ""}${isToday ? " is-today" : ""}`}
                   onClick={() => {
                     setSelected(cell);
+                    onSelectDate?.(iso);
                     setOpen(false);
                   }}
                 >

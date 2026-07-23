@@ -114,11 +114,15 @@ export default async function AvailabilityPage({
               {isFullDay ? (
                 <span className="a-cal-toggle is-blocked">Hele dag dicht</span>
               ) : slotLabels.length > 0 ? (
-                slotLabels.map((label, i) => (
-                  <span key={i} className="a-cal-toggle is-blocked" title={label}>
-                    {label}
-                  </span>
-                ))
+                slotLabels.map((label, i) => {
+                  const match = label.match(/(\d{2}:\d{2})/);
+                  const displayTag = match ? `${match[1]}u dicht` : label;
+                  return (
+                    <span key={i} className="a-cal-toggle is-blocked" title={label}>
+                      {displayTag}
+                    </span>
+                  );
+                })
               ) : null}
             </Link>
           );

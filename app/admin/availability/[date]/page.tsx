@@ -25,8 +25,8 @@ export default async function AvailabilityDayPage({ params }: { params: Promise<
         {formatAdminDate(date)}
       </h1>
       <p className="a-subtitle">
-        Standaard is deze dag volledig boekbaar. Blokkeer de hele dag, of geef aan wanneer jullie een deel
-        van de dag dicht zijn (bijvoorbeeld een vakantie, feestdag of besloten evenement).
+        Standaard zijn de tours en tastings geopend op donderdag, vrijdag en zaterdag met vaste tijdslots (15:00, 17:00 en 19:00 uur).
+        Vink hieronder aan als de hele dag dicht is, of blokkeer specifieke tijdslots.
       </p>
 
       <div style={{ marginTop: "1.5rem", maxWidth: "32rem" }}>

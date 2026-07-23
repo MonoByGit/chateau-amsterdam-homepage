@@ -8,8 +8,8 @@ export type SelectOption = { key: string; nl: string; en: string };
 // regardless of which language the visitor filled the form in.
 export const PREFERRED_PERIODS: SelectOption[] = [
   { key: "slot_1500", nl: "15:00 uur (70 min. tour & tasting)", en: "3:00 PM (70 min. tour & tasting)" },
-  { key: "slot_1700", nl: "17:00 uur (50 min. tasting)", en: "5:00 PM (50 min. tasting)" },
-  { key: "slot_1900", nl: "19:00 uur (50 min. tasting)", en: "7:00 PM (50 min. tasting)" },
+  { key: "slot_1700", nl: "17:00 uur (70 min. tour & tasting)", en: "5:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1900", nl: "19:00 uur (70 min. tour & tasting)", en: "7:00 PM (70 min. tour & tasting)" },
 ];
 
 export const OCCASIONS: SelectOption[] = [

@@ -10,17 +10,26 @@ import { DateField } from "@/components/tastings-date-field";
 
 import { TOURS_TASTINGS_PAGE_DEFAULTS, type ToursTastingsPageContent } from "@/lib/content/defaults";
 
+import { useState } from "react";
+
 export function ToursTastingsContent({
   verzonden,
   fout,
   content = TOURS_TASTINGS_PAGE_DEFAULTS,
+  blockedFullDays = [],
+  blockedSlotsByDate = {},
 }: {
   verzonden?: string;
   fout?: string;
   content?: ToursTastingsPageContent;
+  blockedFullDays?: string[];
+  blockedSlotsByDate?: Record<string, string[]>;
 }) {
   const { t } = useLanguage();
+  const [selectedDateIso, setSelectedDateIso] = useState<string>("");
   const errorPair = fout ? TASTING_ERROR_MESSAGES[fout] : null;
+
+  const currentBlockedSlots = selectedDateIso ? blockedSlotsByDate[selectedDateIso] ?? [] : [];
 
   return (
     <>
@@ -128,7 +137,7 @@ export function ToursTastingsContent({
                 {errorPair ? <p className="tastings-form-error">{t(errorPair.nl, errorPair.en)}</p> : null}
                 <div className="tastings-form-row">
                   <PartySizeField />
-                  <DateField />
+                  <DateField blockedFullDays={blockedFullDays} onSelectDate={setSelectedDateIso} />
                 </div>
                 <div className="tastings-form-row">
                   <div className="tastings-field">
@@ -137,11 +146,16 @@ export function ToursTastingsContent({
                       <span className="fl">{t(C.fieldPeriod.nl, C.fieldPeriod.en)}</span>
                     </label>
                     <select id="preferredPeriod" name="preferredPeriod" defaultValue={PREFERRED_PERIODS[0].nl} className="tastings-input">
-                      {PREFERRED_PERIODS.map((period) => (
-                        <option key={period.key} value={period.nl}>
-                          {t(period.nl, period.en)}
-                        </option>
-                      ))}
+                      {PREFERRED_PERIODS.map((period) => {
+                        const isBlocked = currentBlockedSlots.some((label) =>
+                          label.toLowerCase().includes(period.nl.slice(0, 5).toLowerCase())
+                        );
+                        return (
+                          <option key={period.key} value={period.nl} disabled={isBlocked}>
+                            {t(period.nl, period.en)}{isBlocked ? ` (${t("Niet beschikbaar", "Not available")})` : ""}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                   <div className="tastings-field">
