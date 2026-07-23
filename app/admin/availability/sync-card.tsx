@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { saveIcalSyncUrl, triggerGoogleCalendarSync } from "./actions";
+import { clearAllAvailabilityBlocks, saveIcalSyncUrl, triggerGoogleCalendarSync } from "./actions";
 
 export function SyncCard({ initialIcalUrl }: { initialIcalUrl: string }) {
   const [icalUrl, setIcalUrl] = useState(initialIcalUrl);
@@ -24,6 +24,15 @@ export function SyncCard({ initialIcalUrl }: { initialIcalUrl: string }) {
     });
   };
 
+  const handleClearAll = () => {
+    if (!confirm("Weet je zeker dat je alle bestaande handmatige/oude kalenderblokkades wilt wissen?")) return;
+    setFeedback(null);
+    startTransition(async () => {
+      const res = await clearAllAvailabilityBlocks();
+      setFeedback({ type: res.success ? "success" : "error", text: res.message });
+    });
+  };
+
   return (
     <div className="a-card" style={{ padding: "1.25rem", marginBottom: "2rem" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
@@ -35,15 +44,27 @@ export function SyncCard({ initialIcalUrl }: { initialIcalUrl: string }) {
             Koppel de Google Calendar van Chateau Amsterdam. Afspraken of sluitingen in Google Calendar blokkeren automatisch de tijden op de site.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleSyncNow}
-          disabled={isPending || !icalUrl}
-          className="a-btn a-btn--primary"
-          style={{ whiteSpace: "nowrap" }}
-        >
-          {isPending ? "Bezig met sync..." : "🔄 Nu Synchroniseren"}
-        </button>
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={handleClearAll}
+            disabled={isPending}
+            className="a-btn a-btn--secondary"
+            style={{ whiteSpace: "nowrap", fontSize: "0.8125rem", color: "var(--a-danger)" }}
+            title="Wist alle oude demo-blokkades uit de kalender"
+          >
+            🧹 Oude data wissen
+          </button>
+          <button
+            type="button"
+            onClick={handleSyncNow}
+            disabled={isPending || !icalUrl}
+            className="a-btn a-btn--primary"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            {isPending ? "Bezig..." : "🔄 Nu Synchroniseren"}
+          </button>
+        </div>
       </div>
 
       <form action={handleSave} style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>

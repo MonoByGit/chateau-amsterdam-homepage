@@ -41,3 +41,10 @@ export async function triggerGoogleCalendarSync(): Promise<{ success: boolean; m
     return { success: false, message: `Fout bij synchroniseren: ${msg}` };
   }
 }
+
+export async function clearAllAvailabilityBlocks(): Promise<{ success: boolean; message: string }> {
+  await db.delete(availabilityBlocks);
+  revalidatePath("/admin/availability");
+  revalidatePath("/admin");
+  return { success: true, message: "Alle oude beschikbaarheids-blokkades zijn gewist. De kalender is nu schoon." };
+}
