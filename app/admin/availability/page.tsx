@@ -40,7 +40,11 @@ export default async function AvailabilityPage({
   const params = await searchParams;
   const { year, month } = parseMonthParam(params.month);
 
-  const blocks = await listBlocksForMonth(year, month);
+  const [blocks, icalUrl] = await Promise.all([
+    listBlocksForMonth(year, month),
+    getIcalUrl(),
+  ]);
+
   const blocksByDate = new Map<string, AvailabilityBlock[]>();
   for (const block of blocks) {
     const list = blocksByDate.get(block.date) ?? [];
@@ -61,9 +65,11 @@ export default async function AvailabilityPage({
   return (
     <div>
       <h1 className="a-h1">Beschikbaarheid</h1>
-      <p className="a-subtitle">
+      <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>
         Standaard zijn de tours en tastings geopend op donderdag, vrijdag en zaterdag (vaste slots: 15:00, 17:00 en 19:00 uur). Klik op een dag om uitzonderingen, extra openingen of sluitingen in te stellen.
       </p>
+
+      <SyncCard initialIcalUrl={icalUrl} />
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "1.5rem 0" }}>
         <h2 className="a-h1" style={{ fontSize: "1.25rem", textTransform: "capitalize" }}>
