@@ -127,8 +127,8 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
           <div style={{ marginTop: "0.625rem", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
             <span style={{ fontSize: "0.75rem", color: "var(--a-text-muted)" }}>Snel een sfeerafbeelding kiezen:</span>
             <select
-              className="a-input"
-              style={{ fontSize: "0.75rem", padding: "0.375rem 0.5rem", height: "auto", cursor: "pointer" }}
+              className="a-input a-select"
+              style={{ fontSize: "0.75rem", padding: "0.375rem 2.5rem 0.375rem 0.625rem", height: "auto", cursor: "pointer" }}
               onChange={(e) => {
                 if (e.target.value) {
                   setVal(e.target.value);
