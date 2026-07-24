@@ -74,13 +74,18 @@ export default function HelpPage() {
           </details>
 
           <details className="a-help-howto" open>
-            <summary>📅 Google Workspace Calendar koppelen & gebruiken (iCal Sync)</summary>
+            <summary>📅 Google Workspace Calendar &amp; iCal Sync (Optioneel)</summary>
             <div className="a-help-howto-body">
               <p>
-                Je kunt de beschikbaarheid op de website automatisch laten synchroniseren met de Google Calendar van Chateau Amsterdam. Zodra er afspraken of sluitingen in Google Agenda staan, blokkeert de site die momenten vanzelf.
+                <strong>⚡ De Essentie vs. Optionele iCal Sync:</strong><br />
+                Met het 1-click Resend e-mailsysteem verloopt het verwerken van aanvragen (goedkeuren/afwijzen) volledig automatisch via de e-mail en het CMS. Zodra je op <strong>[Goedkeuren]</strong> klikt, blokkeert de site dat tijdslot direct zelf.
+              </p>
+              <p>
+                <strong>Wanneer gebruik je wel de iCal Sync?</strong><br />
+                De iCal-koppeling is <em>optioneel</em> en alleen nodig als het salesteam ook <strong>handmatig buiten de website om afspraken of sluitingen in Google Agenda plant</strong> (bijv. als ze in Google Calendar een <em>"Besloten borrel"</em> inzetten en willen dat de site die tijden automatisch sluit).
               </p>
               
-              <h4>1. Eenmalige Initiële Set-up:</h4>
+              <h4>1. Eenmalige Initiële Set-up (alleen bij gebruik Google Calendar):</h4>
               <ol>
                 <li>Open <strong>Google Calendar</strong> in de browser (ingelogd met het Chateau Google Workspace account).</li>
                 <li>Zoek aan de linkerkant de agenda op (bijv. <em>&ldquo;Chateau Tastings & Events&rdquo;</em>) en klik op de 3 puntjes → <strong>Instellingen en delen</strong>.</li>
