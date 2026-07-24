@@ -36,7 +36,11 @@ export function VoorBedrijvenContent({
             <p>{t(content.intro_body.nl, content.intro_body.en)}</p>
           </div>
           <div className="bd-intro-photo">
-            <img src="/assets/path-pour.jpg" alt={t(C.introPhotoAlt.nl, C.introPhotoAlt.en)} fetchPriority="high" />
+            <img
+              src={content.intro_photo_url ? t(content.intro_photo_url.nl, content.intro_photo_url.en) : "/assets/path-pour.jpg"}
+              alt={t(C.introPhotoAlt.nl, C.introPhotoAlt.en)}
+              fetchPriority="high"
+            />
           </div>
         </div>
       </section>

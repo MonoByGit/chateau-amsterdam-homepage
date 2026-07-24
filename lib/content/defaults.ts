@@ -168,10 +168,13 @@ export type PathsContent = {
   intro_body: ContentPair;
   path_1_title: ContentPair;
   path_1_body: ContentPair;
+  path_1_image_url: ContentPair;
   path_2_title: ContentPair;
   path_2_body: ContentPair;
+  path_2_image_url: ContentPair;
   path_3_title: ContentPair;
   path_3_body: ContentPair;
+  path_3_image_url: ContentPair;
 };
 
 export const PATHS_DEFAULTS: PathsContent = {
@@ -187,16 +190,19 @@ export const PATHS_DEFAULTS: PathsContent = {
     nl: "70 minuten tussen de tanks, zes wijnen op tafel, met verhaal en bites. Voor bezoekers van de stad, vriendengroepen en iedereen die wil weten hoe stadswijn smaakt.",
     en: "70 minutes between the tanks, six wines on the table, complete with stories and bites. For city visitors, groups of friends, and anyone who wants to know how urban wine tastes.",
   },
+  path_1_image_url: { nl: "/assets/path-taste.jpg", en: "/assets/path-taste.jpg" },
   path_2_title: { nl: "Voor bedrijven & horeca", en: "For businesses & hospitality" },
   path_2_body: {
     nl: "Grote afname, private label, relatiegeschenken en events in de winery. Eén aanspreekpunt, scherpe staffels, geproduceerd op 10 minuten van CS.",
     en: "Bulk orders, private label, corporate gifts, and events in the winery. A single point of contact, volume discounts, produced 10 minutes from Central Station.",
   },
+  path_2_image_url: { nl: "/assets/path-pour.jpg", en: "/assets/path-pour.jpg" },
   path_3_title: { nl: "De webshop", en: "The webshop" },
   path_3_body: {
     nl: "De volledige collectie, thuisbezorgd. Van klassieke monocépages tot blends die alleen in Noord kunnen bestaan.",
     en: "The complete collection, delivered to your door. From classic single-varietals to blends that could only exist in North.",
   },
+  path_3_image_url: { nl: "/assets/path-drink.png", en: "/assets/path-drink.png" },
 };
 
 export type WinesContent = {
@@ -269,12 +275,16 @@ export type ToursTastingsPageContent = {
   hero_title_lead: ContentPair;
   hero_title_em: ContentPair;
   hero_sub: ContentPair;
+  hero_photo_url: ContentPair;
   opening_line1: ContentPair;
   opening_line2: ContentPair;
   tour_heading: ContentPair;
   tour_body: ContentPair;
+  tour_main_photo_url: ContentPair;
+  tour_detail_photo_url: ContentPair;
   tasting_heading: ContentPair;
   tasting_body: ContentPair;
+  tasting_main_photo_url: ContentPair;
   strip_duration: ContentPair;
   strip_duration_label: ContentPair;
   strip_wines: ContentPair;
@@ -286,6 +296,7 @@ export type ToursTastingsPageContent = {
   reserve_label: ContentPair;
   reserve_heading: ContentPair;
   reserve_sub: ContentPair;
+  reserve_photo_url: ContentPair;
 };
 
 export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
@@ -296,6 +307,7 @@ export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
     nl: "70 minuten tussen de tanks. Zes wijnen op tafel. Een middag die je proeft in plaats van leest.",
     en: "70 minutes between the tanks. Six wines on the table. An afternoon you taste, not read.",
   },
+  hero_photo_url: { nl: "/assets/hero-winery.jpg", en: "/assets/hero-winery.jpg" },
   opening_line1: { nl: "Midden in de stad wordt hier wijn gemaakt, van tank tot glas.", en: "In the middle of the city, wine is made here, from tank to glass." },
   opening_line2: { nl: "Wij laten je proeven wat er ontstaat.", en: "We let you taste what it becomes." },
   tour_heading: { nl: "Tussen de tanks", en: "Between the tanks" },
@@ -303,11 +315,14 @@ export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
     nl: "Een tour van 70 minuten door de winery. Je ziet hoe de druiven hier worden verwerkt tot wijn, van tank tot fles, en hoort het verhaal achter Chateau Amsterdam.",
     en: "A 70-minute tour through the winery. See how the grapes here become wine, from tank to bottle, and hear the story behind Chateau Amsterdam.",
   },
+  tour_main_photo_url: { nl: "/assets/step-makerij.jpg", en: "/assets/step-makerij.jpg" },
+  tour_detail_photo_url: { nl: "/assets/step-druif.jpg", en: "/assets/step-druif.jpg" },
   tasting_heading: { nl: "Zes wijnen, één tafel", en: "Six wines, one table" },
   tasting_body: {
     nl: "Na de tour proef je 6 wijnen met een kleine snack erbij. Dieetwensen of allergieën? Laat het weten bij je aanvraag, dan houden we er rekening mee.",
     en: "After the tour you taste 6 wines with a small bite alongside. Dietary needs or allergies? Let us know in your request and we'll take care of it.",
   },
+  tasting_main_photo_url: { nl: "/assets/path-taste.jpg", en: "/assets/path-taste.jpg" },
   strip_duration: { nl: "70 min", en: "70 min" },
   strip_duration_label: { nl: "Tour & tasting samen", en: "Tour & tasting together" },
   strip_wines: { nl: "6", en: "6" },
@@ -319,6 +334,7 @@ export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
   reserve_label: { nl: "Reserveren", en: "Reserve" },
   reserve_heading: { nl: "Boek je plek tussen de tanks.", en: "Book your spot between the tanks." },
   reserve_sub: { nl: "We bevestigen je aanvraag persoonlijk.", en: "We confirm your request personally." },
+  reserve_photo_url: { nl: "/assets/place-map.jpg", en: "/assets/place-map.jpg" },
 };
 
 export type VoorBedrijvenPageContent = {
@@ -326,6 +342,7 @@ export type VoorBedrijvenPageContent = {
   intro_heading_lead: ContentPair;
   intro_heading_em: ContentPair;
   intro_body: ContentPair;
+  intro_photo_url: ContentPair;
   strip_contact_label: ContentPair;
   strip_distance: ContentPair;
   strip_distance_label: ContentPair;
@@ -353,6 +370,7 @@ export const VOOR_BEDRIJVEN_PAGE_DEFAULTS: VoorBedrijvenPageContent = {
     nl: "Van de borrel tussen de tanks tot je naam op de fles. Eén partner, geproduceerd tien minuten van Amsterdam CS. Kies hieronder waar je aan denkt, wij nemen het van daar over.",
     en: "From drinks between the tanks to your name on the bottle. One partner, produced ten minutes from Amsterdam Central. Pick what you're thinking of below, we'll take it from there.",
   },
+  intro_photo_url: { nl: "/assets/path-pour.jpg", en: "/assets/path-pour.jpg" },
   strip_contact_label: { nl: "Aanspreekpunt, van begin tot levering", en: "One point of contact, from start to delivery" },
   strip_distance: { nl: "10 min", en: "10 min" },
   strip_distance_label: { nl: "Van Amsterdam CS, midden in Noord", en: "From Amsterdam Central, in the heart of Noord" },

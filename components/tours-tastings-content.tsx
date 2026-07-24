@@ -35,7 +35,11 @@ export function ToursTastingsContent({
     <>
       <section className="tastings-hero">
         <div className="tastings-hero-media">
-          <img src="/assets/hero-winery.jpg" alt={t(C.heroAlt.nl, C.heroAlt.en)} fetchPriority="high" />
+          <img
+            src={content.hero_photo_url ? t(content.hero_photo_url.nl, content.hero_photo_url.en) : "/assets/hero-winery.jpg"}
+            alt={t(C.heroAlt.nl, C.heroAlt.en)}
+            fetchPriority="high"
+          />
         </div>
         <nav className="tastings-hero-top">
           <div>
@@ -71,10 +75,20 @@ export function ToursTastingsContent({
           </div>
           <div className="tastings-gang-cluster">
             <div className="main">
-              <img src="/assets/step-makerij.jpg" alt={t(C.tourMainAlt.nl, C.tourMainAlt.en)} loading="lazy" decoding="async" />
+              <img
+                src={content.tour_main_photo_url ? t(content.tour_main_photo_url.nl, content.tour_main_photo_url.en) : "/assets/step-makerij.jpg"}
+                alt={t(C.tourMainAlt.nl, C.tourMainAlt.en)}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div className="detail">
-              <img src="/assets/step-druif.jpg" alt={t(C.grapesAlt.nl, C.grapesAlt.en)} loading="lazy" decoding="async" />
+              <img
+                src={content.tour_detail_photo_url ? t(content.tour_detail_photo_url.nl, content.tour_detail_photo_url.en) : "/assets/step-druif.jpg"}
+                alt={t(C.grapesAlt.nl, C.grapesAlt.en)}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </div>
         </div>
@@ -84,10 +98,20 @@ export function ToursTastingsContent({
         <div className="tastings-gang-grid">
           <div className="tastings-gang-cluster">
             <div className="main">
-              <img src="/assets/path-taste.jpg" alt={t(C.tastingMainAlt.nl, C.tastingMainAlt.en)} loading="lazy" decoding="async" />
+              <img
+                src={content.tasting_main_photo_url ? t(content.tasting_main_photo_url.nl, content.tasting_main_photo_url.en) : "/assets/path-taste.jpg"}
+                alt={t(C.tastingMainAlt.nl, C.tastingMainAlt.en)}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div className="detail">
-              <img src="/assets/step-druif.jpg" alt={t(C.grapesAlt.nl, C.grapesAlt.en)} loading="lazy" decoding="async" />
+              <img
+                src={content.tour_detail_photo_url ? t(content.tour_detail_photo_url.nl, content.tour_detail_photo_url.en) : "/assets/step-druif.jpg"}
+                alt={t(C.grapesAlt.nl, C.grapesAlt.en)}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </div>
           <div className="tastings-gang-text">
@@ -121,7 +145,12 @@ export function ToursTastingsContent({
 
       <section className="tastings-reserve" id="reserveren">
         <div className="tastings-reserve-media">
-          <img src="/assets/place-hal.jpg" alt={t(C.reserveMediaAlt.nl, C.reserveMediaAlt.en)} loading="lazy" decoding="async" />
+          <img
+            src={content.reserve_photo_url ? t(content.reserve_photo_url.nl, content.reserve_photo_url.en) : "/assets/place-map.jpg"}
+            alt={t(C.reserveMediaAlt.nl, C.reserveMediaAlt.en)}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div className="tastings-reserve-inner">
           <div className="tastings-reserve-head">
