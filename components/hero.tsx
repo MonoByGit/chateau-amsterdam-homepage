@@ -7,6 +7,7 @@ import { useReveal } from "@/lib/use-reveal";
 import { useParallax } from "@/lib/use-parallax";
 import { useMagnetic } from "@/lib/use-magnetic";
 import type { HeroContent, MarqueeContent } from "@/lib/content/defaults";
+import { parseImageSrc } from "@/lib/content/defaults";
 
 const MARQUEE_KEYS: Array<keyof MarqueeContent> = [
   "marquee_1",
@@ -83,10 +84,17 @@ export function Hero({ content, marquee }: { content: HeroContent; marquee: Marq
         <figure ref={mediaReveal.ref as React.RefObject<HTMLElement>} className={`hero-media rv${mediaReveal.isVisible ? " in" : ""}`}>
           <div className="media-clip">
             <div ref={parallaxRef as React.RefObject<HTMLDivElement>} className="pwrap">
-              <img
-                src={content.hero_image_url ? t(content.hero_image_url.nl, content.hero_image_url.en) : "/assets/hero-winery.jpg"}
-                alt="Chateau Amsterdam Winery Interior Hall with stainless steel tanks and oak barrels"
-              />
+              {(() => {
+                const rawUrl = content.hero_image_url ? t(content.hero_image_url.nl, content.hero_image_url.en) : "/assets/hero-winery.jpg";
+                const parsed = parseImageSrc(rawUrl);
+                return (
+                  <img
+                    src={parsed.src}
+                    alt="Chateau Amsterdam Winery Interior Hall with stainless steel tanks and oak barrels"
+                    style={{ objectPosition: parsed.objectPosition || "center" }}
+                  />
+                );
+              })()}
             </div>
           </div>
           <figcaption>{t(content.media_caption.nl, content.media_caption.en)}</figcaption>
