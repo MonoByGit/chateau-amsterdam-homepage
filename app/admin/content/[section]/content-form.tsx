@@ -43,7 +43,7 @@ const PRESET_ASSETS = [
   { label: "🍇 Pluk Verse Druiven", url: "/assets/step-druif.jpg" },
   { label: "🚛 Gekoeld Transport", url: "/assets/step-reis.png" },
   { label: "🏭 Makerij & RVS Vaten", url: "/assets/step-makerij.jpg" },
-  { label: "🍷 Proeverij op Vat", url: "/assets/path-taste.jpg" },
+  { label: "🍷 Proeverij Flight op Vat met Borrelplanken", url: "/assets/path-taste.jpg" },
   { label: "🏛️ Winery Exterieur Sfeer", url: "/assets/hero-winery.jpg" },
   { label: "🏭 Winery Hal Binnen", url: "/assets/place-hal.jpg" },
 ];
