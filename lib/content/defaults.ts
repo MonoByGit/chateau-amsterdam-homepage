@@ -1,7 +1,24 @@
-// lib/content/defaults.ts
 import type { ContentPair } from "@/lib/content/get-content";
 
 export type { ContentPair };
+
+export function parseImageSrc(rawUrl: string | null | undefined): { src: string; objectPosition?: string } {
+  if (!rawUrl) return { src: "" };
+  const [src, hash] = rawUrl.split("#");
+  if (!hash) return { src };
+  const posMap: Record<string, string> = {
+    top: "top",
+    bottom: "bottom",
+    center: "center",
+    left: "left",
+    right: "right",
+    "top-left": "top left",
+    "top-right": "top right",
+    "bottom-left": "bottom left",
+    "bottom-right": "bottom right",
+  };
+  return { src, objectPosition: posMap[hash] || hash };
+}
 
 export type HeaderContent = {
   nav_1_label: ContentPair;

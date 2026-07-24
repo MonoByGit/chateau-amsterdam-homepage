@@ -3,6 +3,7 @@
 
 import { useActionState, useState } from "react";
 import { saveSection } from "./actions";
+import { parseImageSrc } from "@/lib/content/defaults";
 
 type Block = { fieldKey: string; valueNl: string; valueEn: string };
 
@@ -70,6 +71,16 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
   const [val, setVal] = useState(initialValue);
   const [imgError, setImgError] = useState(false);
 
+  const parsed = parseImageSrc(val);
+  const currentPos = val.includes("#") ? val.split("#")[1] : "center";
+
+  function handlePosChange(newPos: string) {
+    const cleanUrl = val.split("#")[0];
+    const updated = newPos === "center" ? cleanUrl : `${cleanUrl}#${newPos}`;
+    setVal(updated);
+    setImgError(false);
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%" }}>
       <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
@@ -91,12 +102,17 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
               justifyContent: "center",
             }}
           >
-            {val && !imgError ? (
+            {parsed.src && !imgError ? (
               <img
-                src={val}
+                src={parsed.src}
                 alt="Voorbeeld"
                 onError={() => setImgError(true)}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: parsed.objectPosition || "center",
+                }}
               />
             ) : (
               <div style={{ fontSize: "0.75rem", color: "var(--a-text-muted)", textAlign: "center", padding: "0.5rem" }}>
@@ -106,8 +122,8 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
           </div>
         </div>
 
-        {/* Input Field & Preset Quick Select */}
-        <div style={{ flex: 1, minWidth: "260px" }}>
+        {/* Input Field, Preset Quick Select & Focus Control */}
+        <div style={{ flex: 1, minWidth: "260px", display: "flex", flexDirection: "column", gap: "0.625rem" }}>
           <label className="a-field">
             <span className="a-label">Afbeeldingspad of URL</span>
             <input
@@ -124,26 +140,50 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
             <input type="hidden" name={`${fieldKey}__en`} value={val} />
           </label>
 
-          <div style={{ marginTop: "0.625rem", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "0.75rem", color: "var(--a-text-muted)" }}>Snel een sfeerafbeelding kiezen:</span>
-            <select
-              className="a-input a-select"
-              style={{ fontSize: "0.75rem", padding: "0.375rem 2.5rem 0.375rem 0.625rem", height: "auto", cursor: "pointer" }}
-              onChange={(e) => {
-                if (e.target.value) {
-                  setVal(e.target.value);
-                  setImgError(false);
-                }
-              }}
-              value=""
-            >
-              <option value="">-- Kies een foto uit de bibliotheek --</option>
-              {PRESET_ASSETS.map((asset) => (
-                <option key={asset.url} value={asset.url}>
-                  {asset.label} ({asset.url})
-                </option>
-              ))}
-            </select>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: "180px" }}>
+              <span className="a-label" style={{ fontSize: "0.75rem", marginBottom: "0.25rem", display: "block" }}>
+                🎯 Focuspunt / Uitsnede in frame:
+              </span>
+              <select
+                className="a-input a-select"
+                style={{ fontSize: "0.75rem", padding: "0.375rem 2.5rem 0.375rem 0.625rem", height: "auto", cursor: "pointer" }}
+                value={currentPos}
+                onChange={(e) => handlePosChange(e.target.value)}
+              >
+                <option value="center">📍 Midden (Standaard)</option>
+                <option value="top">⬆️ Bovenkant accentueren</option>
+                <option value="bottom">⬇️ Onderkant accentueren</option>
+                <option value="top-left">↖️ Boven-Links</option>
+                <option value="top-right">↗️ Boven-Rechts</option>
+                <option value="bottom-left">↙️ Onder-Links</option>
+                <option value="bottom-right">↘️ Onder-Rechts</option>
+              </select>
+            </div>
+
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <span className="a-label" style={{ fontSize: "0.75rem", marginBottom: "0.25rem", display: "block" }}>
+                🖼️ Snel een sfeerafbeelding kiezen:
+              </span>
+              <select
+                className="a-input a-select"
+                style={{ fontSize: "0.75rem", padding: "0.375rem 2.5rem 0.375rem 0.625rem", height: "auto", cursor: "pointer" }}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setVal(e.target.value);
+                    setImgError(false);
+                  }
+                }}
+                value=""
+              >
+                <option value="">-- Kies een foto uit de bibliotheek --</option>
+                {PRESET_ASSETS.map((asset) => (
+                  <option key={asset.url} value={asset.url}>
+                    {asset.label} ({asset.url})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>

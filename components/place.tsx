@@ -7,6 +7,8 @@ import { useParallax } from "@/lib/use-parallax";
 import { useMagnetic } from "@/lib/use-magnetic";
 import type { PlaceContent } from "@/lib/content/defaults";
 
+import { parseImageSrc } from "@/lib/content/defaults";
+
 export function Place({ content }: { content: PlaceContent }) {
   const { t } = useLanguage();
   const parallaxRef = useParallax(0.18);
@@ -19,12 +21,16 @@ export function Place({ content }: { content: PlaceContent }) {
   const cta = useReveal(0.3);
   const ctaMagnetic = useMagnetic();
 
+  const rawUrl = content.place_image_url ? t(content.place_image_url.nl, content.place_image_url.en) : "/assets/place-map.jpg";
+  const parsed = parseImageSrc(rawUrl);
+
   return (
     <section className="place on-dark" id="bezoek">
       <div ref={parallaxRef as React.RefObject<HTMLDivElement>} className="place-media">
         <img
-          src={content.place_image_url ? t(content.place_image_url.nl, content.place_image_url.en) : "/assets/place-hal.jpg"}
+          src={parsed.src}
           alt="Chateau Amsterdam Winery exterior at waterfront in Amsterdam-Noord during evening blue hour"
+          style={{ objectPosition: parsed.objectPosition || "center" }}
         />
       </div>
       <div className="place-inner">

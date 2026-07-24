@@ -12,6 +12,8 @@ import { TOURS_TASTINGS_PAGE_DEFAULTS, type ToursTastingsPageContent } from "@/l
 
 import { useState } from "react";
 
+import { parseImageSrc } from "@/lib/content/defaults";
+
 export function ToursTastingsContent({
   verzonden,
   fout,
@@ -25,20 +27,27 @@ export function ToursTastingsContent({
   blockedFullDays?: string[];
   blockedSlotsByDate?: Record<string, string[]>;
 }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [selectedDateIso, setSelectedDateIso] = useState<string>("");
   const errorPair = fout ? TASTING_ERROR_MESSAGES[fout] : null;
 
   const currentBlockedSlots = selectedDateIso ? blockedSlotsByDate[selectedDateIso] ?? [] : [];
+
+  const heroParsed = parseImageSrc(content.hero_photo_url ? t(content.hero_photo_url.nl, content.hero_photo_url.en) : "/assets/tasting-hero.jpg");
+  const tourMainParsed = parseImageSrc(content.tour_main_photo_url ? t(content.tour_main_photo_url.nl, content.tour_main_photo_url.en) : "/assets/step-makerij.jpg");
+  const tourDetailParsed = parseImageSrc(content.tour_detail_photo_url ? t(content.tour_detail_photo_url.nl, content.tour_detail_photo_url.en) : "/assets/step-druif.jpg");
+  const tastingMainParsed = parseImageSrc(content.tasting_main_photo_url ? t(content.tasting_main_photo_url.nl, content.tasting_main_photo_url.en) : "/assets/path-taste.jpg");
+  const reserveParsed = parseImageSrc(content.reserve_photo_url ? t(content.reserve_photo_url.nl, content.reserve_photo_url.en) : "/assets/place-map.jpg");
 
   return (
     <>
       <section className="tastings-hero">
         <div className="tastings-hero-media">
           <img
-            src={content.hero_photo_url ? t(content.hero_photo_url.nl, content.hero_photo_url.en) : "/assets/hero-winery.jpg"}
+            src={heroParsed.src}
             alt={t(C.heroAlt.nl, C.heroAlt.en)}
             fetchPriority="high"
+            style={{ objectPosition: heroParsed.objectPosition || "center" }}
           />
         </div>
         <nav className="tastings-hero-top">
@@ -76,18 +85,20 @@ export function ToursTastingsContent({
           <div className="tastings-gang-cluster">
             <div className="main">
               <img
-                src={content.tour_main_photo_url ? t(content.tour_main_photo_url.nl, content.tour_main_photo_url.en) : "/assets/step-makerij.jpg"}
+                src={tourMainParsed.src}
                 alt={t(C.tourMainAlt.nl, C.tourMainAlt.en)}
                 loading="lazy"
                 decoding="async"
+                style={{ objectPosition: tourMainParsed.objectPosition || "center" }}
               />
             </div>
             <div className="detail">
               <img
-                src={content.tour_detail_photo_url ? t(content.tour_detail_photo_url.nl, content.tour_detail_photo_url.en) : "/assets/step-druif.jpg"}
+                src={tourDetailParsed.src}
                 alt={t(C.grapesAlt.nl, C.grapesAlt.en)}
                 loading="lazy"
                 decoding="async"
+                style={{ objectPosition: tourDetailParsed.objectPosition || "center" }}
               />
             </div>
           </div>
@@ -99,18 +110,20 @@ export function ToursTastingsContent({
           <div className="tastings-gang-cluster">
             <div className="main">
               <img
-                src={content.tasting_main_photo_url ? t(content.tasting_main_photo_url.nl, content.tasting_main_photo_url.en) : "/assets/path-taste.jpg"}
+                src={tastingMainParsed.src}
                 alt={t(C.tastingMainAlt.nl, C.tastingMainAlt.en)}
                 loading="lazy"
                 decoding="async"
+                style={{ objectPosition: tastingMainParsed.objectPosition || "center" }}
               />
             </div>
             <div className="detail">
               <img
-                src={content.tour_detail_photo_url ? t(content.tour_detail_photo_url.nl, content.tour_detail_photo_url.en) : "/assets/step-druif.jpg"}
+                src={tourDetailParsed.src}
                 alt={t(C.grapesAlt.nl, C.grapesAlt.en)}
                 loading="lazy"
                 decoding="async"
+                style={{ objectPosition: tourDetailParsed.objectPosition || "center" }}
               />
             </div>
           </div>
@@ -146,10 +159,11 @@ export function ToursTastingsContent({
       <section className="tastings-reserve" id="reserveren">
         <div className="tastings-reserve-media">
           <img
-            src={content.reserve_photo_url ? t(content.reserve_photo_url.nl, content.reserve_photo_url.en) : "/assets/place-map.jpg"}
+            src={reserveParsed.src}
             alt={t(C.reserveMediaAlt.nl, C.reserveMediaAlt.en)}
             loading="lazy"
             decoding="async"
+            style={{ objectPosition: reserveParsed.objectPosition || "center" }}
           />
         </div>
         <div className="tastings-reserve-inner">
