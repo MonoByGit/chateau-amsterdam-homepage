@@ -34,6 +34,7 @@ const IMAGE_FIELD_TITLES: Record<string, string> = {
 };
 
 const PRESET_ASSETS = [
+  { label: "🥂 Proosten Sfeer (Tour & Tasting)", url: "/assets/tasting-hero.jpg" },
   { label: "📍 Gouden 3D Kaart Noord", url: "/assets/place-map.jpg" },
   { label: "🍇 Pluk Verse Druiven", url: "/assets/step-druif.jpg" },
   { label: "🚛 Gekoeld Transport", url: "/assets/step-reis.png" },

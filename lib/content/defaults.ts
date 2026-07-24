@@ -307,7 +307,7 @@ export const TOURS_TASTINGS_PAGE_DEFAULTS: ToursTastingsPageContent = {
     nl: "70 minuten tussen de tanks. Zes wijnen op tafel. Een middag die je proeft in plaats van leest.",
     en: "70 minutes between the tanks. Six wines on the table. An afternoon you taste, not read.",
   },
-  hero_photo_url: { nl: "/assets/hero-winery.jpg", en: "/assets/hero-winery.jpg" },
+  hero_photo_url: { nl: "/assets/tasting-hero.jpg", en: "/assets/tasting-hero.jpg" },
   opening_line1: { nl: "Midden in de stad wordt hier wijn gemaakt, van tank tot glas.", en: "In the middle of the city, wine is made here, from tank to glass." },
   opening_line2: { nl: "Wij laten je proeven wat er ontstaat.", en: "We let you taste what it becomes." },
   tour_heading: { nl: "Tussen de tanks", en: "Between the tanks" },
