@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/lib/language";
+import { parseImageSrc } from "@/lib/content/defaults";
 import { BusinessInquiry } from "@/components/business-inquiry";
 import { VOOR_BEDRIJVEN_COPY as C } from "@/lib/content/voor-bedrijven";
 
@@ -18,6 +19,9 @@ export function VoorBedrijvenContent({
   content?: VoorBedrijvenPageContent;
 }) {
   const { t } = useLanguage();
+
+  const rawUrl = content.intro_photo_url ? t(content.intro_photo_url.nl, content.intro_photo_url.en) : "/assets/b2b-hero.jpg";
+  const parsed = parseImageSrc(rawUrl);
 
   return (
     <>
@@ -37,9 +41,10 @@ export function VoorBedrijvenContent({
           </div>
           <div className="bd-intro-photo">
             <img
-              src={content.intro_photo_url ? t(content.intro_photo_url.nl, content.intro_photo_url.en) : "/assets/path-pour.jpg"}
+              src={parsed.src}
               alt={t(C.introPhotoAlt.nl, C.introPhotoAlt.en)}
               fetchPriority="high"
+              style={{ objectPosition: parsed.objectPosition || "center" }}
             />
           </div>
         </div>

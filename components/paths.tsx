@@ -52,6 +52,8 @@ import type { PathsContent } from "@/lib/content/defaults";
   },
 ];
 
+import { parseImageSrc } from "@/lib/content/defaults";
+
 function PathRow({
   meta,
   content,
@@ -68,14 +70,16 @@ function PathRow({
     if ((e.target as HTMLElement).closest("a")) return;
     if (!meta.href.startsWith("#")) {
       window.location.href = meta.href;
-      return;
-    }
-    const target = document.querySelector(meta.href);
-    if (target) {
+    } else {
+      const target = document.querySelector(meta.href);
+      if (!target) return;
       e.preventDefault();
       target.scrollIntoView({ behavior: "smooth" });
     }
   }
+
+  const rawUrl = content[meta.imgKey] ? (lang === "nl" ? content[meta.imgKey].nl : content[meta.imgKey].en) : meta.imgFallback;
+  const parsed = parseImageSrc(rawUrl);
 
   return (
     <div
@@ -91,9 +95,10 @@ function PathRow({
       </div>
       <div className="thumb">
         <img
-          src={content[meta.imgKey] ? (lang === "nl" ? content[meta.imgKey].nl : content[meta.imgKey].en) : meta.imgFallback}
+          src={parsed.src}
           alt={meta.alt}
           className="path-thumb-img"
+          style={{ objectPosition: parsed.objectPosition || "center" }}
         />
       </div>
       <a className="go" ref={goMagnetic as React.RefObject<HTMLAnchorElement>} href={meta.href} aria-label={meta.ariaLabel}>

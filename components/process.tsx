@@ -47,6 +47,8 @@ const STEP_META: Array<{
   },
 ];
 
+import { parseImageSrc } from "@/lib/content/defaults";
+
 function Step({
   meta,
   content,
@@ -58,7 +60,8 @@ function Step({
 }) {
   const reveal = useReveal();
   const title = content[meta.titleKey];
-  const imgSrc = (content[meta.imgKey] && typeof content[meta.imgKey] === "object" ? content[meta.imgKey].nl : null) || meta.fallbackImg;
+  const rawImg = (content[meta.imgKey] && typeof content[meta.imgKey] === "object" ? content[meta.imgKey].nl : null) || meta.fallbackImg;
+  const parsed = parseImageSrc(rawImg);
 
   return (
     <article ref={reveal.ref as React.RefObject<HTMLElement>} className={`step rv${reveal.isVisible ? " in" : ""}`}>
@@ -78,7 +81,12 @@ function Step({
         <p>{lang === "nl" ? content[meta.bodyKey].nl : content[meta.bodyKey].en}</p>
       </div>
       <div className="slotwrap">
-        <img src={imgSrc} alt={meta.alt} className="step-img" />
+        <img
+          src={parsed.src}
+          alt={meta.alt}
+          className="step-img"
+          style={{ objectPosition: parsed.objectPosition || "center" }}
+        />
       </div>
     </article>
   );
