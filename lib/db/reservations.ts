@@ -20,7 +20,7 @@ export const ALL_RESERVATION_STATUSES: ReservationStatus[] = [
 // `in_behandeling` first), but nothing moves out of a confirmed or
 // rejected reservation.
 const VALID_TRANSITIONS: Record<ReservationStatus, ReservationStatus[]> = {
-  nieuw: ["in_behandeling", "afgewezen"],
+  nieuw: ["in_behandeling", "bevestigd", "afgewezen"],
   in_behandeling: ["bevestigd", "afgewezen"],
   bevestigd: [],
   afgewezen: [],
