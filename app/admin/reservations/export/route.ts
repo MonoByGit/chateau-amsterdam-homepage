@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { listReservations } from "@/lib/db/reservations";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const reservations = await listReservations();
 

@@ -1,6 +1,10 @@
 // app/admin/availability/page.tsx
 import Link from "next/link";
 import { listBlocksForMonth, type AvailabilityBlock } from "@/lib/db/availability";
+import { getIcalUrl } from "@/lib/ical/sync";
+import { SyncCard } from "./sync-card";
+
+export const dynamic = "force-dynamic";
 
 function pad(n: number): string {
   return n.toString().padStart(2, "0");

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getBlocksForSection } from "@/lib/db/content";
 import { ContentForm } from "./content-form";
 
+export const dynamic = "force-dynamic";
+
 export default async function ContentSectionPage({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
   const blocks = await getBlocksForSection("home", section);

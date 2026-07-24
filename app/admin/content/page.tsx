@@ -1,6 +1,7 @@
-// app/admin/content/page.tsx
 import Link from "next/link";
 import { getBlocksForSection } from "@/lib/db/content";
+
+export const dynamic = "force-dynamic";
 import {
   HEADER_DEFAULTS,
   HERO_DEFAULTS,

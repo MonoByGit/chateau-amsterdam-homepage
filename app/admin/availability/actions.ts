@@ -2,8 +2,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { saveDayBlocks } from "@/lib/db/availability";
-
+import { clearAllBlocks, saveDayBlocks } from "@/lib/db/availability";
 import { saveIcalUrl, syncGoogleCalendar } from "@/lib/ical/sync";
 
 export async function saveDayAvailability(date: string, formData: FormData): Promise<void> {
@@ -43,7 +42,7 @@ export async function triggerGoogleCalendarSync(): Promise<{ success: boolean; m
 }
 
 export async function clearAllAvailabilityBlocks(): Promise<{ success: boolean; message: string }> {
-  await db.delete(availabilityBlocks);
+  await clearAllBlocks();
   revalidatePath("/admin/availability");
   revalidatePath("/admin");
   return { success: true, message: "Alle oude beschikbaarheids-blokkades zijn gewist. De kalender is nu schoon." };

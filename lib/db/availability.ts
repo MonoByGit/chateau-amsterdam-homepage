@@ -50,3 +50,7 @@ export async function saveDayBlocks(date: string, input: { isFullDay: boolean; s
 
   await db.insert(availabilityBlocks).values(cleanSlots.map((label) => ({ date, isFullDay: false, label })));
 }
+
+export async function clearAllBlocks(): Promise<void> {
+  await db.delete(availabilityBlocks);
+}

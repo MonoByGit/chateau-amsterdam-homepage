@@ -4,6 +4,8 @@ import { listReservations } from "@/lib/db/reservations";
 import { listBlocksForMonth } from "@/lib/db/availability";
 import { formatAdminDate } from "@/lib/format-date";
 
+export const dynamic = "force-dynamic";
+
 const STATUS_LABELS: Record<string, string> = {
   nieuw: "Nieuw",
   in_behandeling: "In behandeling",

@@ -9,6 +9,8 @@ import {
 import { updateStatus } from "./actions";
 import { formatAdminDate } from "@/lib/format-date";
 
+export const dynamic = "force-dynamic";
+
 const STATUS_LABELS: Record<ReservationStatus, string> = {
   nieuw: "Nieuw",
   in_behandeling: "In behandeling",

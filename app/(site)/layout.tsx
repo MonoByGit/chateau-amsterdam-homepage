@@ -63,6 +63,8 @@ const structuredData = {
   sameAs: ["https://www.instagram.com/chateauamsterdam/", "https://www.linkedin.com/company/chateau-amsterdam/"],
 };
 
+import { MobileBookingCta } from "@/components/mobile-booking-cta";
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headerContent = await getContent("home", "header", HEADER_DEFAULTS);
   const footerContent = await getContent("home", "footer", FOOTER_DEFAULTS);
@@ -84,6 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <SiteFooter content={footerContent} />
                 <CartDrawer />
                 <MobileNavPanel content={headerContent} />
+                <MobileBookingCta />
                 <AgeGate />
                 <CookieBanner />
                 <AnalyticsScript />

@@ -9,7 +9,7 @@ import type { PlaceContent } from "@/lib/content/defaults";
 
 export function Place({ content }: { content: PlaceContent }) {
   const { t } = useLanguage();
-  const parallaxRef = useParallax(0.12);
+  const parallaxRef = useParallax(0.18);
   const label = useReveal();
   const heading1 = useReveal();
   const heading2 = useReveal(0.12);
