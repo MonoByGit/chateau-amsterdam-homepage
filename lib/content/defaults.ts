@@ -7,17 +7,32 @@ export function parseImageSrc(rawUrl: string | null | undefined): { src: string;
   const [src, hash] = rawUrl.split("#");
   if (!hash) return { src };
   const posMap: Record<string, string> = {
-    top: "top",
-    bottom: "bottom",
-    center: "center",
-    left: "left",
-    right: "right",
-    "top-left": "top left",
-    "top-right": "top right",
-    "bottom-left": "bottom left",
-    "bottom-right": "bottom right",
+    top: "50% 0%",
+    bottom: "50% 100%",
+    center: "50% 50%",
+    left: "0% 50%",
+    right: "100% 50%",
+    "top-left": "0% 0%",
+    "top-right": "100% 0%",
+    "bottom-left": "0% 100%",
+    "bottom-right": "100% 100%",
   };
-  return { src, objectPosition: posMap[hash] || hash };
+
+  if (posMap[hash]) {
+    return { src, objectPosition: posMap[hash] };
+  }
+
+  const pMatch = hash.match(/^(\d+)p(\d+)p$/);
+  if (pMatch) {
+    return { src, objectPosition: `${pMatch[1]}% ${pMatch[2]}%` };
+  }
+
+  const dashMatch = hash.match(/^(\d+)-(\d+)$/);
+  if (dashMatch) {
+    return { src, objectPosition: `${dashMatch[1]}% ${dashMatch[2]}%` };
+  }
+
+  return { src, objectPosition: hash };
 }
 
 export type HeaderContent = {

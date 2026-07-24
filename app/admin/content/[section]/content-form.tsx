@@ -70,9 +70,46 @@ function formatFieldLabel(key: string): { title: string; isImage: boolean } {
 function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initialValue: string }) {
   const [val, setVal] = useState(initialValue);
   const [imgError, setImgError] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const parsed = parseImageSrc(val);
-  const currentPos = val.includes("#") ? val.split("#")[1] : "center";
+
+  // Calculate percentage focal point coordinates for visual reticle marker
+  let focalX = 50;
+  let focalY = 50;
+
+  if (val.includes("#")) {
+    const hash = val.split("#")[1];
+    if (hash === "top") { focalX = 50; focalY = 0; }
+    else if (hash === "bottom") { focalX = 50; focalY = 100; }
+    else if (hash === "left") { focalX = 0; focalY = 50; }
+    else if (hash === "right") { focalX = 100; focalY = 50; }
+    else if (hash === "top-left") { focalX = 0; focalY = 0; }
+    else if (hash === "top-right") { focalX = 100; focalY = 0; }
+    else if (hash === "bottom-left") { focalX = 0; focalY = 100; }
+    else if (hash === "bottom-right") { focalX = 100; focalY = 100; }
+    else {
+      const pMatch = hash.match(/^(\d+)p(\d+)p$/);
+      if (pMatch) {
+        focalX = parseInt(pMatch[1], 10);
+        focalY = parseInt(pMatch[2], 10);
+      }
+    }
+  }
+
+  function handlePoint(e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+    const xPct = Math.max(0, Math.min(100, Math.round(((clientX - rect.left) / rect.width) * 100)));
+    const yPct = Math.max(0, Math.min(100, Math.round(((clientY - rect.top) / rect.height) * 100)));
+
+    const cleanUrl = val.split("#")[0];
+    const updated = (xPct === 50 && yPct === 50) ? cleanUrl : `${cleanUrl}#${xPct}p${yPct}p`;
+    setVal(updated);
+    setImgError(false);
+  }
 
   function handlePosChange(newPos: string) {
     const cleanUrl = val.split("#")[0];
@@ -81,39 +118,104 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
     setImgError(false);
   }
 
+  const currentSelectVal = val.includes("#") ? (val.split("#")[1].includes("p") ? "custom" : val.split("#")[1]) : "center";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%" }}>
       <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-        {/* Visual Live Image Thumbnail Preview */}
+        {/* Visual Drag & Click Focal Point Thumbnail Container */}
         <div style={{ flexShrink: 0 }}>
-          <span className="a-label" style={{ marginBottom: "0.375rem", display: "block", fontSize: "0.75rem" }}>
-            Visuele weergave:
-          </span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.375rem" }}>
+            <span className="a-label" style={{ fontSize: "0.75rem" }}>
+              🎯 Sleep / Klik uitsnede:
+            </span>
+            <span style={{ fontSize: "0.7rem", color: "var(--a-accent, #cda757)", fontWeight: 600 }}>
+              {focalX}% {focalY}%
+            </span>
+          </div>
           <div
+            onMouseDown={(e) => { setIsDragging(true); handlePoint(e); }}
+            onMouseMove={(e) => { if (isDragging) handlePoint(e); }}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
+            onTouchStart={(e) => { setIsDragging(true); handlePoint(e); }}
+            onTouchMove={(e) => { if (isDragging) handlePoint(e); }}
+            onTouchEnd={() => setIsDragging(false)}
             style={{
-              width: "180px",
-              height: "115px",
+              width: "190px",
+              height: "120px",
               borderRadius: "8px",
               overflow: "hidden",
-              border: "1px solid var(--a-border)",
+              border: "2px solid var(--a-border-strong)",
               background: "var(--a-surface-2)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              position: "relative",
+              cursor: "crosshair",
+              userSelect: "none",
+              boxShadow: isDragging ? "0 0 0 3px var(--a-accent-soft)" : "none",
+              transition: "box-shadow 0.15s ease",
             }}
+            title="Klik of sleep de muis over deze foto om het exacte focuspunt van de uitsnede in te stellen"
           >
             {parsed.src && !imgError ? (
-              <img
-                src={parsed.src}
-                alt="Voorbeeld"
-                onError={() => setImgError(true)}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: parsed.objectPosition || "center",
-                }}
-              />
+              <>
+                <img
+                  src={parsed.src}
+                  alt="Voorbeeld uitsnede"
+                  onError={() => setImgError(true)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: parsed.objectPosition || "50% 50%",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Golden Target Reticle Crosshair Marker */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: `${focalX}%`,
+                    top: `${focalY}%`,
+                    transform: "translate(-50%, -50%)",
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    border: "2px solid #ffffff",
+                    backgroundColor: "rgba(205, 167, 87, 0.85)",
+                    boxShadow: "0 0 10px rgba(0,0,0,0.6)",
+                    pointerEvents: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#fff" }} />
+                </div>
+
+                {/* Subtle Drag Hint Overlay */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "4px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "rgba(0,0,0,0.65)",
+                    color: "#fff",
+                    fontSize: "0.625rem",
+                    padding: "2px 6px",
+                    borderRadius: "4px",
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  🖐️ Sleep om te richten
+                </div>
+              </>
             ) : (
               <div style={{ fontSize: "0.75rem", color: "var(--a-text-muted)", textAlign: "center", padding: "0.5rem" }}>
                 {imgError ? "⚠️ Afbeelding niet gevonden" : "Geen foto ingesteld"}
@@ -143,21 +245,24 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: "180px" }}>
               <span className="a-label" style={{ fontSize: "0.75rem", marginBottom: "0.25rem", display: "block" }}>
-                🎯 Focuspunt / Uitsnede in frame:
+                🎯 Preset of Slepen ({focalX}% {focalY}%):
               </span>
               <select
                 className="a-input a-select"
                 style={{ fontSize: "0.75rem", padding: "0.375rem 2.5rem 0.375rem 0.625rem", height: "auto", cursor: "pointer" }}
-                value={currentPos}
+                value={currentSelectVal}
                 onChange={(e) => handlePosChange(e.target.value)}
               >
-                <option value="center">📍 Midden (Standaard)</option>
-                <option value="top">⬆️ Bovenkant accentueren</option>
-                <option value="bottom">⬇️ Onderkant accentueren</option>
-                <option value="top-left">↖️ Boven-Links</option>
-                <option value="top-right">↗️ Boven-Rechts</option>
-                <option value="bottom-left">↙️ Onder-Links</option>
-                <option value="bottom-right">↘️ Onder-Rechts</option>
+                {currentSelectVal === "custom" && (
+                  <option value="custom">🎯 Aangepast gesleept ({focalX}% {focalY}%)</option>
+                )}
+                <option value="center">📍 Midden (50% 50%)</option>
+                <option value="top">⬆️ Bovenkant (50% 0%)</option>
+                <option value="bottom">⬇️ Onderkant (50% 100%)</option>
+                <option value="top-left">↖️ Boven-Links (0% 0%)</option>
+                <option value="top-right">↗️ Boven-Rechts (100% 0%)</option>
+                <option value="bottom-left">↙️ Onder-Links (0% 100%)</option>
+                <option value="bottom-right">↘️ Onder-Rechts (100% 100%)</option>
               </select>
             </div>
 
