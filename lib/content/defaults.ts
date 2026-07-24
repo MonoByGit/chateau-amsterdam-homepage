@@ -244,7 +244,7 @@ export const PLACE_DEFAULTS: PlaceContent = {
   route_line1: { nl: "Pont vanaf CS, 10 min fietsen", en: "Ferry from Central Station, 10 min bike" },
   route_line2: { nl: "of metro 52 → Noorderpark", en: "or metro 52 → Noorderpark" },
   cta_label: { nl: "Plan je bezoek", en: "Plan your visit" },
-  place_image_url: { nl: "/assets/place-hal.jpg", en: "/assets/place-hal.jpg" },
+  place_image_url: { nl: "/assets/place-map.jpg", en: "/assets/place-map.jpg" },
 };
 
 export type WijnenPageContent = {
