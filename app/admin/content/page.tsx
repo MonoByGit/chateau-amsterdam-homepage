@@ -117,8 +117,21 @@ export default async function ContentPage({
 
   return (
     <div>
-      <h1 className="a-h1">Content CMS</h1>
-      <p className="a-subtitle">Beheer alle teksten voor de website per pagina.</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+        <div>
+          <h1 className="a-h1">Content CMS</h1>
+          <p className="a-subtitle" style={{ margin: 0 }}>Beheer alle teksten en sfeerafbeeldingen voor de website per pagina.</p>
+        </div>
+        <a
+          href={activePage === "home" ? (activeSection === "place" ? "/#bezoek" : "/") : `/${activePage}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="a-btn a-btn--secondary"
+          style={{ fontSize: "0.8125rem", textDecoration: "none" }}
+        >
+          👁️ Bekijk pagina op site ↗
+        </a>
+      </div>
       <NavTabs activePage={activePage} />
 
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "1rem" }}>

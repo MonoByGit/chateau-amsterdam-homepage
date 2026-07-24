@@ -47,21 +47,44 @@ function filterHref(
 export default async function ReservationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; track?: string }>;
+  searchParams: Promise<{ status?: string; track?: string; q?: string }>;
 }) {
   const params = await searchParams;
   const status = params.status as ReservationStatus | undefined;
   const track = params.track as ReservationTrack | undefined;
+  const query = (params.q || "").toLowerCase().trim();
 
-  const reservationList = await listReservations({ status, track });
+  let reservationList = await listReservations({ status, track });
+
+  if (query) {
+    reservationList = reservationList.filter((r) =>
+      r.contactName.toLowerCase().includes(query) ||
+      r.email.toLowerCase().includes(query) ||
+      (r.companyName && r.companyName.toLowerCase().includes(query)) ||
+      (r.phone && r.phone.includes(query))
+    );
+  }
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <h1 className="a-h1">Reserveringen</h1>
-        <Link href="/admin/reservations/geschiedenis" className="a-link" style={{ fontSize: "0.8125rem" }}>
-          Geschiedenis →
-        </Link>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+        <div>
+          <h1 className="a-h1">Reserveringen</h1>
+          <p className="a-subtitle" style={{ margin: 0 }}>Beheer alle proeverijen en zakelijke aanvragen.</p>
+        </div>
+        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+          <a
+            href="/admin/reservations/export"
+            className="a-btn a-btn--secondary"
+            style={{ fontSize: "0.8125rem" }}
+            download
+          >
+            📥 Exporteer naar CSV
+          </a>
+          <Link href="/admin/reservations/geschiedenis" className="a-link" style={{ fontSize: "0.8125rem" }}>
+            Geschiedenis →
+          </Link>
+        </div>
       </div>
 
       <div className="a-filter-bar" style={{ marginTop: "1.25rem", marginBottom: "1.5rem" }}>

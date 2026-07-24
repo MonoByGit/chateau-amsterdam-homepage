@@ -200,8 +200,32 @@ export function ContentForm({ section, page = "home", blocks }: { section: strin
         <button type="submit" disabled={isPending} className="a-btn a-btn--primary">
           {isPending ? "Bezig met opslaan…" : "Opslaan"}
         </button>
-        {status ? <span className="a-badge a-badge--success">{status}</span> : null}
+        {status ? <span className="a-badge a-badge--success">✓ {status}</span> : null}
       </div>
+
+      {status ? (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "1.5rem",
+            right: "1.5rem",
+            zIndex: 999,
+            background: "#1c1917",
+            color: "#f5f5f4",
+            border: "1px solid var(--a-accent, #cda757)",
+            borderRadius: "8px",
+            padding: "0.875rem 1.25rem",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.625rem",
+            fontSize: "0.875rem",
+            fontWeight: 500,
+          }}
+        >
+          <span>✨ Wijzigingen succesvol opgeslagen & direct live op de site!</span>
+        </div>
+      ) : null}
     </form>
   );
 }
