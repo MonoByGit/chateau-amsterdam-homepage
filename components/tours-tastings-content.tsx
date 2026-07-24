@@ -174,7 +174,37 @@ export function ToursTastingsContent({
           </div>
           <div className="tastings-form-wrap">
             {verzonden ? (
-              <p className="tastings-form-success">{t(C.formSuccess.nl, C.formSuccess.en)}</p>
+              <div
+                style={{
+                  background: "#1c1917",
+                  border: "1px solid var(--a-accent, #cda757)",
+                  borderRadius: "12px",
+                  padding: "2rem",
+                  color: "#f7f5f0",
+                  boxShadow: "0 15px 35px rgba(0,0,0,0.4)",
+                }}
+              >
+                <div style={{ fontSize: "1.75rem", marginBottom: "0.5rem" }}>🍷</div>
+                <h3 style={{ color: "var(--a-accent, #cda757)", margin: "0 0 0.75rem 0", fontSize: "1.25rem", fontWeight: 600 }}>
+                  {t("Bedankt! Je reserveringsaanvraag is ontvangen.", "Thank you! Your booking request has been received.")}
+                </h3>
+                <p style={{ margin: "0 0 1.25rem 0", fontSize: "0.9375rem", color: "#d6d3d1", lineHeight: 1.6 }}>
+                  {t(
+                    "We hebben je aanvraag in goede orde ontvangen. Er is zojuist een automatische ontvangstbevestiging per e-mail naar je gestuurd. Ons salesteam bekijkt je gekozen datum en tijdslot, en stuurt je zo snel mogelijk de definitieve bevestiging!",
+                    "We have received your request. An automatic confirmation receipt has been sent to your email. Our sales team is reviewing your requested date and slot, and will send you the final confirmation shortly!"
+                  )}
+                </p>
+                <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: "8px", padding: "1rem 1.25rem", borderLeft: "3px solid var(--a-accent, #cda757)" }}>
+                  <div style={{ fontSize: "0.8125rem", color: "#a8a29e", marginBottom: "0.375rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    {t("Status van je aanvraag", "Status of your request")}
+                  </div>
+                  <div style={{ fontSize: "0.875rem", color: "#f7f5f0", display: "flex", flexDirection: "column", gap: "0.375rem" }}>
+                    <span>✓ {t("Ontvangstbevestiging gemaild", "Receipt email dispatched")}</span>
+                    <span>⏳ {t("In behandeling bij salesteam", "Under review by sales team")}</span>
+                    <span>📧 {t("Definitieve bevestiging volgt", "Final confirmation to follow")}</span>
+                  </div>
+                </div>
+              </div>
             ) : (
               <form action={submitTastingInquiry}>
                 {errorPair ? <p className="tastings-form-error">{t(errorPair.nl, errorPair.en)}</p> : null}

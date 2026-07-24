@@ -1,6 +1,6 @@
 // lib/email/send.ts
 import type { Reservation } from "@/lib/db/reservations";
-import { renderCustomerConfirmationEmail, renderSalesNotificationEmail } from "./templates";
+import { renderCustomerConfirmationEmail, renderCustomerReceiptEmail, renderSalesNotificationEmail } from "./templates";
 
 export const SALES_EMAIL_RECIPIENT = process.env.SALES_EMAIL || "sales@chateau.amsterdam";
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || "Chateau Amsterdam <no-reply@chateau.amsterdam>";
@@ -48,6 +48,15 @@ export async function sendSalesNotification(reservation: Reservation): Promise<v
   const { subject, html } = renderSalesNotificationEmail(reservation);
   await sendEmail({
     to: SALES_EMAIL_RECIPIENT,
+    subject,
+    html,
+  });
+}
+
+export async function sendCustomerReceipt(reservation: Reservation): Promise<void> {
+  const { subject, html } = renderCustomerReceiptEmail(reservation);
+  await sendEmail({
+    to: reservation.email,
     subject,
     html,
   });

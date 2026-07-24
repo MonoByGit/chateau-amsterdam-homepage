@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { createBusinessReservation } from "@/lib/db/reservations";
 import { validateBusinessInquiry, type BusinessInquiryInput } from "@/lib/validation/business-inquiry";
 import { checkRateLimit, recordFailedAttempt } from "@/lib/auth/rate-limit";
-import { sendSalesNotification } from "@/lib/email/send";
+import { sendCustomerReceipt, sendSalesNotification } from "@/lib/email/send";
 
 function readInquiryForm(formData: FormData): BusinessInquiryInput {
   return {
@@ -47,8 +47,9 @@ export async function submitBusinessInquiry(formData: FormData): Promise<void> {
 
   try {
     await sendSalesNotification(reservation);
+    await sendCustomerReceipt(reservation);
   } catch (err) {
-    console.error("Failed to send sales notification email", err);
+    console.error("Failed to send reservation emails", err);
   }
 
   redirect("/voor-bedrijven?verzonden=1#aanvraag");

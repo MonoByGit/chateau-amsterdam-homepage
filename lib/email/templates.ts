@@ -229,3 +229,82 @@ export function renderCustomerConfirmationEmail(reservation: Reservation): { sub
 
   return { subject, html };
 }
+
+export function renderCustomerReceiptEmail(reservation: Reservation): { subject: string; html: string } {
+  const isBusiness = reservation.track === "zakelijk";
+  const subject = `🍷 Ontvangstbevestiging Aanvraag · Chateau Amsterdam`;
+
+  const dateStr = reservation.requestedDate
+    ? new Date(reservation.requestedDate).toLocaleDateString("nl-NL", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : "In overleg";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${subject}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f7f5f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1c1917;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width: 580px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e7e3d8; overflow: hidden;">
+          <tr>
+            <td style="background-color: #1c1917; padding: 28px; text-align: center;">
+              <h1 style="color: #cda757; margin: 0; font-size: 22px; font-weight: 600;">Chateau Amsterdam</h1>
+              <p style="color: #a8a29e; margin: 4px 0 0 0; font-size: 13px;">Urban Winery · Amsterdam-Noord</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 32px;">
+              <h2 style="margin: 0 0 16px 0; color: #1c1917; font-size: 20px;">Beste ${reservation.contactName},</h2>
+              <p style="color: #44403c; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
+                Bedankt voor je aanvraag bij <strong>Chateau Amsterdam</strong>! We hebben je verzoek voor <strong>${
+                  isBusiness ? "een zakelijke bijeenkomst / event" : "een Tour & Tasting"
+                }</strong> in goede orde ontvangen.
+              </p>
+
+              <div style="background-color: #faf8f5; border-left: 4px solid #cda757; padding: 16px; margin-bottom: 24px;">
+                <p style="margin: 0; font-size: 14px; color: #1c1917;"><strong>Gevraagde Datum:</strong> ${dateStr}</p>
+                ${
+                  reservation.preferredPeriod
+                    ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #1c1917;"><strong>Tijdslot:</strong> ${reservation.preferredPeriod}</p>`
+                    : ""
+                }
+                <p style="margin: 4px 0 0 0; font-size: 14px; color: #1c1917;"><strong>Aantal personen:</strong> ${
+                  reservation.partySize || reservation.groupSize || 1
+                }</p>
+              </div>
+
+              <h3 style="font-size: 15px; color: #1c1917; margin: 0 0 10px 0;">Wat gebeurt er nu?</h3>
+              <ul style="margin: 0 0 24px 0; padding-left: 20px; color: #57534e; font-size: 14px; line-height: 1.6;">
+                <li>Ons salesteam bekijkt je gekozen datum en tijdslot.</li>
+                <li>Zodra de beschikbaarheid is gecontroleerd, ontvang je per e-mail de definitieve bevestiging.</li>
+              </ul>
+
+              <p style="color: #57534e; font-size: 14px; line-height: 1.6;">
+                Heb je tussentijds vragen of wijzigingen? Je kunt ons altijd bereiken via <a href="mailto:sales@chateau.amsterdam" style="color: #cda757;">sales@chateau.amsterdam</a>.
+              </p>
+              
+              <p style="margin: 28px 0 0 0; color: #1c1917; font-weight: 600; font-size: 14px;">
+                Met vriendelijke groet,<br>
+                <em>Team Chateau Amsterdam</em>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  return { subject, html };
+}

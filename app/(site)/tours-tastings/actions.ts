@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { createTastingReservation } from "@/lib/db/reservations";
 import { validateTastingInquiry, type TastingInquiryInput } from "@/lib/validation/tasting-inquiry";
 import { checkRateLimit, recordFailedAttempt } from "@/lib/auth/rate-limit";
-import { sendSalesNotification } from "@/lib/email/send";
+import { sendCustomerReceipt, sendSalesNotification } from "@/lib/email/send";
 
 function readInquiryForm(formData: FormData): TastingInquiryInput {
   return {
@@ -49,8 +49,9 @@ export async function submitTastingInquiry(formData: FormData): Promise<void> {
 
   try {
     await sendSalesNotification(reservation);
+    await sendCustomerReceipt(reservation);
   } catch (err) {
-    console.error("Failed to send sales notification email", err);
+    console.error("Failed to send reservation emails", err);
   }
 
   redirect("/tours-tastings?verzonden=1#reserveren");
