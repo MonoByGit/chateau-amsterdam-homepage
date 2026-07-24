@@ -137,6 +137,40 @@ export default function HelpPage() {
               </p>
             </div>
           </details>
+          <details className="a-help-howto" open style={{ border: "1px solid #cda757", borderRadius: "8px", background: "#1c1917", color: "#f7f5f0", padding: "0.5rem" }}>
+            <summary style={{ color: "#cda757", fontWeight: 600, fontSize: "1.05rem" }}>
+              🏖️ Vakantie-Backlog &amp; Actiepunten (Na de 3 weken pauze)
+            </summary>
+            <div className="a-help-howto-body" style={{ color: "#d6d3d1" }}>
+              <p style={{ margin: "0 0 1rem 0" }}>
+                Overzicht van de actiepunten en ingerichte onderdelen voor wanneer het team terug is van vakantie:
+              </p>
+
+              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>1. 🚀 Live E-mailkoppeling met Resend Instellen</h4>
+              <ul style={{ margin: "0 0 1rem 0", paddingLeft: "1.25rem" }}>
+                <li>Resend account openen/inloggen op <a href="https://resend.com" target="_blank" rel="noreferrer" style={{ color: "#cda757" }}>resend.com</a>.</li>
+                <li>Het domein <code>chateau.amsterdam</code> koppelen in Resend (DNS TXT/MX records).</li>
+                <li>Resend API key toevoegen in Railway Variables: <code>RESEND_API_KEY=re_12345...</code></li>
+                <li>Verifieer een testaanvraag: salesteam krijgt de 1-click goedkeurings-mail en klant krijgt direct de ontvangstbevestiging.</li>
+              </ul>
+
+              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>2. 📅 Live Google Workspace Agenda Koppeling</h4>
+              <ul style={{ margin: "0 0 1rem 0", paddingLeft: "1.25rem" }}>
+                <li>Het geheime iCal <code>.ics</code> adres ophalen in de Google Calendar van Chateau (zie handleiding hieronder).</li>
+                <li>Inplakken bij <strong>Beschikbaarheid</strong> → <strong>Google Workspace Calendar Koppeling</strong>.</li>
+                <li>Klikken op 🔄 <em>Nu Synchroniseren</em>. Probeer een testgoedkeuring uit via de e-mail!</li>
+              </ul>
+
+              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>3. ✨ UX &amp; Interactiviteit Verfijningen (Na de Vakantie)</h4>
+              <ul style={{ margin: "0 0 0.5rem 0", paddingLeft: "1.25rem" }}>
+                <li><strong>Automatische Afwijzingsmail:</strong> Bij het klikken op <code>[Afwijzen]</code> optioneel een vriendelijke mail naar de klant sturen met een alternatieve datum-suggestie.</li>
+                <li><strong>Kalender-bestand (.ics) in Bevestigingsmail:</strong> Klant met 1 klik de tasting laten toevoegen aan hun eigen Google/Apple Agenda.</li>
+                <li><strong>Slimme Datumblokkering in Formulier:</strong> Maandagen en dinsdagen (wijnmakerij gesloten) automatisch grijs / niet-selecteerbaar maken in de datumkiezer.</li>
+                <li><strong>Herinneringsmail (24u vooraf):</strong> Automatisch een herinnering met route/parkeerinfo sturen 1 dag voor de gereserveerde tasting.</li>
+              </ul>
+            </div>
+          </details>
+
           <details className="a-help-howto">
             <summary>Een collega toevoegen (of verwijderen)</summary>
             <div className="a-help-howto-body">
