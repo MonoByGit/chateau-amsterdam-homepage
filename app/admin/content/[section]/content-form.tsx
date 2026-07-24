@@ -36,14 +36,14 @@ const IMAGE_FIELD_TITLES: Record<string, string> = {
 
 const PRESET_ASSETS = [
   { label: "🥂 Proosten Sfeer (Tour & Tasting)", url: "/assets/tasting-hero.jpg" },
+  { label: "🍽️ Bedrijven Gedekte Tafel met Kaarsen (B2B)", url: "/assets/b2b-hero.jpg" },
+  { label: "📦 Webshop Fles uit Doos Til", url: "/assets/path-drink.png" },
+  { label: "🍾 Bottellijn Glazen Flessen (Proces Stap 4)", url: "/assets/step-fles.jpg" },
   { label: "📍 Gouden 3D Kaart Noord", url: "/assets/place-map.jpg" },
   { label: "🍇 Pluk Verse Druiven", url: "/assets/step-druif.jpg" },
   { label: "🚛 Gekoeld Transport", url: "/assets/step-reis.png" },
   { label: "🏭 Makerij & RVS Vaten", url: "/assets/step-makerij.jpg" },
-  { label: "🍾 Bottellijn & Fles", url: "/assets/step-fles.jpg" },
   { label: "🍷 Proeverij op Vat", url: "/assets/path-taste.jpg" },
-  { label: "🍽️ Bedrijven Lang Gedekte Tafel", url: "/assets/path-pour.jpg" },
-  { label: "📦 Webshop Fles uit Doos", url: "/assets/path-drink.png" },
   { label: "🏛️ Winery Exterieur Sfeer", url: "/assets/hero-winery.jpg" },
   { label: "🏭 Winery Hal Binnen", url: "/assets/place-hal.jpg" },
 ];

@@ -402,7 +402,7 @@ export const VOOR_BEDRIJVEN_PAGE_DEFAULTS: VoorBedrijvenPageContent = {
     nl: "Van de borrel tussen de tanks tot je naam op de fles. Eén partner, geproduceerd tien minuten van Amsterdam CS. Kies hieronder waar je aan denkt, wij nemen het van daar over.",
     en: "From drinks between the tanks to your name on the bottle. One partner, produced ten minutes from Amsterdam Central. Pick what you're thinking of below, we'll take it from there.",
   },
-  intro_photo_url: { nl: "/assets/path-pour.jpg", en: "/assets/path-pour.jpg" },
+  intro_photo_url: { nl: "/assets/b2b-hero.jpg", en: "/assets/b2b-hero.jpg" },
   strip_contact_label: { nl: "Aanspreekpunt, van begin tot levering", en: "One point of contact, from start to delivery" },
   strip_distance: { nl: "10 min", en: "10 min" },
   strip_distance_label: { nl: "Van Amsterdam CS, midden in Noord", en: "From Amsterdam Central, in the heart of Noord" },
