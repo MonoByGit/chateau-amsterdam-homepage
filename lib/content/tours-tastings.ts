@@ -6,11 +6,46 @@ export type SelectOption = { key: string; nl: string; en: string };
 // value submitted to the server (and stored in reservations.preferred_period)
 // is always option.nl, so admin/reservations keeps reading plain Dutch text
 // regardless of which language the visitor filled the form in.
-export const PREFERRED_PERIODS: SelectOption[] = [
-  { key: "slot_1500", nl: "15:00 uur (70 min. tour & tasting)", en: "3:00 PM (70 min. tour & tasting)" },
-  { key: "slot_1700", nl: "17:00 uur (70 min. tour & tasting)", en: "5:00 PM (70 min. tour & tasting)" },
-  { key: "slot_1900", nl: "19:00 uur (70 min. tour & tasting)", en: "7:00 PM (70 min. tour & tasting)" },
+export const ALL_PREFERRED_PERIODS: SelectOption[] = [
+  { key: "slot_1200", nl: "12:00 uur (70 min. tour & tasting)", en: "12:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1400", nl: "14:00 uur (70 min. tour & tasting)", en: "2:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1600", nl: "16:00 uur (70 min. tour & tasting)", en: "4:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1800", nl: "18:00 uur (70 min. tour & tasting)", en: "6:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1930", nl: "19:30 uur (70 min. tour & tasting)", en: "7:30 PM (70 min. tour & tasting)" },
 ];
+
+export const FRIDAY_PREFERRED_PERIODS: SelectOption[] = [
+  { key: "slot_1400", nl: "14:00 uur (70 min. tour & tasting)", en: "2:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1600", nl: "16:00 uur (70 min. tour & tasting)", en: "4:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1800", nl: "18:00 uur (70 min. tour & tasting)", en: "6:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1930", nl: "19:30 uur (70 min. tour & tasting)", en: "7:30 PM (70 min. tour & tasting)" },
+];
+
+export const THURSDAY_PREFERRED_PERIODS: SelectOption[] = [
+  { key: "slot_1400", nl: "14:00 uur (70 min. tour & tasting)", en: "2:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1600", nl: "16:00 uur (70 min. tour & tasting)", en: "4:00 PM (70 min. tour & tasting)" },
+  { key: "slot_1800", nl: "18:00 uur (70 min. tour & tasting)", en: "6:00 PM (70 min. tour & tasting)" },
+];
+
+export const PREFERRED_PERIODS: SelectOption[] = THURSDAY_PREFERRED_PERIODS;
+
+export function getPreferredPeriodsForDate(dateIso?: string): SelectOption[] {
+  if (!dateIso) {
+    return THURSDAY_PREFERRED_PERIODS;
+  }
+  const [y, m, d] = dateIso.split("-").map(Number);
+  const day = new Date(y, m - 1, d).getDay();
+  if (day === 6) {
+    // Saturday: 12:00, 14:00, 16:00, 18:00, 19:30
+    return ALL_PREFERRED_PERIODS;
+  }
+  if (day === 5) {
+    // Friday: 14:00, 16:00, 18:00, 19:30
+    return FRIDAY_PREFERRED_PERIODS;
+  }
+  // Thursday (and other days)
+  return THURSDAY_PREFERRED_PERIODS;
+}
 
 export const OCCASIONS: SelectOption[] = [
   { key: "none", nl: "Geen speciale gelegenheid", en: "No special occasion" },
@@ -21,13 +56,18 @@ export const OCCASIONS: SelectOption[] = [
   { key: "other", nl: "Anders", en: "Other" },
 ];
 
+export const TOUR_LANGUAGES: SelectOption[] = [
+  { key: "nl", nl: "Nederlands", en: "Dutch" },
+  { key: "en", nl: "Engels", en: "English" },
+];
+
 export const TASTING_ERROR_MESSAGES: Record<string, ContentPair> = {
   name_required: { nl: "Naam is verplicht.", en: "Name is required." },
   email_required: { nl: "E-mailadres is verplicht.", en: "Email address is required." },
   email_invalid: { nl: "Vul een geldig e-mailadres in.", en: "Enter a valid email address." },
   party_size_invalid: {
-    nl: "Vul een geldig aantal personen in (max. 20).",
-    en: "Enter a valid number of guests (max. 20).",
+    nl: "Vul een geldig aantal personen in (min. 2, max. 20).",
+    en: "Enter a valid number of guests (min. 2, max. 20).",
   },
   date_required: { nl: "Kies een datum.", en: "Choose a date." },
   date_invalid: { nl: "Kies een geldige datum.", en: "Choose a valid date." },
@@ -89,6 +129,7 @@ export const TOURS_TASTINGS_COPY = {
   dateNextMonth: { nl: "Volgende maand", en: "Next month" },
   dateToday: { nl: "Vandaag", en: "Today" },
   fieldPeriod: { nl: "Voorkeursmoment", en: "Preferred time" },
+  fieldLanguage: { nl: "Voorkeurstaal", en: "Preferred language" },
   fieldOccasion: { nl: "Gelegenheid (optioneel)", en: "Occasion (optional)" },
   fieldName: { nl: "Naam", en: "Name" },
   fieldNamePlaceholder: { nl: "Voor- en achternaam", en: "First and last name" },
@@ -96,14 +137,14 @@ export const TOURS_TASTINGS_COPY = {
   fieldEmailPlaceholder: { nl: "naam@voorbeeld.nl", en: "name@example.com" },
   fieldPhone: { nl: "Telefoonnummer", en: "Phone number" },
   fieldPhonePlaceholder: { nl: "06 12345678", en: "06 12345678" },
-  fieldNotes: { nl: "Allergieën, dieetwensen of opmerkingen", en: "Allergies, dietary needs or comments" },
+  fieldNotes: { nl: "Opmerkingen of dieetwensen", en: "Comments or dietary needs" },
   fieldNotesPlaceholder: {
-    nl: "Bijvoorbeeld: notenallergie, vegetarisch, of iets anders dat we moeten weten.",
-    en: "For example: nut allergy, vegetarian, or anything else we should know.",
+    nl: "Bijvoorbeeld: iemand is zwanger, vegetarisch, of iets anders dat we moeten weten.",
+    en: "For example: pregnancy, vegetarian, or anything else we should know.",
   },
   submit: { nl: "Verstuur aanvraag", en: "Send request" },
   note: {
-    nl: "Met een groep groter dan 20 personen? Neem contact op voor een groepsaanbod op maat.",
-    en: "Group larger than 20? Get in touch for a tailored group offer.",
+    nl: "Met een groep groter dan 20 personen, neem dan contact op met Sales voor een groepsaanbod.",
+    en: "For groups larger than 20 guests, please contact Sales for a custom group offer.",
   },
 } satisfies Record<string, ContentPair>;

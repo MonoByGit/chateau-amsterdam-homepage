@@ -1,0 +1,884 @@
+[
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "discover_heading",
+    "value_nl": "Ontdek",
+    "value_en": "Discover"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "discover_link_1",
+    "value_nl": "Het verhaal",
+    "value_en": "Our story"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "discover_link_2",
+    "value_nl": "Het proces",
+    "value_en": "The process"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "discover_link_3",
+    "value_nl": "De collectie",
+    "value_en": "The collection"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "do_heading",
+    "value_nl": "Doen",
+    "value_en": "Do"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "do_link_2",
+    "value_nl": "Voor bedrijven",
+    "value_en": "For businesses"
+  },
+  {
+    "page": "home",
+    "section": "footer",
+    "field_key": "footer_note",
+    "value_nl": "Urban winery aan het IJ. Druiven uit heel Europa, maar wijn uit Amsterdam-Noord, sinds 2017.",
+    "value_en": "Urban winery on the IJ. Grapes from all over Europe, but wine from Amsterdam-North, since 2017."
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "cta_label",
+    "value_nl": "Tour & tasting",
+    "value_en": "Tour & tasting"
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "nav_1_label",
+    "value_nl": "Verhaal",
+    "value_en": "Story"
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "nav_2_label",
+    "value_nl": "Proces",
+    "value_en": "Process"
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "nav_3_label",
+    "value_nl": "Wijnen",
+    "value_en": "Wines"
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "nav_4_label",
+    "value_nl": "Zakelijk",
+    "value_en": "Business"
+  },
+  {
+    "page": "home",
+    "section": "header",
+    "field_key": "nav_5_label",
+    "value_nl": "Bezoek",
+    "value_en": "Visit"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "cta_primary",
+    "value_nl": "Tour & Tasting",
+    "value_en": "Tour & Tasting"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "cta_secondary",
+    "value_nl": "Zakelijk",
+    "value_en": "For businesses"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "eyebrow_3",
+    "value_nl": "Wijn uit de stad, voor de stad",
+    "value_en": "Wine from the city, for the city"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "hero_image_url",
+    "value_nl": "/assets/hero-winery.jpg",
+    "value_en": "/assets/hero-winery.jpg"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "intro_em",
+    "value_nl": "Geen wijngaard, geen probleem.",
+    "value_en": "No vineyard, no problem."
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "intro_lead",
+    "value_nl": "Druiven uit heel Europa, samengebracht in Amsterdam-Noord. ",
+    "value_en": "Grapes from all over Europe, brought together in Amsterdam-North. "
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "media_caption",
+    "value_nl": "↳ De winery, Johan van Hasseltweg 51, Amsterdam Noord",
+    "value_en": "↳ The winery, Johan van Hasseltweg 51 Amsterdam-Noord"
+  },
+  {
+    "page": "home",
+    "section": "hero",
+    "field_key": "script_tagline",
+    "value_nl": "de urban winery",
+    "value_en": "the urban winery"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "body_lead",
+    "value_nl": "Sinds 2017 reizen druiven uit heel Europa gekoeld naar Amsterdam-Noord. ",
+    "value_en": "Since 2017, grapes from all over Europe travel chilled to Amsterdam-North. "
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "body_strong",
+    "value_nl": "Om in stalen tanks, betonnen tanks, amfora en eikenhouten vaten te rijpen. ",
+    "value_en": "To ripe in steel tanks, concrete tanks, amphora, and oak barrels. "
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "body_tail",
+    "value_nl": "Met de stad Amsterdam als onze \"wijngaard\", zijn we vrijer dan elke klassieke wijnproducent. Riesling die Moscatel ontmoet? Bij ons kan het.",
+    "value_en": "With the city of Amsterdam as our \"vineyard\", we are more free than any classic wineproducer. Riesling meeting Moscatel? Here it's possible."
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "heading_line1",
+    "value_nl": "Geen wijngaard.",
+    "value_en": "No vineyard."
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "heading_line2",
+    "value_nl": "Geen probleem.",
+    "value_en": "No problem."
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "label",
+    "value_nl": "Het verhaal",
+    "value_en": "Our story"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_1_desc",
+    "value_nl": "Decanter punten",
+    "value_en": "Decanter points"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_1_value",
+    "value_nl": "91",
+    "value_en": "91"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_2_desc",
+    "value_nl": "Winery in Amsterdam-Noord",
+    "value_en": "Winery in Amsterdam-North"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_2_value",
+    "value_nl": "1000",
+    "value_en": "1000"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_3_desc",
+    "value_nl": "Landen waar onze druiven groeien",
+    "value_en": "Countries where our grapes grow"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_3_value",
+    "value_nl": "5",
+    "value_en": "5"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_4_desc",
+    "value_nl": "Flessen per jaar",
+    "value_en": "Bottles per year"
+  },
+  {
+    "page": "home",
+    "section": "manifest",
+    "field_key": "stat_4_value",
+    "value_nl": "200000",
+    "value_en": "200000"
+  },
+  {
+    "page": "home",
+    "section": "marquee",
+    "field_key": "marquee_1",
+    "value_nl": "Eerste urban winery van Nederland",
+    "value_en": "First urban winery in the Netherlands"
+  },
+  {
+    "page": "home",
+    "section": "marquee",
+    "field_key": "marquee_2",
+    "value_nl": "De grootste van Europa",
+    "value_en": "The largest in Europe"
+  },
+  {
+    "page": "home",
+    "section": "marquee",
+    "field_key": "marquee_3",
+    "value_nl": "Druiven uit heel Europa",
+    "value_en": "Grapes from all over Europe"
+  },
+  {
+    "page": "home",
+    "section": "marquee",
+    "field_key": "marquee_4",
+    "value_nl": "Proeven tussen de tanks",
+    "value_en": "Tastings among the tanks"
+  },
+  {
+    "page": "home",
+    "section": "marquee",
+    "field_key": "marquee_5",
+    "value_nl": "Private labels",
+    "value_en": "Private labels"
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "heading_line1",
+    "value_nl": "Voor proevers, schenkers",
+    "value_en": "For tasters, pourers"
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "heading_line2_em",
+    "value_nl": "thuisdrinkers.",
+    "value_en": "home drinkers."
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "intro_body",
+    "value_nl": "Toerist, inkoper of liefhebber: iedereen drinkt hier dezelfde wijn. Alleen de weg ernaartoe verschilt.",
+    "value_en": "Tourist, buyer, or wine lover: everyone here drinks the same wine. Only the path there differs."
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "label",
+    "value_nl": "Kies je glas",
+    "value_en": "Choose your glass"
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_1_body",
+    "value_nl": "70 minuten tussen de tanks, zes wijnen op tafel, luisterend naar verhalen over het wijn maken. Voor bezoekers van de stad, vriendengroepen en iedereen die wil weten hoe stadswijn smaakt.",
+    "value_en": "70 minutes between the tanks, six wines on the table, complete with stories about our love for winemaking. For city visitors, groups of friends, and anyone who wants to know how urban wine tastes."
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_1_title",
+    "value_nl": "Tour & tastings",
+    "value_en": "Tour & tastings"
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_2_body",
+    "value_nl": "Grote afname, private label, relatiegeschenken en events in de winery. Eén aanspreekpunt, scherpe staffels, geproduceerd op 10 minuten van CS.",
+    "value_en": "Bulk orders, private label, corporate gifts, and events in the winery. A single point of contact, volume discounts, produced 10 minutes from Central Station."
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_2_title",
+    "value_nl": "Voor bedrijven & horeca",
+    "value_en": "For businesses & hospitality"
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_3_body",
+    "value_nl": "De volledige collectie, thuisbezorgd. Van klassieke monocépages tot blends die alleen in Amsterdam-Noord konden ontstaan.",
+    "value_en": "The complete collection, delivered to your door. From classic single-varietals to blends that could only exist in Amsterdam-North."
+  },
+  {
+    "page": "home",
+    "section": "paths",
+    "field_key": "path_3_title",
+    "value_nl": "De webshop",
+    "value_en": "The webshop"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "address_heading",
+    "value_nl": "Adres",
+    "value_en": "Address"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "address_line1",
+    "value_nl": "Johan van Hasseltweg 51",
+    "value_en": "Johan van Hasseltweg 51"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "address_line2",
+    "value_nl": "Amsterdam-Noord",
+    "value_en": "Amsterdam-North"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "cta_label",
+    "value_nl": "Plan je bezoek",
+    "value_en": "Plan your visit"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "heading_line1",
+    "value_nl": "Een winery",
+    "value_en": "A winery"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "heading_line2",
+    "value_nl": "in de stad",
+    "value_en": "in the city"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "hours_heading",
+    "value_nl": "Open (winkel)",
+    "value_en": "Hours (shop)"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "hours_line1",
+    "value_nl": "Di tot vrij // Zaterdag",
+    "value_en": "Tues to Fri // Saturday"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "hours_line2",
+    "value_nl": "10 tot 17 // 12 tot 18",
+    "value_en": "10 to 5 // 12 to 6"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "label",
+    "value_nl": "De plek",
+    "value_en": "The venue"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "route_line1",
+    "value_nl": "Pont vanaf CS, 10 min fietsen",
+    "value_en": "Ferry from Central Station, 10 min bike"
+  },
+  {
+    "page": "home",
+    "section": "place",
+    "field_key": "route_line2",
+    "value_nl": "of metro 52 → Noorderpark",
+    "value_en": "or metro 52 → Noorderpark"
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "heading_em",
+    "value_nl": "dwars door de stad.",
+    "value_en": "straight through the city."
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "heading_lead",
+    "value_nl": "Van boer tot fles, ",
+    "value_en": "From farmer to bottle, "
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_1_body",
+    "value_nl": "Alles begint bij de druif. We werken met een select netwerk van wijnboeren uit heel Europa, die stuk voor stuk biologisch telen en met de hand oogsten op het juiste moment.",
+    "value_en": "It all begins with the grape. We work with a select network of farmers from all across Europe, each of them growing organically and harvesting by hand at exactly the right moment."
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_1_title",
+    "value_nl": "De druif",
+    "value_en": "The grape"
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_2_body",
+    "value_nl": "Elke druif reist gekoeld van de boer naar Amsterdam. Het klinkt als transport, maar het is eigenlijk al het begin van de wijn: op de snelweg gebeuren de eerste stappen van de fermentatie.",
+    "value_en": "Every grape travels chilled from the farmer to Amsterdam. It sounds like transport, but it’s actually already the beginning of the wine: the first steps of fermentation happen right there on the highway."
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_2_title",
+    "value_nl": "De reis",
+    "value_en": "The journey"
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_3_body",
+    "value_nl": "Hier krijgt de wijn zijn vorm. Staal, beton of amfora, ons eigen lab bewaakt elke stap van het proces, zodat elke wijn zijn eigen karakter krijgt.",
+    "value_en": "Here the wine takes shape. Steel, concrete or amphora, our own lab oversees every step of the process, so each wine develops its own character."
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_3_title",
+    "value_nl": "De winery",
+    "value_en": "The winery"
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_4_body",
+    "value_nl": "De laatste stap is de fles. Hier komt alles samen: de druif, de reis en de ambacht in de winery. Nu is de wijn klaar om van genoten te worden. ",
+    "value_en": "The last step is the bottle. That's where everything comes together: the grape, the journey, and the craft from the winery. Now the wine is ready to be enjoyed."
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "step_4_title",
+    "value_nl": "De fles",
+    "value_en": "The bottle"
+  },
+  {
+    "page": "home",
+    "section": "process",
+    "field_key": "sub_text",
+    "value_nl": "Wij verplaatsen de druif, niet de wijn. Daardoor kan je hier van dichtbij mee maken hoe wijn écht gemaakt wordt.",
+    "value_en": "We move the grape, not the wine. This lets you experience close-up how wine is truly made."
+  },
+  {
+    "page": "home",
+    "section": "wines",
+    "field_key": "cta_label",
+    "value_nl": "Shop alle wijnen",
+    "value_en": "Shop all wines"
+  },
+  {
+    "page": "home",
+    "section": "wines",
+    "field_key": "heading_line1",
+    "value_nl": "Van klassiek",
+    "value_en": "From classic"
+  },
+  {
+    "page": "home",
+    "section": "wines",
+    "field_key": "heading_line2_em",
+    "value_nl": "eigenwijs.",
+    "value_en": "rebellious."
+  },
+  {
+    "page": "home",
+    "section": "wines",
+    "field_key": "heading_line2_lead",
+    "value_nl": "tot ",
+    "value_en": "to "
+  },
+  {
+    "page": "home",
+    "section": "wines",
+    "field_key": "label",
+    "value_nl": "De collectie",
+    "value_en": "The collection"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "hero_label",
+    "value_nl": "Ontdek Chateau",
+    "value_en": "Discover Chateau"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "hero_photo_url",
+    "value_nl": "/assets/tasting-hero.jpg#35p27p",
+    "value_en": "/assets/tasting-hero.jpg#35p27p"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "hero_sub",
+    "value_nl": "70 minuten tussen de tanks. Zes wijnen op tafel. Ervaar het zelf, in plaats van er over te lezen.",
+    "value_en": "70 minutes between the tanks. Six wines on the table. Experience it yourself, instead of just reading about it."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "hero_title_em",
+    "value_nl": "tasting",
+    "value_en": "tasting"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "hero_title_lead",
+    "value_nl": "Tour &",
+    "value_en": "Tour &"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "opening_line1",
+    "value_nl": "Midden in de stad wordt er wijn gemaakt, van tank tot glas.",
+    "value_en": "In the middle of the city, we make wine, from tank to glass."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "opening_line2",
+    "value_nl": "Kom kijken, hoe stadswijn smaakt.",
+    "value_en": "Come see, how city wine tastes."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "reserve_heading",
+    "value_nl": "Boek je plek tussen de tanks.",
+    "value_en": "Book your spot between the tanks."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "reserve_label",
+    "value_nl": "Reserveren",
+    "value_en": "Reserve"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "reserve_photo_url",
+    "value_nl": "/assets/place-map.jpg#48p49p",
+    "value_en": "/assets/place-map.jpg#48p49p"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "reserve_sub",
+    "value_nl": "We bevestigen je aanvraag persoonlijk.",
+    "value_en": "We confirm your request personally."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_discount",
+    "value_nl": "20%",
+    "value_en": "20%"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_discount_label",
+    "value_nl": "Korting in de winkel",
+    "value_en": "Discount in the shop"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_duration",
+    "value_nl": "70 min",
+    "value_en": "70 min"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_duration_label",
+    "value_nl": "Tour & tasting samen",
+    "value_en": "Tour & tasting together"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_price",
+    "value_nl": "€55",
+    "value_en": "€55"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_price_label",
+    "value_nl": "Per persoon",
+    "value_en": "Per person"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_wines",
+    "value_nl": "6",
+    "value_en": "6"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "strip_wines_label",
+    "value_nl": "Wijnen om te proeven",
+    "value_en": "Wines to taste"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tasting_body",
+    "value_nl": "Tijdens de tour proef je 6 wijnen. Drinkt er iemand geen alcohol? Laat het weten bij je aanvraag, dan houden we er rekening mee.",
+    "value_en": "During the tour you taste 6 wines. Alcoholfree options? Let us know in your request and we'll take care of it."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tasting_heading",
+    "value_nl": "Zes wijnen, één tafel",
+    "value_en": "Six wines, one table"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tasting_main_photo_url",
+    "value_nl": "/assets/path-taste.jpg",
+    "value_en": "/assets/path-taste.jpg"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tour_body",
+    "value_nl": "Een tour van 70 minuten door de winery. Je leert hoe druiven worden verwerkt tot wijn, van boer tot fles, en hoort het verhaal achter Chateau Amsterdam.",
+    "value_en": "A 70-minute tour through the winery. Learn how grapes become wine, from farmer to bottle, and hear the story behind Chateau Amsterdam."
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tour_detail_photo_url",
+    "value_nl": "/assets/step-druif.jpg",
+    "value_en": "/assets/step-druif.jpg"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tour_heading",
+    "value_nl": "Tussen de tanks",
+    "value_en": "Between the tanks"
+  },
+  {
+    "page": "tours-tastings",
+    "section": "main",
+    "field_key": "tour_main_photo_url",
+    "value_nl": "/assets/step-makerij.jpg",
+    "value_en": "/assets/step-makerij.jpg"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "form_heading",
+    "value_nl": "Vertel ons waar je aan denkt.",
+    "value_en": "Tell us what you have in mind."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "form_intro",
+    "value_nl": "Eén formulier, rechtstreeks naar ons team.",
+    "value_en": "One form, straight to our team."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "form_label",
+    "value_nl": "Aanvraag",
+    "value_en": "Request"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "form_note",
+    "value_nl": "We nemen snel contact met je op.",
+    "value_en": "We'll get back to you quickly."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "index_label",
+    "value_nl": "Vier diensten, één aanspreekpunt",
+    "value_en": "Four services, one point of contact"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "intro_body",
+    "value_nl": "Van een borrel tussen de tanks tot je eigen naam op de fles. Eén partner, tien minuten van Amsterdam CS. Kies hieronder waar je aan denkt, wij nemen het van daar over. ",
+    "value_en": "From a drink between the tanks to your own name on the bottle. One partner, ten minutes from Amsterdam Central Station. Choose below what you’re thinking of, we’ll take it from there."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "intro_heading_em",
+    "value_nl": "op jouw manier",
+    "value_en": "for your business"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "intro_heading_lead",
+    "value_nl": "Wijn voor jouw bedrijf",
+    "value_en": "Wine that works"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "intro_label",
+    "value_nl": "Zakelijk & horeca",
+    "value_en": "Business & hospitality"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "intro_photo_url",
+    "value_nl": "/assets/path-pour.jpg",
+    "value_en": "/assets/path-pour.jpg"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_1_body",
+    "value_nl": "Borrel met je team tussen de wijntanks. Van 10 tot 60 personen, met of zonder bites erbij.",
+    "value_en": "Have drinks with your team between the tanks. From 10 to 60 guests, with or without bites."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_1_title",
+    "value_nl": "Tastings & borrels",
+    "value_en": "Tastings & drinks"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_2_body",
+    "value_nl": "Jullie naam op de fles. Wij vinifiëren, jij bepaalt het etiket en het verhaal erachter.",
+    "value_en": "Your name on the bottle. We vinify, you decide the label and the story behind it."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_2_title",
+    "value_nl": "Private label & relatiegeschenken",
+    "value_en": "Private label & corporate gifts"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_3_body",
+    "value_nl": "Jouw eigen winery voor een avond? 20 tot 150 gasten, inclusief bar, geluid en sfeer.",
+    "value_en": "The winery as your private setting? 20 to 150 guests, including bar, sound and atmosphere."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_3_title",
+    "value_nl": "Events & locatieverhuur",
+    "value_en": "Events & venue rental"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_4_body",
+    "value_nl": "Steeds meer horeca schenkt onze wijn, niet alleen in Amsterdam. Wij leveren, waar jij zit. Een betrouwbare partner, zonder tussenpartijen.",
+    "value_en": "More and more hospitality venues pour our wine, not just in Amsterdam. We deliver, wherever you are. A reliable partner, without middlemen."
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "service_4_title",
+    "value_nl": "Groothandel voor horeca",
+    "value_en": "Wholesale for hospitality"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "strip_contact_label",
+    "value_nl": "Eén aanspreekpunt, van begin tot levering",
+    "value_en": "One point of contact, from start to delivery"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "strip_distance",
+    "value_nl": "10 min",
+    "value_en": "10 min"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "strip_distance_label",
+    "value_nl": "Van Amsterdam CS, midden in Noord",
+    "value_en": "From Amsterdam Central, in the heart of Noord"
+  },
+  {
+    "page": "voor-bedrijven",
+    "section": "main",
+    "field_key": "strip_produced_label",
+    "value_nl": "Geproduceerd in de eigen winery",
+    "value_en": "Produced in our own winery"
+  }
+]

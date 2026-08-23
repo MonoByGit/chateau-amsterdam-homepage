@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { createTastingReservation } from "@/lib/db/reservations";
 import { validateTastingInquiry, type TastingInquiryInput } from "@/lib/validation/tasting-inquiry";
 import { checkRateLimit, recordFailedAttempt } from "@/lib/auth/rate-limit";
-import { sendCustomerReceipt, sendSalesNotification } from "@/lib/email/send";
+import { sendSalesNotification, sendCustomerReceipt } from "@/lib/email/send";
 
 function readInquiryForm(formData: FormData): TastingInquiryInput {
   return {
@@ -15,6 +15,7 @@ function readInquiryForm(formData: FormData): TastingInquiryInput {
     partySize: String(formData.get("partySize") ?? ""),
     requestedDate: String(formData.get("requestedDate") ?? ""),
     preferredPeriod: String(formData.get("preferredPeriod") ?? ""),
+    preferredLanguage: String(formData.get("preferredLanguage") ?? ""),
     occasion: String(formData.get("occasion") ?? ""),
     notes: String(formData.get("notes") ?? ""),
   };
@@ -43,15 +44,18 @@ export async function submitTastingInquiry(formData: FormData): Promise<void> {
     partySize: Number(input.partySize),
     requestedDate: input.requestedDate,
     preferredPeriod: input.preferredPeriod,
+    preferredLanguage: input.preferredLanguage,
     occasion: input.occasion,
     notes: input.notes,
   });
 
   try {
-    await sendSalesNotification(reservation);
-    await sendCustomerReceipt(reservation);
+    await Promise.allSettled([
+      sendSalesNotification(reservation),
+      sendCustomerReceipt(reservation),
+    ]);
   } catch (err) {
-    console.error("Failed to send reservation emails", err);
+    console.error("Failed to send notification emails", err);
   }
 
   redirect("/tours-tastings?verzonden=1#reserveren");

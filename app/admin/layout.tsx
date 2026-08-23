@@ -1,5 +1,6 @@
 import "./admin.css";
 import type { ReactNode } from "react";
+import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { validateSession } from "@/lib/db/sessions";
@@ -8,6 +9,17 @@ import { SESSION_COOKIE_NAME } from "@/lib/auth/session-cookie";
 import { AdminNav } from "./nav";
 import { MobileNav } from "./mobile-nav";
 import { logout } from "./actions";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
+
+export const metadata: Metadata = {
+  title: "Admin · Chateau Amsterdam",
+};
 
 // Same type family as the public site (app/(site)/layout.tsx), loaded
 // separately here because /admin has its own independent root layout,

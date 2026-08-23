@@ -2,10 +2,273 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { saveSection } from "./actions";
+import { restoreSectionVersion, saveSection } from "./actions";
 import { parseImageSrc } from "@/lib/content/defaults";
+import type { ContentVersionRow } from "@/lib/db/content";
 
 type Block = { fieldKey: string; valueNl: string; valueEn: string };
+
+function formatDate(date: Date | string) {
+  const d = typeof date === "string" ? new Date(date) : date;
+  return new Intl.DateTimeFormat("nl-NL", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+}
+
+function VersionHistory({
+  versions,
+  onRestore,
+  isRestoring,
+}: {
+  versions: ContentVersionRow[];
+  onRestore: (versionId: string, label: string) => Promise<void>;
+  isRestoring: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!versions || versions.length === 0) return null;
+
+  const latest = versions[0];
+
+  return (
+    <div
+      className="a-card"
+      style={{
+        marginBottom: "1.5rem",
+        padding: 0,
+        overflow: "hidden",
+        border: "1px solid var(--a-border)",
+        background: "var(--a-surface)",
+      }}
+    >
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          padding: "0.875rem 1.25rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          cursor: "pointer",
+          userSelect: "none",
+          background: "var(--a-surface)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+          <span style={{ fontSize: "1.1rem" }}>🕒</span>
+          <div>
+            <span style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--a-text)" }}>
+              Versiegeschiedenis & Backups
+            </span>
+            <span style={{ marginLeft: "0.5rem", fontSize: "0.8125rem", color: "var(--a-text-2)" }}>
+              Laatst opgeslagen: {formatDate(latest.createdAt)}
+            </span>
+          </div>
+          {latest.note && (
+            <span className="a-badge a-badge--info" style={{ fontSize: "0.6875rem" }}>
+              {latest.note}
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          className="a-btn a-btn--secondary"
+          style={{ fontSize: "0.75rem", padding: "0.3125rem 0.75rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+        >
+          {isOpen ? "▲ Verberg geschiedenis" : `▼ Bekijk eerdere momentopnames (${versions.length}/5)`}
+        </button>
+      </div>
+
+      {isOpen && (
+        <div
+          style={{
+            borderTop: "1px solid var(--a-border)",
+            padding: "1rem 1.25rem",
+            background: "var(--a-surface-2)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+          }}
+        >
+          <p style={{ margin: 0, fontSize: "0.8125rem", color: "var(--a-text-2)" }}>
+            Het systeem bewaart automatisch de <strong>laatste 5 momentopnames</strong> van deze sectie. Je kunt te allen tijde terugkeren naar een eerdere staat:
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.25rem" }}>
+            {versions.map((ver, idx) => {
+              const isCurrent = idx === 0;
+              return (
+                <div
+                  key={ver.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "0.75rem 1rem",
+                    borderRadius: "4px",
+                    background: isCurrent ? "var(--a-surface)" : "transparent",
+                    border: isCurrent ? "1px solid var(--a-border-strong)" : "1px solid var(--a-border)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <span style={{ fontSize: "0.875rem" }}>{isCurrent ? "🟢" : "⚪"}</span>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <strong style={{ fontSize: "0.8125rem", color: "var(--a-text)" }}>
+                          {formatDate(ver.createdAt)}
+                        </strong>
+                        {isCurrent && (
+                          <span className="a-badge a-badge--success" style={{ fontSize: "0.6875rem" }}>
+                            Huidige live versie
+                          </span>
+                        )}
+                      </div>
+                      <span style={{ fontSize: "0.75rem", color: "var(--a-text-2)" }}>
+                        {ver.note || "Opgeslagen via CMS"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {!isCurrent && (
+                    <button
+                      type="button"
+                      disabled={isRestoring}
+                      className="a-btn a-btn--secondary"
+                      style={{ fontSize: "0.75rem", padding: "0.3125rem 0.625rem" }}
+                      onClick={() => onRestore(ver.id, formatDate(ver.createdAt))}
+                    >
+                      {isRestoring ? "Herstellen…" : "⏪ Terugzetten naar dit moment"}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function ContentForm({
+  section,
+  page = "home",
+  blocks,
+  versions = [],
+}: {
+  section: string;
+  page?: string;
+  blocks: Block[];
+  versions?: ContentVersionRow[];
+}) {
+  const [status, formAction, isPending] = useActionState(submitSection.bind(null, section, page), null);
+  const [isRestoring, setIsRestoring] = useState(false);
+  const [restoreMessage, setRestoreMessage] = useState<string | null>(null);
+
+  async function handleRestore(versionId: string, label: string) {
+    const confirmed = window.confirm(`Weet je zeker dat je alle teksten van deze sectie wilt terugzetten naar de momentopname van ${label}?`);
+    if (!confirmed) return;
+
+    try {
+      setIsRestoring(true);
+      await restoreSectionVersion(versionId);
+      setRestoreMessage(`Succesvol teruggezet naar de versie van ${label}`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 600);
+    } catch (err) {
+      console.error(err);
+      alert("Er is een fout opgetreden bij het herstellen van de versie.");
+      setIsRestoring(false);
+    }
+  }
+
+  return (
+    <form action={formAction} style={{ marginTop: "1.5rem" }}>
+      <VersionHistory versions={versions} onRestore={handleRestore} isRestoring={isRestoring} />
+
+      <div className="a-card">
+        {blocks.map((block) => {
+          const meta = formatFieldLabel(block.fieldKey);
+          return (
+            <div key={block.fieldKey} className="a-card-row">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span className="a-label" style={{ fontWeight: 600, color: meta.isImage ? "var(--a-accent-text)" : "var(--a-text)" }}>
+                  {meta.title}
+                </span>
+                <span className="a-eyebrow" style={{ opacity: 0.5 }}>{block.fieldKey}</span>
+              </div>
+              <div style={{ marginTop: "0.625rem", display: "grid", gap: "1rem", gridTemplateColumns: meta.isImage ? "1fr" : "repeat(auto-fit, minmax(240px, 1fr))" }}>
+                {meta.isImage ? (
+                  <ImageFieldInput fieldKey={block.fieldKey} initialValue={block.valueNl} />
+                ) : (
+                  <>
+                    <label className="a-field">
+                      <span className="a-label">Nederlands (NL)</span>
+                      <textarea
+                        name={`${block.fieldKey}__nl`}
+                        defaultValue={block.valueNl}
+                        rows={2}
+                        className="a-textarea"
+                      />
+                    </label>
+                    <label className="a-field">
+                      <span className="a-label">Engels (EN)</span>
+                      <textarea
+                        name={`${block.fieldKey}__en`}
+                        defaultValue={block.valueEn}
+                        rows={2}
+                        className="a-textarea"
+                      />
+                    </label>
+                  </>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <button type="submit" disabled={isPending || isRestoring} className="a-btn a-btn--primary">
+          {isPending ? "Bezig met opslaan…" : "Opslaan"}
+        </button>
+        {status ? <span className="a-badge a-badge--success">✓ {status}</span> : null}
+      </div>
+
+      {(status || restoreMessage) ? (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "1.5rem",
+            right: "1.5rem",
+            zIndex: 999,
+            background: "#1c1917",
+            color: "#f5f5f4",
+            border: "1px solid var(--a-accent, #cda757)",
+            borderRadius: "8px",
+            padding: "0.875rem 1.25rem",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.625rem",
+            fontSize: "0.875rem",
+            fontWeight: 500,
+          }}
+        >
+          <span>✨ {restoreMessage || "Wijzigingen succesvol opgeslagen & direct live op de site!"}</span>
+        </div>
+      ) : null}
+    </form>
+  );
+}
+
 
 const IMAGE_FIELD_TITLES: Record<string, string> = {
   // Homepage Hero & Process
@@ -37,6 +300,7 @@ const IMAGE_FIELD_TITLES: Record<string, string> = {
 const PRESET_ASSETS = [
   { label: "🥂 Proosten Sfeer (Tour & Tasting)", url: "/assets/tasting-hero.jpg" },
   { label: "🍽️ Bedrijven Gedekte Tafel met Kaarsen (B2B)", url: "/assets/b2b-hero.jpg" },
+  { label: "🍷 Groothandel Flessen Wand (B2B)", url: "/assets/b2b-wholesale.jpg" },
   { label: "📦 Webshop Fles uit Doos Til", url: "/assets/path-drink.png" },
   { label: "🍾 Bottellijn Glazen Flessen (Proces Stap 4)", url: "/assets/step-fles.jpg" },
   { label: "📍 Gouden 3D Kaart Noord", url: "/assets/place-map.jpg" },
@@ -293,85 +557,5 @@ function ImageFieldInput({ fieldKey, initialValue }: { fieldKey: string; initial
         </div>
       </div>
     </div>
-  );
-}
-
-export function ContentForm({ section, page = "home", blocks }: { section: string; page?: string; blocks: Block[] }) {
-  const [status, formAction, isPending] = useActionState(submitSection.bind(null, section, page), null);
-
-  return (
-    <form action={formAction} style={{ marginTop: "1.5rem" }}>
-      <div className="a-card">
-        {blocks.map((block) => {
-          const meta = formatFieldLabel(block.fieldKey);
-          return (
-            <div key={block.fieldKey} className="a-card-row">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span className="a-label" style={{ fontWeight: 600, color: meta.isImage ? "var(--a-accent-text)" : "var(--a-text)" }}>
-                  {meta.title}
-                </span>
-                <span className="a-eyebrow" style={{ opacity: 0.5 }}>{block.fieldKey}</span>
-              </div>
-              <div style={{ marginTop: "0.625rem", display: "grid", gap: "1rem", gridTemplateColumns: meta.isImage ? "1fr" : "repeat(auto-fit, minmax(240px, 1fr))" }}>
-                {meta.isImage ? (
-                  <ImageFieldInput fieldKey={block.fieldKey} initialValue={block.valueNl} />
-                ) : (
-                  <>
-                    <label className="a-field">
-                      <span className="a-label">Nederlands (NL)</span>
-                      <textarea
-                        name={`${block.fieldKey}__nl`}
-                        defaultValue={block.valueNl}
-                        rows={2}
-                        className="a-textarea"
-                      />
-                    </label>
-                    <label className="a-field">
-                      <span className="a-label">Engels (EN)</span>
-                      <textarea
-                        name={`${block.fieldKey}__en`}
-                        defaultValue={block.valueEn}
-                        rows={2}
-                        className="a-textarea"
-                      />
-                    </label>
-                  </>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-        <button type="submit" disabled={isPending} className="a-btn a-btn--primary">
-          {isPending ? "Bezig met opslaan…" : "Opslaan"}
-        </button>
-        {status ? <span className="a-badge a-badge--success">✓ {status}</span> : null}
-      </div>
-
-      {status ? (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "1.5rem",
-            right: "1.5rem",
-            zIndex: 999,
-            background: "#1c1917",
-            color: "#f5f5f4",
-            border: "1px solid var(--a-accent, #cda757)",
-            borderRadius: "8px",
-            padding: "0.875rem 1.25rem",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.625rem",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-          }}
-        >
-          <span>✨ Wijzigingen succesvol opgeslagen & direct live op de site!</span>
-        </div>
-      ) : null}
-    </form>
   );
 }

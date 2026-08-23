@@ -131,19 +131,21 @@ export default async function ReservationsPage({
           reservationList.map((r) => {
             const nextStatuses = ALL_STATUSES.filter((s) => isValidTransition(r.status, s));
             return (
-              <div key={r.id} className="a-card-row" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <Link href={`/admin/reservations/${r.id}`} style={{ flex: 1, minWidth: 0, textDecoration: "none" }}>
-                  <div className="a-label" style={{ color: "var(--a-text)" }}>
-                    {r.contactName}
-                  </div>
-                  <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                    {TRACK_LABELS[r.track]} · {r.requestedDate ? formatAdminDate(r.requestedDate) : "-"}
-                    {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
-                  </div>
-                </Link>
-                <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+              <div key={r.id} className="a-card-row a-reservation-row">
+                <div className="a-reservation-main">
+                  <Link href={`/admin/reservations/${r.id}`} className="a-reservation-info">
+                    <div className="a-label" style={{ color: "var(--a-text)" }}>
+                      {r.contactName}
+                    </div>
+                    <div className="a-reservation-meta">
+                      {TRACK_LABELS[r.track]} · {r.requestedDate ? formatAdminDate(r.requestedDate) : "-"}
+                      {r.preferredPeriod ? ` · ${r.preferredPeriod}` : ""}
+                    </div>
+                  </Link>
+                  <span className={`a-badge ${STATUS_BADGE_VARIANT[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+                </div>
                 {nextStatuses.length > 0 ? (
-                  <div className="a-inline-actions">
+                  <div className="a-inline-actions a-reservation-actions">
                     {nextStatuses.map((s) => (
                       <form key={s} action={updateStatus.bind(null, r.id, s)}>
                         <button type="submit" className="a-btn a-btn--secondary a-btn--sm">

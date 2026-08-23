@@ -4,10 +4,12 @@
 import { useState } from "react";
 import { saveDayAvailability } from "./actions";
 
-const FIXED_SLOTS = [
-  { id: "slot1", label: "15:00 uur (70 min. tour & tasting)" },
-  { id: "slot2", label: "17:00 uur (70 min. tour & tasting)" },
-  { id: "slot3", label: "19:00 uur (70 min. tour & tasting)" },
+const ALL_FIXED_SLOTS = [
+  { id: "slot1", label: "12:00 uur (70 min. tour & tasting)", time: "12:00", saturdayOnly: true },
+  { id: "slot2", label: "14:00 uur (70 min. tour & tasting)", time: "14:00" },
+  { id: "slot3", label: "16:00 uur (70 min. tour & tasting)", time: "16:00" },
+  { id: "slot4", label: "18:00 uur (70 min. tour & tasting)", time: "18:00" },
+  { id: "slot5", label: "19:30 uur (70 min. tour & tasting)", time: "19:30", fridayAndSaturdayOnly: true },
 ];
 
 export function DayForm({
@@ -21,19 +23,31 @@ export function DayForm({
 }) {
   const [isFullDay, setIsFullDay] = useState(initialIsFullDay);
 
+  const [y, m, d] = date.split("-").map(Number);
+  const dayOfWeek = new Date(y, m - 1, d).getDay();
+  const isSaturday = dayOfWeek === 6;
+  const isFriday = dayOfWeek === 5;
+  const fixedSlots = ALL_FIXED_SLOTS.filter((s) => {
+    if (s.saturdayOnly) return isSaturday;
+    if (s.fridayAndSaturdayOnly) return isFriday || isSaturday;
+    return true;
+  });
+
   // Check if a fixed slot label is currently blocked in initialSlots
-  const isSlotBlocked = (slotLabel: string) => {
-    return initialSlots.some((s) => s.toLowerCase().includes(slotLabel.slice(0, 5).toLowerCase()));
+  const isSlotBlocked = (slotTime: string) => {
+    return initialSlots.some((s) => s.toLowerCase().includes(slotTime.toLowerCase()));
   };
 
   const [blockedSlots, setBlockedSlots] = useState<Record<string, boolean>>({
-    slot1: isSlotBlocked("15:00"),
-    slot2: isSlotBlocked("17:00"),
-    slot3: isSlotBlocked("19:00"),
+    slot1: isSlotBlocked("12:00"),
+    slot2: isSlotBlocked("14:00"),
+    slot3: isSlotBlocked("16:00"),
+    slot4: isSlotBlocked("18:00"),
+    slot5: isSlotBlocked("19:30"),
   });
 
   const customSlotInitial = initialSlots.find(
-    (s) => s && !s.includes("15:00") && !s.includes("17:00") && !s.includes("19:00")
+    (s) => s && !s.includes("12:00") && !s.includes("14:00") && !s.includes("16:00") && !s.includes("18:00") && !s.includes("19:30")
   ) ?? "";
 
   return (
@@ -60,7 +74,7 @@ export function DayForm({
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          {FIXED_SLOTS.map((slot) => {
+          {fixedSlots.map((slot) => {
             const isChecked = blockedSlots[slot.id] ?? false;
             return (
               <label key={slot.id} className="a-checkbox-row" style={{ background: isChecked ? "rgba(229, 62, 62, 0.08)" : "transparent", padding: "0.5rem 0.75rem", borderRadius: "var(--a-r)" }}>
@@ -84,12 +98,12 @@ export function DayForm({
         </div>
 
         <div className="a-field" style={{ marginTop: "1.25rem" }}>
-          <label className="a-label" htmlFor="slot4">
+          <label className="a-label" htmlFor="slot5">
             Aangepaste reden of extra uitzondering (optioneel)
           </label>
           <input
-            id="slot4"
-            name="slot4"
+            id="slot5"
+            name="slot5"
             type="text"
             className="a-input"
             placeholder="Bijv. Besloten evenement / Onderhoud"

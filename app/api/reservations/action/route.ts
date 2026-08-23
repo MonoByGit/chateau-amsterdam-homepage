@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { verifyActionToken } from "@/lib/email/action-token";
 import { getReservation, updateReservationStatus } from "@/lib/db/reservations";
-import { sendCustomerConfirmation } from "@/lib/email/send";
+import { sendCustomerConfirmation, sendSalesConfirmationAlert } from "@/lib/email/send";
 import { db } from "@/lib/db/client";
 import { availabilityBlocks } from "@/lib/db/schema";
 
@@ -104,29 +104,19 @@ export async function GET(request: Request) {
       }
     }
 
-    // Automatically add/block Google Workspace Calendar / Chateau Agenda
-    if (reservation.requestedDate) {
-      const slotLabel = reservation.preferredPeriod
-        ? `Goedgekeurd: ${reservation.contactName} (${reservation.preferredPeriod})`
-        : `Goedgekeurd: ${reservation.contactName}`;
-
-      try {
-        await db.insert(availabilityBlocks).values({
-          date: reservation.requestedDate,
-          isFullDay: false,
-          label: slotLabel,
-        });
-      } catch (err) {
-        console.error("Calendar insert block error", err);
-      }
+    // Trifecta: Send customer confirmation + Sales calendar invite concurrently
+    try {
+      await Promise.allSettled([
+        sendCustomerConfirmation(reservation),
+        sendSalesConfirmationAlert(reservation),
+      ]);
+    } catch (err) {
+      console.error("Email notification error", err);
     }
-
-    // Send customer confirmation email
-    await sendCustomerConfirmation(reservation);
 
     return renderFeedbackPage(
       "✅ Reservering Goedgekeurd!",
-      `De aanvraag voor <strong>${reservation.contactName}</strong> is goedgekeurd. De status in het CMS staat nu op <strong>Goedgekeurd</strong>, de klant is per mail bevestigd en de tijd is in de Google Workspace agenda gezet.`,
+      `De aanvraag voor <strong>${reservation.contactName}</strong> is goedgekeurd. De status in het CMS staat nu op <strong>Goedgekeurd</strong>, de afspraak staat in jullie salesagenda (.ics) en de klant heeft direct een bevestigingsmail ontvangen.`,
       true
     );
   }

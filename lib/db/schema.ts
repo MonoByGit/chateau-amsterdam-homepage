@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, integer, boolean, pgEnum, date, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, integer, boolean, pgEnum, date, uniqueIndex, jsonb } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -27,6 +27,16 @@ export const contentBlocks = pgTable("content_blocks", {
 }, (table) => ({
   uniqueField: uniqueIndex("content_blocks_page_section_field_key_idx").on(table.page, table.section, table.fieldKey),
 }));
+
+export const contentVersions = pgTable("content_versions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  page: text("page").notNull(),
+  section: text("section").notNull(),
+  snapshot: jsonb("snapshot").$type<Record<string, { valueNl: string; valueEn: string }>>().notNull(),
+  note: text("note"),
+  updatedBy: uuid("updated_by").references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
 
 export const media = pgTable("media", {
   id: uuid("id").primaryKey().defaultRandom(),

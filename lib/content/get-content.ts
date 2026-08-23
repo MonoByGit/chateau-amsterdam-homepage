@@ -23,13 +23,17 @@ export async function getContent<T extends Record<string, ContentPair>>(
   defaults: T,
   fetchBlocks: FetchBlocks = getBlocksForSection
 ): Promise<T> {
-  const rows = await fetchBlocks(page, section);
-  const overrides = new Map(rows.map((row) => [row.fieldKey, { nl: row.valueNl, en: row.valueEn }]));
+  try {
+    const rows = await fetchBlocks(page, section);
+    const overrides = new Map(rows.map((row) => [row.fieldKey, { nl: row.valueNl, en: row.valueEn }]));
 
-  const merged = {} as T;
-  for (const fieldKey of Object.keys(defaults) as Array<keyof T>) {
-    const override = overrides.get(fieldKey as string);
-    merged[fieldKey] = (override as T[keyof T] | undefined) ?? defaults[fieldKey];
+    const merged = {} as T;
+    for (const fieldKey of Object.keys(defaults) as Array<keyof T>) {
+      const override = overrides.get(fieldKey as string);
+      merged[fieldKey] = (override as T[keyof T] | undefined) ?? defaults[fieldKey];
+    }
+    return merged;
+  } catch {
+    return defaults;
   }
-  return merged;
 }

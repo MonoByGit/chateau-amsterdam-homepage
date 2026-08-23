@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBlocksForSection } from "@/lib/db/content";
+import { getBlocksForSection, getVersionsForSection } from "@/lib/db/content";
 
 export const dynamic = "force-dynamic";
 import {
@@ -49,6 +49,7 @@ export default async function ContentPage({
 
   if (activePage === "wijnen") {
     const rawBlocks = await getBlocksForSection("wijnen", "overview");
+    const versions = await getVersionsForSection("wijnen", "overview");
     const blockMap = new Map(rawBlocks.map((b) => [b.fieldKey, b]));
     const blocks = Object.entries(WIJNEN_PAGE_DEFAULTS).map(([fieldKey, pair]) => ({
       fieldKey,
@@ -61,13 +62,14 @@ export default async function ContentPage({
         <h1 className="a-h1">Content CMS</h1>
         <p className="a-subtitle">Beheer alle teksten voor de website per pagina.</p>
         <NavTabs activePage={activePage} />
-        <ContentForm section="overview" page="wijnen" blocks={blocks} />
+        <ContentForm section="overview" page="wijnen" blocks={blocks} versions={versions} />
       </div>
     );
   }
 
   if (activePage === "tours-tastings") {
     const rawBlocks = await getBlocksForSection("tours-tastings", "main");
+    const versions = await getVersionsForSection("tours-tastings", "main");
     const blockMap = new Map(rawBlocks.map((b) => [b.fieldKey, b]));
     const blocks = Object.entries(TOURS_TASTINGS_PAGE_DEFAULTS).map(([fieldKey, pair]) => ({
       fieldKey,
@@ -80,13 +82,14 @@ export default async function ContentPage({
         <h1 className="a-h1">Content CMS</h1>
         <p className="a-subtitle">Beheer alle teksten voor de Tour & Tasting pagina.</p>
         <NavTabs activePage={activePage} />
-        <ContentForm section="main" page="tours-tastings" blocks={blocks} />
+        <ContentForm section="main" page="tours-tastings" blocks={blocks} versions={versions} />
       </div>
     );
   }
 
   if (activePage === "voor-bedrijven") {
     const rawBlocks = await getBlocksForSection("voor-bedrijven", "main");
+    const versions = await getVersionsForSection("voor-bedrijven", "main");
     const blockMap = new Map(rawBlocks.map((b) => [b.fieldKey, b]));
     const blocks = Object.entries(VOOR_BEDRIJVEN_PAGE_DEFAULTS).map(([fieldKey, pair]) => ({
       fieldKey,
@@ -99,7 +102,7 @@ export default async function ContentPage({
         <h1 className="a-h1">Content CMS</h1>
         <p className="a-subtitle">Beheer alle teksten voor de Voor Bedrijven pagina.</p>
         <NavTabs activePage={activePage} />
-        <ContentForm section="main" page="voor-bedrijven" blocks={blocks} />
+        <ContentForm section="main" page="voor-bedrijven" blocks={blocks} versions={versions} />
       </div>
     );
   }
@@ -109,6 +112,7 @@ export default async function ContentPage({
   const sectionMeta = HOME_SECTIONS.find((s) => s.key === activeSection) || HOME_SECTIONS[1];
 
   const rawBlocks = await getBlocksForSection("home", sectionMeta.key);
+  const versions = await getVersionsForSection("home", sectionMeta.key);
   const blockMap = new Map(rawBlocks.map((b) => [b.fieldKey, b]));
   const blocks = Object.entries(sectionMeta.defaults).map(([fieldKey, pair]) => ({
     fieldKey,
@@ -152,7 +156,7 @@ export default async function ContentPage({
         <h2 className="a-h1" style={{ fontSize: "1.25rem" }}>
           {sectionMeta.label}
         </h2>
-        <ContentForm section={sectionMeta.key} page="home" blocks={blocks} />
+        <ContentForm section={sectionMeta.key} page="home" blocks={blocks} versions={versions} />
       </div>
     </div>
   );

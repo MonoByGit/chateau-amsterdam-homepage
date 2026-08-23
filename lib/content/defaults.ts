@@ -184,7 +184,7 @@ export const PROCESS_DEFAULTS: ProcessContent = {
     nl: "Hier ontmoeten traditie en stad elkaar. We persen, vergisten en rijpen onder één dak, in ons eigen tempo en op onze eigen manier.",
     en: "Here tradition meets the city. We press, ferment, and age under one roof, at our own pace and in our own way.",
   },
-  step_3_image_url: { nl: "/assets/step-makerij.jpg", en: "/assets/step-makerij.jpg" },
+  step_3_image_url: { nl: "/assets/step-makerij.jpg#48p50p", en: "/assets/step-makerij.jpg#48p50p" },
   step_4_title: { nl: "De fles", en: "The bottle" },
   step_4_body: {
     nl: "Gebotteld aan het IJ. En zero waste: schillen en pitten worden bier, grappa en onze eigen Piquette d'Amsterdam.",
@@ -425,8 +425,8 @@ export const VOOR_BEDRIJVEN_PAGE_DEFAULTS: VoorBedrijvenPageContent = {
   },
   service_4_title: { nl: "Groothandel voor horeca", en: "Wholesale for hospitality" },
   service_4_body: {
-    nl: "Vaste plek op de kaart. Staffelkorting vanaf de eerste doos, altijd op voorraad.",
-    en: "A permanent spot on the menu. Volume discount from the first case, always in stock.",
+    nl: "Steeds meer horeca schenkt onze wijn, niet alleen in Amsterdam. Wij leveren, waar jij zit. Een betrouwbare partner, zonder tussenpartijen.",
+    en: "More and more hospitality venues pour our wine, not just in Amsterdam. We deliver, wherever you are. A reliable partner, without middlemen.",
   },
   form_label: { nl: "Aanvraag", en: "Request" },
   form_heading: { nl: "Vertel ons waar je aan denkt.", en: "Tell us what you have in mind." },
@@ -455,4 +455,104 @@ export const FOOTER_DEFAULTS: FooterContent = {
   discover_link_3: { nl: "De collectie", en: "The collection" },
   do_heading: { nl: "Doen", en: "Do" },
   do_link_2: { nl: "Voor bedrijven", en: "For businesses" },
+};
+
+export type EmailTemplateContent = {
+  subject: ContentPair;
+  heading: ContentPair;
+  intro: ContentPair;
+  details_label: ContentPair;
+  footer_note: ContentPair;
+};
+
+export const EMAIL_RECEIPT_DEFAULTS: EmailTemplateContent = {
+  subject: {
+    nl: "Aanvraag ontvangen · Chateau Amsterdam",
+    en: "Booking request received · Chateau Amsterdam",
+  },
+  heading: {
+    nl: "We hebben je aanvraag ontvangen.",
+    en: "We have received your request.",
+  },
+  intro: {
+    nl: "Bedankt voor je aanvraag! We gaan nu proberen je boeking op het gekozen tijdslot in te plannen. Je ontvangt spoedig een definitieve bevestiging van ons salesteam.",
+    en: "Thank you for your request! We are now scheduling your booking for the selected time slot. You will receive a confirmation from our sales team shortly.",
+  },
+  details_label: {
+    nl: "Samenvatting van je aanvraag",
+    en: "Summary of your booking request",
+  },
+  footer_note: {
+    nl: "Heb je vooraf al vragen of wil je dieetwensen doorgeven? Reageer gerust direct op deze e-mail of neem contact op via sales@chateau.amsterdam.",
+    en: "Have any questions or need to share dietary needs in advance? Feel free to reply directly to this email or reach us at sales@chateau.amsterdam.",
+  },
+};
+
+export const EMAIL_CONFIRMATION_DEFAULTS: EmailTemplateContent = {
+  subject: {
+    nl: "Je reservering bij Chateau Amsterdam is bevestigd!",
+    en: "Your booking at Chateau Amsterdam is confirmed!",
+  },
+  heading: {
+    nl: "We zien je snel tussen de tanks.",
+    en: "We look forward to welcoming you.",
+  },
+  intro: {
+    nl: "Goed nieuws! Je reservering bij Chateau Amsterdam is officieel bevestigd. We kijken ernaar uit je te verwelkomen tussen de stalen tanks aan het IJ.",
+    en: "Great news! Your booking at Chateau Amsterdam has officially been confirmed. We look forward to welcoming you among the steel tanks on the IJ.",
+  },
+  details_label: {
+    nl: "Definitieve Boekingsdetails",
+    en: "Confirmed Booking Details",
+  },
+  footer_note: {
+    nl: "Heb je tussentijds vragen of wijzigingen in het aantal gasten? Laat het ons gerust weten via sales@chateau.amsterdam.",
+    en: "Have any questions or changes in guest count in the meantime? Let us know at sales@chateau.amsterdam.",
+  },
+};
+
+export const EMAIL_UPDATE_DEFAULTS: EmailTemplateContent = {
+  subject: {
+    nl: "Wijziging in je reservering · Chateau Amsterdam",
+    en: "Update to your booking · Chateau Amsterdam",
+  },
+  heading: {
+    nl: "Je reservering is bijgewerkt.",
+    en: "Your booking has been updated.",
+  },
+  intro: {
+    nl: "Je reservering bij Chateau Amsterdam is zojuist aangepast naar de onderstaande gegevens.",
+    en: "Your booking at Chateau Amsterdam has just been updated to the details below.",
+  },
+  details_label: {
+    nl: "Bijgewerkte Gegevens",
+    en: "Updated Details",
+  },
+  footer_note: {
+    nl: "Mocht je nog verdere vragen of wensen hebben, neem dan gerust contact op via sales@chateau.amsterdam.",
+    en: "If you have any further questions or requests, feel free to contact us at sales@chateau.amsterdam.",
+  },
+};
+
+export const EMAIL_SALES_DEFAULTS: EmailTemplateContent = {
+  subject: {
+    nl: "Nieuwe aanvraag via de website",
+    en: "New booking request via the website",
+  },
+  heading: {
+    nl: "Nieuwe website aanvraag",
+    en: "New website request",
+  },
+  intro: {
+    nl: "Er is zojuist een nieuwe aanvraag ingediend. Controleer hieronder de gegevens en klik direct op Bevestigen om de reservering in te plannen, of op Wijzigen om het moment in het CMS aan te passen.",
+    en: "A new inquiry was just submitted. Review the details below and click Confirm to schedule the reservation, or Modify to adjust the booking in the CMS.",
+  },
+  details_label: {
+    nl: "Aanvraagdetails",
+    en: "Inquiry Details",
+  },
+  footer_note: {
+    nl: "Klik op Bevestigen om direct te accepteren, of op Wijzigen om een ander tijdslot met de klant af te stemmen.",
+    en: "Click Confirm to accept directly, or Modify to coordinate another time slot with the customer.",
+  },
 };

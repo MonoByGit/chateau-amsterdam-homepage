@@ -1,27 +1,56 @@
 // lib/email/send.ts
 import type { Reservation } from "@/lib/db/reservations";
-import { renderCustomerConfirmationEmail, renderCustomerReceiptEmail, renderSalesNotificationEmail } from "./templates";
+import {
+  renderCustomerConfirmationEmail,
+  renderCustomerReceiptEmail,
+  renderSalesNotificationEmail,
+  renderSalesConfirmationAlertEmail,
+  renderReservationUpdateEmail,
+} from "./templates";
+import { getEmailContent } from "@/lib/content/emails";
+import { generateIcsContent } from "./calendar";
 
 export const SALES_EMAIL_RECIPIENT = process.env.SALES_EMAIL || "sales@chateau.amsterdam";
-export const SENDER_EMAIL = process.env.SENDER_EMAIL || "Chateau Amsterdam <no-reply@chateau.amsterdam>";
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || "Chateau Amsterdam <no-reply@updates.chateau.amsterdam>";
 
-export async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }): Promise<boolean> {
+export interface EmailAttachment {
+  filename: string;
+  content: string; // Base64 or string
+}
+
+export async function sendEmail({
+  to,
+  subject,
+  html,
+  attachments,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+  attachments?: EmailAttachment[];
+}): Promise<boolean> {
   const resendApiKey = process.env.RESEND_API_KEY;
 
   if (resendApiKey) {
     try {
+      const payload: Record<string, any> = {
+        from: SENDER_EMAIL,
+        to,
+        subject,
+        html,
+      };
+
+      if (attachments && attachments.length > 0) {
+        payload.attachments = attachments;
+      }
+
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${resendApiKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          from: SENDER_EMAIL,
-          to,
-          subject,
-          html,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -45,7 +74,8 @@ export async function sendEmail({ to, subject, html }: { to: string; subject: st
 }
 
 export async function sendSalesNotification(reservation: Reservation): Promise<void> {
-  const { subject, html } = renderSalesNotificationEmail(reservation);
+  const content = await getEmailContent(reservation.track === "zakelijk" ? "sales-business" : "sales-tasting");
+  const { subject, html } = renderSalesNotificationEmail(reservation, content);
   await sendEmail({
     to: SALES_EMAIL_RECIPIENT,
     subject,
@@ -53,8 +83,26 @@ export async function sendSalesNotification(reservation: Reservation): Promise<v
   });
 }
 
+export async function sendSalesConfirmationAlert(reservation: Reservation): Promise<void> {
+  const { subject, html } = renderSalesConfirmationAlertEmail(reservation);
+  const ics = generateIcsContent(reservation);
+
+  await sendEmail({
+    to: SALES_EMAIL_RECIPIENT,
+    subject,
+    html,
+    attachments: [
+      {
+        filename: "chateau-amsterdam-afspraak.ics",
+        content: Buffer.from(ics).toString("base64"),
+      },
+    ],
+  });
+}
+
 export async function sendCustomerReceipt(reservation: Reservation): Promise<void> {
-  const { subject, html } = renderCustomerReceiptEmail(reservation);
+  const content = await getEmailContent("customer-receipt");
+  const { subject, html } = renderCustomerReceiptEmail(reservation, content);
   await sendEmail({
     to: reservation.email,
     subject,
@@ -63,10 +111,37 @@ export async function sendCustomerReceipt(reservation: Reservation): Promise<voi
 }
 
 export async function sendCustomerConfirmation(reservation: Reservation): Promise<void> {
-  const { subject, html } = renderCustomerConfirmationEmail(reservation);
+  const content = await getEmailContent("customer-confirmation");
+  const { subject, html } = renderCustomerConfirmationEmail(reservation, content);
+  const ics = generateIcsContent(reservation);
+
   await sendEmail({
     to: reservation.email,
     subject,
     html,
+    attachments: [
+      {
+        filename: "chateau-amsterdam-reservering.ics",
+        content: Buffer.from(ics).toString("base64"),
+      },
+    ],
+  });
+}
+
+export async function sendReservationUpdateNotification(reservation: Reservation): Promise<void> {
+  const content = await getEmailContent("customer-update");
+  const { subject, html } = renderReservationUpdateEmail(reservation, content);
+  const ics = generateIcsContent(reservation);
+
+  await sendEmail({
+    to: reservation.email,
+    subject,
+    html,
+    attachments: [
+      {
+        filename: "chateau-amsterdam-gewijzigd.ics",
+        content: Buffer.from(ics).toString("base64"),
+      },
+    ],
   });
 }

@@ -68,7 +68,7 @@ export function Manifest({ content }: { content: ManifestContent }) {
         <div className="rule">
           <p ref={body.ref as React.RefObject<HTMLParagraphElement>} className={`rv${body.isVisible ? " in" : ""}`}>
             {lang === "nl" ? content.body_lead.nl : content.body_lead.en}
-            <strong>{lang === "nl" ? content.body_strong.nl : content.body_strong.en}</strong>
+            {lang === "nl" ? content.body_strong.nl : content.body_strong.en}
             {lang === "nl" ? content.body_tail.nl : content.body_tail.en}
           </p>
         </div>

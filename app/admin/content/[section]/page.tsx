@@ -1,6 +1,6 @@
 // app/admin/content/[section]/page.tsx
 import Link from "next/link";
-import { getBlocksForSection } from "@/lib/db/content";
+import { getBlocksForSection, getVersionsForSection } from "@/lib/db/content";
 import { ContentForm } from "./content-form";
 
 export const dynamic = "force-dynamic";
@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function ContentSectionPage({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
   const blocks = await getBlocksForSection("home", section);
+  const versions = await getVersionsForSection("home", section);
 
   return (
     <div>
@@ -18,7 +19,7 @@ export default async function ContentSectionPage({ params }: { params: Promise<{
         {section}
       </h1>
       <p className="a-subtitle">Wijzigingen zijn direct live op de homepage zodra je op Opslaan klikt.</p>
-      <ContentForm section={section} blocks={blocks} />
+      <ContentForm section={section} blocks={blocks} versions={versions} />
     </div>
   );
 }
