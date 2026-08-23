@@ -32,7 +32,7 @@ function formatDutchDate(iso: string): string {
   return `${dayNames[d.getDay()]} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// Build standard time slots based on day of week (70 min fixed tours)
+// Build standard time slots based on day of week (clean start times)
 function getDaySlots(isoDate: string): { key: string; label: string }[] {
   const date = parseIsoDate(isoDate);
   const day = date ? date.getDay() : 4; // 0=Zo, 4=Do, 5=Vr, 6=Za
@@ -40,29 +40,29 @@ function getDaySlots(isoDate: string): { key: string; label: string }[] {
   if (day === 6) {
     // Saturday: 12:00, 14:00, 16:00, 18:00, 19:30
     return [
-      { key: "12:00", label: "12:00 uur (70 min. tour & tasting)" },
-      { key: "14:00", label: "14:00 uur (70 min. tour & tasting)" },
-      { key: "16:00", label: "16:00 uur (70 min. tour & tasting)" },
-      { key: "18:00", label: "18:00 uur (70 min. tour & tasting)" },
-      { key: "19:30", label: "19:30 uur (70 min. tour & tasting)" },
+      { key: "12:00", label: "12:00 uur" },
+      { key: "14:00", label: "14:00 uur" },
+      { key: "16:00", label: "16:00 uur" },
+      { key: "18:00", label: "18:00 uur" },
+      { key: "19:30", label: "19:30 uur" },
     ];
   }
 
   if (day === 5) {
     // Friday: 14:00, 16:00, 18:00, 19:30
     return [
-      { key: "14:00", label: "14:00 uur (70 min. tour & tasting)" },
-      { key: "16:00", label: "16:00 uur (70 min. tour & tasting)" },
-      { key: "18:00", label: "18:00 uur (70 min. tour & tasting)" },
-      { key: "19:30", label: "19:30 uur (70 min. tour & tasting)" },
+      { key: "14:00", label: "14:00 uur" },
+      { key: "16:00", label: "16:00 uur" },
+      { key: "18:00", label: "18:00 uur" },
+      { key: "19:30", label: "19:30 uur" },
     ];
   }
 
   // Thursday (and other days): 14:00, 16:00, 18:00
   return [
-    { key: "14:00", label: "14:00 uur (70 min. tour & tasting)" },
-    { key: "16:00", label: "16:00 uur (70 min. tour & tasting)" },
-    { key: "18:00", label: "18:00 uur (70 min. tour & tasting)" },
+    { key: "14:00", label: "14:00 uur" },
+    { key: "16:00", label: "16:00 uur" },
+    { key: "18:00", label: "18:00 uur" },
   ];
 }
 

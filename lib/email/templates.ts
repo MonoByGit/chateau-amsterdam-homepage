@@ -116,6 +116,15 @@ function renderFieldRow(num: string, label: string, value: string): string {
     </tr>`;
 }
 
+export function formatDisplayTime(period: string | null | undefined): string {
+  if (!period) return "";
+  const match = period.match(/(\d{1,2}[:.]\d{2})/);
+  if (match) {
+    return `${match[1].replace(".", ":")} uur`;
+  }
+  return period;
+}
+
 export function renderSalesNotificationEmail(
   reservation: Reservation,
   customContent?: Partial<EmailTemplateContent>
@@ -161,7 +170,7 @@ export function renderSalesNotificationEmail(
       ${renderFieldRow(
         reservation.companyName ? (reservation.phone ? "05" : "04") : (reservation.phone ? "04" : "03"),
         "Datum & Tijd",
-        `<strong>${dateStr}</strong> ${reservation.preferredPeriod ? `&middot; ${reservation.preferredPeriod}` : ""}`
+        `<strong>${dateStr}</strong> ${reservation.preferredPeriod ? `&middot; ${formatDisplayTime(reservation.preferredPeriod)}` : ""}`
       )}
       ${renderFieldRow(
         "06",
@@ -235,7 +244,7 @@ export function renderSalesConfirmationAlertEmail(reservation: Reservation): { s
       ${renderFieldRow(
         reservation.companyName ? (reservation.phone ? "05" : "04") : (reservation.phone ? "04" : "03"),
         "Datum & Tijd",
-        `<strong>${dateStr}</strong> ${reservation.preferredPeriod ? `&middot; ${reservation.preferredPeriod}` : ""}`
+        `<strong>${dateStr}</strong> ${reservation.preferredPeriod ? `&middot; ${formatDisplayTime(reservation.preferredPeriod)}` : ""}`
       )}
       ${renderFieldRow(
         "06",
@@ -301,7 +310,7 @@ export function renderCustomerReceiptEmail(
       </div>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
         ${renderFieldRow("01", "Datum", dateStr)}
-        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdslot", reservation.preferredPeriod) : ""}
+        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdstip", formatDisplayTime(reservation.preferredPeriod)) : ""}
         ${renderFieldRow("03", "Gezelschap", `${reservation.partySize || reservation.groupSize || 2} personen`)}
         ${renderFieldRow("04", "Locatie", "Johan van Hasseltweg 51, Amsterdam-Noord")}
       </table>
@@ -362,7 +371,7 @@ export function renderCustomerConfirmationEmail(
       </div>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
         ${renderFieldRow("01", "Datum", `<strong>${dateStr}</strong>`)}
-        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdslot", `<strong>${reservation.preferredPeriod}</strong>`) : ""}
+        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdstip", `<strong>${formatDisplayTime(reservation.preferredPeriod)}</strong>`) : ""}
         ${renderFieldRow("03", "Gezelschap", `${reservation.partySize || reservation.groupSize || 2} personen`)}
         ${renderFieldRow("04", "Adres", "Johan van Hasseltweg 51, 1021 KN Amsterdam")}
         ${renderFieldRow("05", "Locatie", "10 min. vanaf CS &middot; Gratis parkeren")}
@@ -431,7 +440,7 @@ export function renderReservationUpdateEmail(
       </div>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
         ${renderFieldRow("01", "Datum", `<strong>${dateStr}</strong>`)}
-        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdslot", `<strong>${reservation.preferredPeriod}</strong>`) : ""}
+        ${reservation.preferredPeriod ? renderFieldRow("02", "Tijdstip", `<strong>${formatDisplayTime(reservation.preferredPeriod)}</strong>`) : ""}
         ${renderFieldRow("03", "Gezelschap", `${reservation.partySize || reservation.groupSize || 2} personen`)}
         ${renderFieldRow("04", "Locatie", "Johan van Hasseltweg 51, Amsterdam-Noord")}
       </table>

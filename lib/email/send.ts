@@ -11,7 +11,7 @@ import { getEmailContent } from "@/lib/content/emails";
 import { generateIcsContent } from "./calendar";
 
 export const SALES_EMAIL_RECIPIENT = process.env.SALES_EMAIL || "sales@chateau.amsterdam";
-export const SENDER_EMAIL = process.env.SENDER_EMAIL || "Chateau Amsterdam <no-reply@updates.chateau.amsterdam>";
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || "Chateau Amsterdam <reserveringen@updates.chateau.amsterdam>";
 
 export interface EmailAttachment {
   filename: string;
@@ -36,6 +36,7 @@ export async function sendEmail({
       const payload: Record<string, any> = {
         from: SENDER_EMAIL,
         to,
+        reply_to: "sales@chateau.amsterdam",
         subject,
         html,
       };
