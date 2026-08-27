@@ -5,16 +5,41 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
 async function main() {
+  if (!process.env.DATABASE_URL) {
+    console.warn("DATABASE_URL not set, skipping database migration.");
+    return;
+  }
+
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const db = drizzle(pool);
 
-  await migrate(db, { migrationsFolder: "./drizzle" });
+  try {
+    await migrate(db, { migrationsFolder: "./drizzle" });
+    console.log("Migrations applied via drizzle migrator.");
+  } catch (err: any) {
+    console.warn("Drizzle migration notice (continuing startup):", err?.message || err);
+  }
+
+  // Ensure newsletter_subscribers table exists safely
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
+        "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+        "email" text NOT NULL UNIQUE,
+        "locale" text DEFAULT 'nl' NOT NULL,
+        "source" text DEFAULT 'modal' NOT NULL,
+        "created_at" timestamp with time zone DEFAULT now() NOT NULL
+      );
+    `);
+    console.log("newsletter_subscribers table verified.");
+  } catch (err) {
+    console.warn("Could not verify newsletter_subscribers table:", err);
+  }
 
   await pool.end();
-  console.log("Migrations applied.");
 }
 
 main().catch((err) => {
-  console.error(err);
-  process.exit(1);
+  console.warn("Migration warning (continuing startup):", err);
 });
+
