@@ -78,11 +78,21 @@ export type TastingReservationInput = {
   partySize: number;
   requestedDate: string;
   preferredPeriod: string;
+  preferredLanguage?: string;
   occasion: string;
   notes: string;
 };
 
 export async function createTastingReservation(input: TastingReservationInput): Promise<Reservation> {
+  const langLabel = input.preferredLanguage ? `Taal: ${input.preferredLanguage}` : "";
+  const period = input.preferredPeriod
+    ? (langLabel ? `${input.preferredPeriod} · ${langLabel}` : input.preferredPeriod)
+    : (langLabel || null);
+
+  const notesWithLang = [langLabel ? `[${langLabel}]` : "", input.notes?.trim()]
+    .filter(Boolean)
+    .join(" ");
+
   const [row] = await db
     .insert(reservations)
     .values({
@@ -92,9 +102,9 @@ export async function createTastingReservation(input: TastingReservationInput): 
       phone: input.phone || null,
       partySize: input.partySize,
       requestedDate: input.requestedDate,
-      preferredPeriod: input.preferredPeriod || null,
+      preferredPeriod: period,
       occasion: input.occasion || null,
-      notes: input.notes || null,
+      notes: notesWithLang || null,
     })
     .returning();
   return row;
@@ -119,4 +129,30 @@ export async function updateReservationStatus(id: string, status: ReservationSta
     .update(reservations)
     .set({ status, updatedAt: new Date() })
     .where(eq(reservations.id, id));
+}
+
+export type UpdateReservationInput = {
+  requestedDate?: string | null;
+  preferredPeriod?: string | null;
+  partySize?: number | null;
+  notes?: string | null;
+};
+
+export async function updateReservationDetails(id: string, input: UpdateReservationInput): Promise<Reservation> {
+  const existing = await getReservation(id);
+  if (!existing) {
+    throw new Error(`Reservation not found: ${id}`);
+  }
+  const [updated] = await db
+    .update(reservations)
+    .set({
+      requestedDate: input.requestedDate !== undefined ? input.requestedDate : existing.requestedDate,
+      preferredPeriod: input.preferredPeriod !== undefined ? input.preferredPeriod : existing.preferredPeriod,
+      partySize: input.partySize !== undefined ? input.partySize : existing.partySize,
+      notes: input.notes !== undefined ? input.notes : existing.notes,
+      updatedAt: new Date(),
+    })
+    .where(eq(reservations.id, id))
+    .returning();
+  return updated;
 }

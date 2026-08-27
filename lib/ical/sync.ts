@@ -150,23 +150,32 @@ export async function syncGoogleCalendar(icalUrl?: string): Promise<{ syncedEven
       const sum = ev.summary.toLowerCase();
       const time = ev.startTime ?? "";
 
-      if (time.startsWith("15") || sum.includes("15:00") || sum.includes("15u") || sum.includes("3:00")) {
-        slotsToBlock.push("15:00 uur (70 min. tour & tasting)");
+      if (time.startsWith("12") || sum.includes("12:00") || sum.includes("12u")) {
+        slotsToBlock.push("12:00 uur (70 min. tour & tasting)");
       }
-      if (time.startsWith("17") || sum.includes("17:00") || sum.includes("17u") || sum.includes("5:00")) {
-        slotsToBlock.push("17:00 uur (70 min. tour & tasting)");
+      if (time.startsWith("14") || sum.includes("14:00") || sum.includes("14u") || sum.includes("2:00")) {
+        slotsToBlock.push("14:00 uur (70 min. tour & tasting)");
       }
-      if (time.startsWith("19") || sum.includes("19:00") || sum.includes("19u") || sum.includes("7:00")) {
-        slotsToBlock.push("19:00 uur (70 min. tour & tasting)");
+      if (time.startsWith("16") || sum.includes("16:00") || sum.includes("16u") || sum.includes("4:00")) {
+        slotsToBlock.push("16:00 uur (70 min. tour & tasting)");
+      }
+      if (time.startsWith("18") || sum.includes("18:00") || sum.includes("18u") || sum.includes("6:00")) {
+        slotsToBlock.push("18:00 uur (70 min. tour & tasting)");
       }
 
       // Any custom event summary (e.g. "Besloten feest")
-      if (!time.startsWith("15") && !time.startsWith("17") && !time.startsWith("19") && ev.summary) {
+      if (
+        !time.startsWith("12") &&
+        !time.startsWith("14") &&
+        !time.startsWith("16") &&
+        !time.startsWith("18") &&
+        ev.summary
+      ) {
         slotsToBlock.push(ev.summary);
       }
     }
 
-    const uniqueSlots = Array.from(new Set(slotsToBlock)).slice(0, 4);
+    const uniqueSlots = Array.from(new Set(slotsToBlock)).slice(0, 5);
     if (uniqueSlots.length > 0) {
       await db.delete(availabilityBlocks).where(eq(availabilityBlocks.date, date));
       await db.insert(availabilityBlocks).values(

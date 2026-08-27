@@ -25,7 +25,7 @@ export default async function AvailabilityDayPage({ params }: { params: Promise<
         {formatAdminDate(date)}
       </h1>
       <p className="a-subtitle">
-        Standaard zijn de tours en tastings geopend op donderdag, vrijdag en zaterdag met vaste tijdslots (15:00, 17:00 en 19:00 uur).
+        Standaard zijn de tours en tastings geopend op donderdag &amp; vrijdag (14:00, 16:00, 18:00) en zaterdag (12:00, 14:00, 16:00, 18:00).
         Vink hieronder aan als de hele dag dicht is, of blokkeer specifieke tijdslots.
       </p>
 

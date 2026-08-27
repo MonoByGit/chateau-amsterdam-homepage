@@ -18,6 +18,8 @@ export const WINE_METAFIELD_IDENTIFIERS = [
   { namespace: "custom", key: "pairing" },
   { namespace: "custom", key: "story" },
   { namespace: "custom", key: "origin" },
+  { namespace: "custom", key: "type" },
+  { namespace: "custom", key: "experimental" },
 ] as const;
 
 export type WineMetafieldKey = (typeof WINE_METAFIELD_IDENTIFIERS)[number]["key"];

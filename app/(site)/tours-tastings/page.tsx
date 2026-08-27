@@ -37,15 +37,19 @@ export default async function ToursTastingsPage({
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
 
-  const monthBlocksPromises = [0, 1, 2, 3].map((offset) => {
-    const total = year * 12 + (month - 1) + offset;
-    const y = Math.floor(total / 12);
-    const m = (total % 12) + 1;
-    return listBlocksForMonth(y, m);
-  });
-
-  const monthBlocksResults = await Promise.all(monthBlocksPromises);
-  const allBlocks = monthBlocksResults.flat();
+  let allBlocks: any[] = [];
+  try {
+    const monthBlocksPromises = [0, 1, 2, 3].map((offset) => {
+      const total = year * 12 + (month - 1) + offset;
+      const y = Math.floor(total / 12);
+      const m = (total % 12) + 1;
+      return listBlocksForMonth(y, m);
+    });
+    const monthBlocksResults = await Promise.all(monthBlocksPromises);
+    allBlocks = monthBlocksResults.flat();
+  } catch (err) {
+    console.warn("Could not fetch availability blocks, falling back to empty list:", err);
+  }
 
   const blockedFullDays = allBlocks.filter((b) => b.isFullDay).map((b) => b.date);
   const blockedSlotsByDate: Record<string, string[]> = {};

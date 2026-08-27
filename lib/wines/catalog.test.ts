@@ -5,8 +5,8 @@ import { getWineCatalog, getFeaturedWines, getWineByHandle } from "./catalog";
 function mockProduct(overrides: Partial<Record<string, unknown>> = {}) {
   return {
     id: "gid://shopify/Product/1",
-    handle: "100-gamay",
-    title: "100% Gamay",
+    handle: "test-wine",
+    title: "Test Wine",
     productType: "Red wine",
     descriptionHtml: "<p>Light red wine.</p>",
     featuredImage: { url: "https://cdn.shopify.com/gamay.jpg", altText: null },
@@ -54,7 +54,7 @@ describe("getWineCatalog", () => {
     const wines = await getWineCatalog();
 
     expect(wines).toHaveLength(1);
-    expect(wines[0].handle).toBe("100-gamay");
+    expect(wines[0].handle).toBe("test-wine");
     expect(wines[0].fieldsNl.oneliner).toBe("Fruity and refreshing");
     expect(wines[0].fieldsEn.oneliner).toBe("Fruity and refreshing EN");
   });
@@ -115,7 +115,7 @@ describe("getWineByHandle", () => {
       })
     );
 
-    const wine = await getWineByHandle("100-gamay");
+    const wine = await getWineByHandle("test-wine");
 
     expect(wine?.descriptionNl).toBe("Het verhaal");
     expect(wine?.descriptionEn).toBe("The story");

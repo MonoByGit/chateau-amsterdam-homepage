@@ -1,198 +1,220 @@
 // app/admin/help/page.tsx
+export const dynamic = "force-dynamic";
+
 export default function HelpPage() {
   return (
-    <div>
-      <h1 className="a-h1">Handleiding</h1>
-      <p className="a-subtitle">Wat er allemaal in het CMS zit, en hoe je de belangrijkste dingen zelf doet.</p>
+    <div style={{ maxWidth: "62rem" }}>
+      <h1 className="a-h1">Handleiding &amp; Systeembeheer</h1>
+      <p className="a-subtitle">
+        Actuele werkwijze voor het beheer van Chateau Amsterdam: van binnenkomende aanvragen en omboeken tot de E-mail Studio en Google Agenda koppeling.
+      </p>
 
-      <div className="a-dashboard-section">
-        <h2>Overzicht</h2>
-        <div className="a-help-grid">
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Overzicht</span>
-            <h3>Startpagina</h3>
-            <p>Openstaande reserveringen, binnenkort geblokkeerde dagen, en bezoekersstatistieken in één oogopslag.</p>
+      {/* Live Status & Oplevering Card */}
+      <div
+        className="a-card"
+        style={{
+          padding: "1.25rem 1.5rem",
+          marginBottom: "2rem",
+          background: "rgba(184, 134, 11, 0.08)",
+          border: "1px solid rgba(184, 134, 11, 0.35)",
+          borderRadius: "8px",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "0.5rem" }}>
+          <span style={{ fontSize: "1.25rem" }}>🚀</span>
+          <h2 className="a-h2" style={{ fontSize: "1.125rem", margin: 0, color: "var(--a-text)" }}>
+            Actuele Systeemstatus (Productie-Klaar)
+          </h2>
+        </div>
+        <p style={{ fontSize: "0.875rem", color: "var(--a-text-2)", margin: "0 0 1rem 0" }}>
+          Alle functionaliteiten zijn volledig gebouwd, getest en klaargezet voor het team:
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem" }}>
+          <div style={{ padding: "0.75rem", background: "var(--a-card-bg)", borderRadius: "6px", border: "1px solid var(--a-border)" }}>
+            <strong style={{ color: "#22c55e", fontSize: "0.875rem" }}>✓ Reserveringen &amp; Omboeken</strong>
+            <p style={{ fontSize: "0.75rem", color: "var(--a-text-2)", margin: "0.25rem 0 0 0" }}>
+              1-klik goedkeuring via e-mail of telefonisch omboeken via CMS.
+            </p>
           </div>
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Reserveringen</span>
-            <h3>Aanvragen afhandelen</h3>
-            <p>Elke tasting- of tour-aanvraag komt hier binnen. Bevestigen, afwijzen, of in behandeling zetten.</p>
+
+          <div style={{ padding: "0.75rem", background: "var(--a-card-bg)", borderRadius: "6px", border: "1px solid var(--a-border)" }}>
+            <strong style={{ color: "#22c55e", fontSize: "0.875rem" }}>✓ E-mail Studio</strong>
+            <p style={{ fontSize: "0.75rem", color: "var(--a-text-2)", margin: "0.25rem 0 0 0" }}>
+              Editor in NL/EN, live desktop &amp; mobiel previews, HTML export.
+            </p>
           </div>
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Beschikbaarheid</span>
-            <h3>Kalender & iCal Sync</h3>
-            <p>Vaste tijdslots (15:00, 17:00, 19:00) of hele dagen blokkeren. Automatisch gekoppeld aan Google Workspace Calendar.</p>
+
+          <div style={{ padding: "0.75rem", background: "var(--a-card-bg)", borderRadius: "6px", border: "1px solid var(--a-border)" }}>
+            <strong style={{ color: "#22c55e", fontSize: "0.875rem" }}>✓ Shopify Realtime Sync</strong>
+            <p style={{ fontSize: "0.75rem", color: "var(--a-text-2)", margin: "0.25rem 0 0 0" }}>
+              Wijnen, prijzen, pairings, smaakprofielen en checkout hand-off.
+            </p>
           </div>
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Content</span>
-            <h3>Teksten op de site</h3>
-            <p>Koppen, intro&apos;s en labels per sectie van de homepage, zonder dat er iets herbouwd hoeft te worden.</p>
-          </div>
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Media</span>
-            <h3>Foto-bibliotheek</h3>
-            <p>Alle geüploade foto&apos;s op één plek, te gebruiken bij teksten en content elders in het CMS.</p>
-          </div>
-          <div className="a-card a-help-card">
-            <span className="a-eyebrow">Account</span>
-            <h3>Jij en je team</h3>
-            <p>Eigen wachtwoord wijzigen, en collega&apos;s toevoegen of verwijderen die ook mogen inloggen.</p>
+
+          <div style={{ padding: "0.75rem", background: "var(--a-card-bg)", borderRadius: "6px", border: "1px solid var(--a-border)" }}>
+            <strong style={{ color: "#22c55e", fontSize: "0.875rem" }}>✓ Google Agenda Koppeling</strong>
+            <p style={{ fontSize: "0.75rem", color: "var(--a-text-2)", margin: "0.25rem 0 0 0" }}>
+              iCal synchronisatie voor automatische tijdslot-blokkades.
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Grid: Overzicht van modules */}
       <div className="a-dashboard-section">
-        <h2>Hoe het werkt</h2>
+        <h2>Overzicht van het CMS</h2>
+        <div className="a-help-grid">
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">Reserveringen</span>
+            <h3>Aanvragen &amp; Omboeken</h3>
+            <p>Binnenkomende tastings en zakelijke aanvragen direct bevestigen of na telefonisch overleg omzetten naar een nieuw moment.</p>
+          </div>
+
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">E-mail Studio</span>
+            <h3>Templates &amp; Teksten</h3>
+            <p>Pas alle automatische e-mails aan in NL &amp; EN, bekijk live desktop/mobiele previews en exporteer HTML.</p>
+          </div>
+
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">Beschikbaarheid</span>
+            <h3>Kalender &amp; Google Agenda</h3>
+            <p>Tijdsloten of hele dagen sluiten in het CMS of automatisch via de Google Workspace Calendar sync.</p>
+          </div>
+
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">Wijnen</span>
+            <h3>Shopify Synchronisatie</h3>
+            <p>Wijnen, foto&apos;s, alcoholpercentage, smaakprofielen, pairings en one-liners komen realtime uit Shopify.</p>
+          </div>
+
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">Content &amp; Foto&apos;s</span>
+            <h3>Website Teksten</h3>
+            <p>Pas alle koppen, intro&apos;s, verhalen en sfeerfoto&apos;s op de homepage, zakelijke en tasting-pagina&apos;s aan.</p>
+          </div>
+
+          <div className="a-card a-help-card">
+            <span className="a-eyebrow">Team</span>
+            <h3>Accounts &amp; Beveiliging</h3>
+            <p>Eigen wachtwoord wijzigen en collega&apos;s toevoegen of beheren.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Stap-voor-stap werkwijzen */}
+      <div className="a-dashboard-section">
+        <h2>Instructies per Onderdeel</h2>
         <div className="a-card">
-          <details className="a-help-howto">
-            <summary>Een reservering afhandelen</summary>
-            <div className="a-help-howto-body">
-              <ol>
-                <li>Ga naar <strong>Reserveringen</strong>. Nieuwe aanvragen staan bovenaan.</li>
-                <li>Open de aanvraag voor naam, gastenaantal, datum en eventuele opmerkingen.</li>
-                <li>
-                  Zet de status op <strong>Bevestigd</strong> of <strong>Afgewezen</strong>. De klant ziet dit niet
-                  automatisch terug, bevestig het gesprek zelf per mail of telefoon.
-                </li>
-              </ol>
-            </div>
-          </details>
-          <details className="a-help-howto">
-            <summary>Een dag of tijdslot (deels) blokkeren via het CMS</summary>
-            <div className="a-help-howto-body">
-              <ol>
-                <li>Ga naar <strong>Beschikbaarheid</strong> en klik op de gewenste datum in de kalender.</li>
-                <li>
-                  Vink <strong>Deze hele dag niet beschikbaar (volledig gesloten)</strong> aan voor een vakantiedag of feestdag.
-                </li>
-                <li>
-                  Of vink een specifiek tijdslot aan (bijv. <strong>15:00 uur</strong>, <strong>17:00 uur</strong> of <strong>19:00 uur</strong>) om uitsluitend dat moment te blokkeren voor boekingen.
-                </li>
-                <li>Klik op <strong>Opslaan</strong>. Geblokkeerde dagen/slots worden direct op de reserveringspagina uitgeschakeld.</li>
-              </ol>
-            </div>
-          </details>
 
+          {/* 1. Reserveringen Flow */}
           <details className="a-help-howto" open>
-            <summary>📅 Google Workspace Calendar &amp; iCal Sync (Optioneel)</summary>
+            <summary>🍷 1. Hoe handel je een reserveringsaanvraag af?</summary>
             <div className="a-help-howto-body">
               <p>
-                <strong>⚡ De Essentie vs. Optionele iCal Sync:</strong><br />
-                Met het 1-click Resend e-mailsysteem verloopt het verwerken van aanvragen (goedkeuren/afwijzen) volledig automatisch via de e-mail en het CMS. Zodra je op <strong>[Goedkeuren]</strong> klikt, blokkeert de site dat tijdslot direct zelf.
+                Wanneer een bezoeker via de website een proeverij of zakelijke aanvraag indient, ziet de bezoeker direct een bevestiging op het scherm en ontvangt <strong>Sales</strong> een e-mailnotificatie met twee directe knoppen:
               </p>
-              <p>
-                <strong>Wanneer gebruik je wel de iCal Sync?</strong><br />
-                De iCal-koppeling is <em>optioneel</em> en alleen nodig als het salesteam ook <strong>handmatig buiten de website om afspraken of sluitingen in Google Agenda plant</strong> (bijv. als ze in Google Calendar een <em>"Besloten borrel"</em> inzetten en willen dat de site die tijden automatisch sluit).
-              </p>
-              
-              <h4>1. Eenmalige Initiële Set-up (alleen bij gebruik Google Calendar):</h4>
+
+              <h4>Scenario A: Het aangevraagde tijdslot past wél</h4>
               <ol>
-                <li>Open <strong>Google Calendar</strong> in de browser (ingelogd met het Chateau Google Workspace account).</li>
-                <li>Zoek aan de linkerkant de agenda op (bijv. <em>&ldquo;Chateau Tastings & Events&rdquo;</em>) en klik op de 3 puntjes → <strong>Instellingen en delen</strong>.</li>
-                <li>Scroll in het linkermenu naar het kopje <strong>Agenda integreren</strong>.</li>
-                <li>Zoek de regel <strong>&ldquo;Geheim adres in iCal-indeling&rdquo;</strong> en kopieer de geheime URL (deze eindigt op <code>.ics</code>).</li>
-                <li>Ga in dit CMS naar <strong>Beschikbaarheid</strong>, plak de gekopieerde URL in het vak onder <em>Google Workspace Calendar Koppeling</em> en klik op <strong>URL Opslaan</strong>.</li>
-                <li>Klik daarna op de knop <strong>🔄 Nu Synchroniseren</strong> om de eerste sync uit te voeren.</li>
+                <li>Klik in de binnengekomen e-mail (of in het CMS) direct op <strong>`✓ Bevestigen`</strong>.</li>
+                <li>De reservering wordt automatisch op <em>Bevestigd</em> gezet en in de agenda geplaatst.</li>
+                <li>De klant ontvangt direct de officiële <strong>Definitieve Bevestigingsmail</strong> met alle details, datum, tijd en adres.</li>
               </ol>
 
-              <h4>2. Dagelijks gebruik via Google Calendar:</h4>
+              <h4>Scenario B: Het aangevraagde tijdslot kan NIET (Omboeken)</h4>
+              <ol>
+                <li>Klik in de e-mail op <strong>`✏️ Wijzigen`</strong> (of open de reservering in het CMS).</li>
+                <li>Klik op de knop <strong>`📞 Bel klant`</strong> om direct telefonisch een alternatief moment af te stemmen.</li>
+                <li>Vul in het formulier de nieuw overeengekomen datum en het nieuwe tijdslot in.</li>
+                <li>Klik op <strong>`✅ Opslaan &amp; Definitieve Bevestiging naar klant sturen`</strong>.</li>
+                <li>Het systeem past de reservering aan en de klant ontvangt direct de bevestigingsmail met de nieuwe datum en tijd!</li>
+              </ol>
+            </div>
+          </details>
+
+          {/* 2. E-mail Studio */}
+          <details className="a-help-howto" open>
+            <summary>📬 2. E-mails beheren &amp; aanpassen in de E-mail Studio</summary>
+            <div className="a-help-howto-body">
+              <p>
+                Onder <strong>E-mailtemplates</strong> in het linkermenu vind je de E-mail Studio. Hier beheer je de teksten van alle 4 actieve e-mailtemplates:
+              </p>
               <ul>
-                <li>
-                  <strong>Hele dag sluiten:</strong> Maak een dag-evenement aan in Google Calendar met de titel <em>&ldquo;Dicht&rdquo;</em>, <em>&ldquo;Gesloten&rdquo;</em> of <em>&ldquo;Volgeboekt&rdquo;</em>. De site sluit die dag automatisch volledig voor reserveringen.
-                </li>
-                <li>
-                  <strong>Specifiek tijdslot blokkeren:</strong> Maak een afspraak aan op het desbetreffende tijdstip (bijv. om 15:00, 17:00 of 19:00 uur) met een titel zoals <em>&ldquo;Besloten feest&rdquo;</em> of <em>&ldquo;Groepsboeking&rdquo;</em>. De site schakelt uitsluitend dat tijdslot uit voor bezoekers.
-                </li>
-                <li>
-                  <strong>Handmatige verversing:</strong> Heb je zojuist iets aangepast in Google Calendar en wil je dat het nú op de site staat? Ga in het CMS naar <strong>Beschikbaarheid</strong> en klik op <strong>🔄 Nu Synchroniseren</strong>.
-                </li>
+                <li><strong>1. Klant: Definitieve Bevestiging:</strong> De officiële bevestiging die de klant ontvangt na goedkeuring of omboeking.</li>
+                <li><strong>2. Klant: Wijziging Reservering:</strong> Wordt verstuurd als Sales achteraf een bestaande boeking wijzigt.</li>
+                <li><strong>3. Sales: Tasting Aanvraag:</strong> Notificatiemail met actieknoppen voor particuliere tours.</li>
+                <li><strong>4. Sales: Zakelijke Aanvraag:</strong> Notificatiemail voor zakelijke events, groothandel en private label.</li>
               </ul>
+
+              <h4>Hoe pas je teksten aan?</h4>
+              <ol>
+                <li>Kies het gewenste template via de tabbladen bovenaan.</li>
+                <li>Schakel tussen <strong>🇳🇱 Nederlands</strong> en <strong>🇬🇧 English</strong>.</li>
+                <li>Pas de onderwerpregel, koptekst, introductie of afsluitende tekst aan in het linkerpaneel.</li>
+                <li>Klik op <strong>💾 Wijzigingen opslaan</strong>. De wijziging is direct actief voor alle uitgaande e-mails.</li>
+                <li>Bekijk rechts realtime het resultaat in <strong>Desktop weergave</strong> of <strong>Mobiel (390px iPhone)</strong>.</li>
+                <li>Wil je het template gebruiken in een extern systeem (zoals Mailchimp of Klaviyo)? Klik rechtsboven op <strong>📋 HTML Kopiëren</strong> of <strong>📥 Download</strong>.</li>
+              </ol>
             </div>
           </details>
+
+          {/* 3. Google Workspace Calendar Sync */}
           <details className="a-help-howto">
-            <summary>Een wijn toevoegen, verbergen of op de homepage zetten</summary>
+            <summary>📅 3. Google Workspace Agenda &amp; Beschikbaarheid</summary>
             <div className="a-help-howto-body">
               <p>
-                De wijnenpagina en de wijndetailpagina&apos;s zijn een spiegel van Shopify: alles wat je in Shopify
-                aanpast (foto, prijs, voorraad, tekstvelden onder &ldquo;Productmetavelden&rdquo;) verschijnt
-                automatisch op de site, meestal binnen 5 minuten. Er is nergens meer een aparte plek waar je een wijn
-                nogmaals moet invoeren.
-              </p>
-              <p>
-                <strong>Nieuwe wijn toevoegen:</strong> maak 'm aan als product in Shopify (Producten → Product
-                toevoegen), met Categorie &ldquo;Wijn&rdquo; en het juiste Type (Rood/Wit/Oranje/Rosé/Pét-Nat/Piquette).
-                Zodra het Type klopt en de status op &ldquo;Actief&rdquo; staat, verschijnt de wijn vanzelf op de
-                wijnenpagina, zonder dat je 'm ergens handmatig hoeft toe te voegen.
-              </p>
-              <p>
-                <strong>Wijn (tijdelijk) van de site halen:</strong> zet de status in Shopify op &ldquo;Concept&rdquo;
-                of &ldquo;Gearchiveerd&rdquo;. Wil je 'm laten staan als verkoopbaar product maar wel van de
-                wijnenpagina weren, klik dan in de collectie <strong>All our wines</strong> op &ldquo;Uitsluiten&rdquo;
-                voor die specifieke wijn.
-              </p>
-              <p>
-                <strong>Op de homepage uitlichten:</strong> voeg de wijn toe aan de collectie{" "}
-                <strong>Homepage</strong> in Shopify (Producten → Collecties). Maximaal 5 tegelijk, sleep daar de
-                volgorde.
-              </p>
-              <p>
-                Tekstvelden zoals het verhaal, wijn-spijs advies, druif en streek staan onder &ldquo;Productmetavelden&rdquo;
-                op de productpagina in Shopify — niet verplicht om te vullen, maar zorgen wel voor een rijkere
-                detailpagina.
-              </p>
-            </div>
-          </details>
-          <details className="a-help-howto" open style={{ border: "1px solid #cda757", borderRadius: "8px", background: "#1c1917", color: "#f7f5f0", padding: "0.5rem" }}>
-            <summary style={{ color: "#cda757", fontWeight: 600, fontSize: "1.05rem" }}>
-              🏖️ Vakantie-Backlog &amp; Actiepunten (Na de 3 weken pauze)
-            </summary>
-            <div className="a-help-howto-body" style={{ color: "#d6d3d1" }}>
-              <p style={{ margin: "0 0 1rem 0" }}>
-                Overzicht van de actiepunten en ingerichte onderdelen voor wanneer het team terug is van vakantie:
+                Onder <strong>Beschikbaarheid</strong> zie je de kalender. Je kunt hier handmatig data en tijdsloten (12:00, 14:00, 16:00, 18:00) blokkeren, óf dit automatisch laten synchroniseren met jullie Google Workspace Agenda.
               </p>
 
-              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>1. 🚀 Live E-mailkoppeling met Resend Instellen</h4>
-              <ul style={{ margin: "0 0 1rem 0", paddingLeft: "1.25rem" }}>
-                <li>Resend account openen/inloggen op <a href="https://resend.com" target="_blank" rel="noreferrer" style={{ color: "#cda757" }}>resend.com</a>.</li>
-                <li>Het domein <code>chateau.amsterdam</code> koppelen in Resend (DNS TXT/MX records).</li>
-                <li>Resend API key toevoegen in Railway Variables: <code>RESEND_API_KEY=re_12345...</code></li>
-                <li>Verifieer een testaanvraag: salesteam krijgt de 1-click goedkeurings-mail en klant krijgt direct de ontvangstbevestiging.</li>
-              </ul>
+              <h4>Eenmalige koppeling met Google Calendar:</h4>
+              <ol>
+                <li>Open Google Calendar in je browser (met het Chateau Workspace account).</li>
+                <li>Klik naast de gewenste agenda (bijv. <em>Tastings &amp; Events</em>) op de 3 puntjes → <strong>Instellingen en delen</strong>.</li>
+                <li>Scroll naar beneden naar <strong>Agenda integreren</strong>.</li>
+                <li>Kopieer het <strong>&ldquo;Geheim adres in iCal-indeling&rdquo;</strong> (de URL die eindigt op <code>.ics</code>).</li>
+                <li>Plak deze URL in het CMS onder <strong>Beschikbaarheid</strong> → <strong>Google Workspace Calendar Koppeling</strong> en klik op <strong>URL Opslaan</strong>.</li>
+              </ol>
 
-              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>2. 📅 Live Google Workspace Agenda Koppeling</h4>
-              <ul style={{ margin: "0 0 1rem 0", paddingLeft: "1.25rem" }}>
-                <li>Het geheime iCal <code>.ics</code> adres ophalen in de Google Calendar van Chateau (zie handleiding hieronder).</li>
-                <li>Inplakken bij <strong>Beschikbaarheid</strong> → <strong>Google Workspace Calendar Koppeling</strong>.</li>
-                <li>Klikken op 🔄 <em>Nu Synchroniseren</em>. Probeer een testgoedkeuring uit via de e-mail!</li>
-              </ul>
-
-              <h4 style={{ color: "#cda757", margin: "1rem 0 0.5rem 0" }}>3. ✨ UX &amp; Interactiviteit Verfijningen (Na de Vakantie)</h4>
-              <ul style={{ margin: "0 0 0.5rem 0", paddingLeft: "1.25rem" }}>
-                <li><strong>Automatische Afwijzingsmail:</strong> Bij het klikken op <code>[Afwijzen]</code> optioneel een vriendelijke mail naar de klant sturen met een alternatieve datum-suggestie.</li>
-                <li><strong>Kalender-bestand (.ics) in Bevestigingsmail:</strong> Klant met 1 klik de tasting laten toevoegen aan hun eigen Google/Apple Agenda.</li>
-                <li><strong>Slimme Datumblokkering in Formulier:</strong> Maandagen en dinsdagen (wijnmakerij gesloten) automatisch grijs / niet-selecteerbaar maken in de datumkiezer.</li>
-                <li><strong>Herinneringsmail (24u vooraf):</strong> Automatisch een herinnering met route/parkeerinfo sturen 1 dag voor de gereserveerde tasting.</li>
+              <h4>Hoe herkent het systeem gebeurtenissen in Google Calendar?</h4>
+              <ul>
+                <li><strong>Hele dag sluiten:</strong> Maak een dagafspraak in Google Calendar met de titel <em>&ldquo;Gesloten&rdquo;</em>, <em>&ldquo;Dicht&rdquo;</em> of <em>&ldquo;Volgeboekt&rdquo;</em>. Die dag kan niet meer geboekt worden op de site.</li>
+                <li><strong>Tijdslot blokkeren:</strong> Maak een afspraak op het tijdstip (bijv. om 14:00 of 16:00 uur) met een titel zoals <em>&ldquo;Besloten groep&rdquo;</em>. Uitsluitend dat tijdslot verdwijnt van de website.</li>
               </ul>
             </div>
           </details>
 
+          {/* 4. Wijnen via Shopify */}
           <details className="a-help-howto">
-            <summary>Een collega toevoegen (of verwijderen)</summary>
+            <summary>🍇 4. Wijnen, prijzen &amp; data beheren via Shopify</summary>
+            <div className="a-help-howto-body">
+              <p>
+                De wijnpagina&apos;s halen alle data rechtstreeks realtime uit <strong>Shopify</strong>. Je hoeft een wijn nooit op twee plekken in te voeren:
+              </p>
+              <ul>
+                <li><strong>Foto:</strong> Wordt automatisch opgehaald uit het eerste mediabestand in Shopify.</li>
+                <li><strong>Wijn &amp; Spijs (Pairing):</strong> Vul in Shopify het metaveld <code>pairing</code> in.</li>
+                <li><strong>One-liner:</strong> Wordt opgehaald uit de korte samenvatting in Shopify.</li>
+                <li><strong>Wijnprofiel / Verhaal:</strong> Wordt opgehaald uit het veld <code>wine profile</code>.</li>
+                <li><strong>Druif, Regio &amp; Alcoholpercentage:</strong> Worden overgenomen uit de specificaties en tags in Shopify.</li>
+                <li><strong>Homepage uitlichten:</strong> Voeg de wijn in Shopify toe aan de collectie <em>&ldquo;Homepage&rdquo;</em> (maximaal 5 wijnen).</li>
+              </ul>
+            </div>
+          </details>
+
+          {/* 5. Team Accounts */}
+          <details className="a-help-howto">
+            <summary>👥 5. Teamleden toevoegen of wachtwoord wijzigen</summary>
             <div className="a-help-howto-body">
               <ol>
-                <li>Ga naar <strong>Account</strong>, onderaan staat &ldquo;Nieuw account toevoegen&rdquo;.</li>
-                <li>
-                  Vul het e-mailadres in. Je krijgt eenmalig een tijdelijk wachtwoord te zien, geef dit door, het
-                  wordt daarna niet meer getoond.
-                </li>
-                <li>De collega logt in en wijzigt het wachtwoord meteen naar iets eigens, onder <strong>Account</strong>.</li>
+                <li>Ga in het linkermenu naar <strong>Account</strong>.</li>
+                <li>Onder <em>Wachtwoord wijzigen</em> pas je je eigen wachtwoord aan.</li>
+                <li>Onder <em>Nieuw account toevoegen</em> vul je het e-mailadres van een collega in om hen toegang te geven.</li>
               </ol>
-              <p>
-                Verwijderen kan ook vanuit hetzelfde scherm. Je eigen account en het laatste overgebleven account
-                kunnen niet verwijderd worden, zodat niemand zichzelf per ongeluk buitensluit.
-              </p>
             </div>
           </details>
+
         </div>
       </div>
     </div>

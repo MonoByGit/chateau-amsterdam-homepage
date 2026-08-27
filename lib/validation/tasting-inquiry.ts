@@ -5,11 +5,13 @@ export type TastingInquiryInput = {
   partySize: string;
   requestedDate: string;
   preferredPeriod: string;
+  preferredLanguage?: string;
   occasion: string;
   notes: string;
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PARTY_SIZE = 2;
 const MAX_PARTY_SIZE = 20;
 
 export function validateTastingInquiry(input: TastingInquiryInput): string | null {
@@ -23,7 +25,7 @@ export function validateTastingInquiry(input: TastingInquiryInput): string | nul
     return "email_invalid";
   }
   const partySize = Number(input.partySize);
-  if (!input.partySize.trim() || !Number.isInteger(partySize) || partySize < 1 || partySize > MAX_PARTY_SIZE) {
+  if (!input.partySize.trim() || !Number.isInteger(partySize) || partySize < MIN_PARTY_SIZE || partySize > MAX_PARTY_SIZE) {
     return "party_size_invalid";
   }
   if (!input.requestedDate.trim()) {

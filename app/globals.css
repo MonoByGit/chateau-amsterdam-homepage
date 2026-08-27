@@ -558,6 +558,54 @@ body[data-pattern="uit"] .bg-pattern { display: none; }
   .wijn-profile-facts { border-right: none; border-bottom: 1px solid var(--theme-border); padding-right: 0; padding-bottom: 16px; }
 }
 
+.wijn-purchase-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--theme-border);
+}
+.wijn-price {
+  display: flex;
+  flex-direction: column;
+}
+.wijn-price-amount {
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(24px, 2.5vw, 32px);
+  letter-spacing: -0.02em;
+  color: var(--theme-fg);
+  line-height: 1;
+}
+.wijn-price-vat {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--theme-fg-muted);
+  margin-top: 5px;
+}
+.wijn-buy-action {
+  margin-left: auto;
+}
+@media (max-width: 520px) {
+  .wijn-purchase-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .wijn-buy-action {
+    margin-left: 0;
+    width: 100%;
+  }
+  .wijn-buy-action button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .wijn-related { position: relative; z-index: 2; padding: 20px var(--gutter) 120px; }
 .wijn-related h2 { font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: clamp(26px, 3.4vw, 40px); margin-bottom: 24px; }
 .wijn-related h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; text-transform: none; color: var(--theme-accent); }
@@ -790,6 +838,54 @@ select.bd-input option { color: var(--ink); }
 
 .tastings-form-wrap { max-width: 760px; margin: 0 auto; background: var(--paper); color: var(--ink); padding: clamp(28px, 4vw, 48px); border-radius: 2px; }
 .tastings-form-wrap form { display: flex; flex-direction: column; gap: 16px; }
+
+.tastings-success-card {
+  text-align: center;
+  padding: clamp(16px, 3vw, 24px) clamp(8px, 2vw, 20px);
+}
+.tastings-success-card .tastings-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-badge);
+  margin-bottom: 12px;
+}
+.tastings-success-card h3 {
+  font-stretch: 125%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0 0 16px 0;
+}
+.tastings-success-card p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(23, 20, 14, 0.75);
+  max-width: 48ch;
+  margin: 0 auto 24px;
+}
+.tastings-success-contact {
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+  color: rgba(23, 20, 14, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.tastings-success-contact a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tastings-success-contact a:hover {
+  color: var(--accent-badge);
+}
 .tastings-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .tastings-field label { display: flex; align-items: baseline; gap: 2px; margin-bottom: 7px; }
 .tastings-field .fn { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--accent-badge); }
@@ -828,8 +924,29 @@ select.bd-input option { color: var(--ink); }
 
 /* custom date field */
 .tastings-field-date { position: relative; }
-.tastings-date-trigger { text-align: left; cursor: pointer; height: 49px; box-sizing: border-box; display: flex; align-items: center; }
+.tastings-date-trigger {
+  text-align: left;
+  cursor: pointer;
+  height: 49px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
 .tastings-date-placeholder { color: rgba(23,20,14,.4); }
+.tastings-date-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--accent-badge);
+  flex-shrink: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.tastings-date-trigger:hover .tastings-date-icon,
+.tastings-date-trigger:focus .tastings-date-icon {
+  opacity: 1;
+}
 .tastings-calendar {
   position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: 300px; max-width: calc(100vw - 2 * var(--gutter));
   background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 2px;
@@ -967,3 +1084,161 @@ select.bd-input option { color: var(--ink); }
 .legal-page a { color: var(--theme-accent-text); text-decoration: underline; }
 .legal-page ul { margin: 12px 0 12px 20px; }
 .legal-page li { font-size: 15.5px; line-height: 1.7; color: var(--theme-fg); opacity: 0.85; margin-bottom: 8px; }
+
+/* ============================================================
+   NEWSLETTER MODAL — Club Chateau
+   ============================================================ */
+.newsletter-backdrop {
+  position: fixed; inset: 0; z-index: 550;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter);
+  background: rgba(23, 20, 14, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s var(--ease-out);
+}
+
+.newsletter-card {
+  position: relative;
+  width: 100%; max-width: 540px;
+  background: var(--theme-bg);
+  color: var(--theme-fg);
+  border: 1px solid var(--theme-border);
+  border-radius: 4px;
+  padding: clamp(32px, 5vw, 48px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: scaleUp 0.35s var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.newsletter-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--theme-fg-muted);
+  border-radius: 50%;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.newsletter-close:hover {
+  background: var(--theme-bg-dim);
+  color: var(--theme-fg);
+  transform: rotate(90deg);
+}
+
+.newsletter-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--theme-accent-text);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.newsletter-badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--theme-accent-bright);
+}
+
+.newsletter-title {
+  font-stretch: 120%;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--theme-fg);
+}
+
+.newsletter-description {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--theme-fg-muted);
+}
+
+.newsletter-form {
+  margin-top: 28px;
+}
+
+.newsletter-input-wrap {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 520px) {
+  .newsletter-input-wrap {
+    flex-direction: column;
+  }
+}
+
+.newsletter-input {
+  flex: 1;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-fg);
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: var(--font-display);
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.newsletter-input:focus {
+  border-color: var(--theme-accent);
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.25);
+}
+
+.newsletter-submit-btn {
+  white-space: nowrap;
+  padding: 14px 24px;
+}
+
+.newsletter-error-text {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #d32f2f;
+  font-family: var(--font-mono);
+}
+
+.newsletter-disclaimer {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--theme-fg-muted);
+  font-family: var(--font-mono);
+}
+
+.newsletter-success-state {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.newsletter-success-icon {
+  width: 52px; height: 52px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--theme-accent);
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: bold;
+}
+
+.newsletter-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+

@@ -18,7 +18,7 @@ describe("isValidTransition", () => {
   it.each([
     ["nieuw", "in_behandeling", true],
     ["nieuw", "afgewezen", true],
-    ["nieuw", "bevestigd", false],
+    ["nieuw", "bevestigd", true],
     ["nieuw", "nieuw", false],
     ["in_behandeling", "bevestigd", true],
     ["in_behandeling", "afgewezen", true],
@@ -195,9 +195,10 @@ describe("reservations repository", () => {
         phone: "0612345678",
         partySize: 4,
         requestedDate: "2026-08-14",
-        preferredPeriod: "Zaterdagavond",
+        preferredPeriod: "14:00 uur",
+        preferredLanguage: "Nederlands",
         occasion: "30ste verjaardag",
-        notes: "Notenallergie in de groep.",
+        notes: "Iemand is zwanger in de groep.",
       });
 
       expect(created.track).toBe("standaard");
@@ -205,9 +206,10 @@ describe("reservations repository", () => {
       expect(created.contactName).toBe("Sanne de Vries");
       expect(created.partySize).toBe(4);
       expect(created.requestedDate).toBe("2026-08-14");
-      expect(created.preferredPeriod).toBe("Zaterdagavond");
+      expect(created.preferredPeriod).toContain("14:00 uur");
+      expect(created.preferredPeriod).toContain("Taal: Nederlands");
       expect(created.occasion).toBe("30ste verjaardag");
-      expect(created.notes).toBe("Notenallergie in de groep.");
+      expect(created.notes).toContain("Iemand is zwanger in de groep.");
     });
 
     it("stores empty optional fields as null", async () => {

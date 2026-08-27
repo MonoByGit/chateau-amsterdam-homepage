@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { validateSession } from "@/lib/db/sessions";
-import { SESSION_COOKIE_NAME } from "@/lib/auth/session-cookie";
+import { validateSession } from "./lib/db/sessions";
+import { SESSION_COOKIE_NAME } from "./lib/auth/session-cookie";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

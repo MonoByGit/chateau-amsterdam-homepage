@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLanguage } from "@/lib/language";
 import { TOURS_TASTINGS_COPY as C } from "@/lib/content/tours-tastings";
 
-const MIN = 1;
+const MIN = 2;
 const MAX = 20;
 
 export function PartySizeField({ defaultValue = 2 }: { defaultValue?: number }) {

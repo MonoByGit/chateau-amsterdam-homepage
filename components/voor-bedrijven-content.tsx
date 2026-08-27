@@ -51,7 +51,7 @@ export function VoorBedrijvenContent({
       </section>
 
       <section className="bd-body" id="aanvraag">
-        <BusinessInquiry verzonden={verzonden} fout={fout} />
+        <BusinessInquiry verzonden={verzonden} fout={fout} content={content} />
       </section>
 
       <section className="bd-strip">

@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { submitTastingInquiry } from "@/app/(site)/tours-tastings/actions";
-import { OCCASIONS, PREFERRED_PERIODS, TASTING_ERROR_MESSAGES, TOURS_TASTINGS_COPY as C } from "@/lib/content/tours-tastings";
+import { getPreferredPeriodsForDate, OCCASIONS, PREFERRED_PERIODS, TOUR_LANGUAGES, TASTING_ERROR_MESSAGES, TOURS_TASTINGS_COPY as C } from "@/lib/content/tours-tastings";
 import { PartySizeField } from "@/components/tastings-party-size-field";
 import { DateField } from "@/components/tastings-date-field";
 
@@ -32,6 +32,7 @@ export function ToursTastingsContent({
   const errorPair = fout ? TASTING_ERROR_MESSAGES[fout] : null;
 
   const currentBlockedSlots = selectedDateIso ? blockedSlotsByDate[selectedDateIso] ?? [] : [];
+  const availablePeriods = getPreferredPeriodsForDate(selectedDateIso);
 
   const heroParsed = parseImageSrc(content.hero_photo_url ? t(content.hero_photo_url.nl, content.hero_photo_url.en) : "/assets/tasting-hero.jpg");
   const tourMainParsed = parseImageSrc(content.tour_main_photo_url ? t(content.tour_main_photo_url.nl, content.tour_main_photo_url.en) : "/assets/step-makerij.jpg");
@@ -174,35 +175,18 @@ export function ToursTastingsContent({
           </div>
           <div className="tastings-form-wrap">
             {verzonden ? (
-              <div
-                style={{
-                  background: "#1c1917",
-                  border: "1px solid var(--a-accent, #cda757)",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  color: "#f7f5f0",
-                  boxShadow: "0 15px 35px rgba(0,0,0,0.4)",
-                }}
-              >
-                <div style={{ fontSize: "1.75rem", marginBottom: "0.5rem" }}>🍷</div>
-                <h3 style={{ color: "var(--a-accent, #cda757)", margin: "0 0 0.75rem 0", fontSize: "1.25rem", fontWeight: 600 }}>
-                  {t("Bedankt! Je reserveringsaanvraag is ontvangen.", "Thank you! Your booking request has been received.")}
-                </h3>
-                <p style={{ margin: "0 0 1.25rem 0", fontSize: "0.9375rem", color: "#d6d3d1", lineHeight: 1.6 }}>
+              <div className="tastings-success-card">
+                <div className="tastings-label">{t("Aanvraag ontvangen", "Request received")}</div>
+                <h3>{t("We gaan ermee aan de slag.", "We're on it.")}</h3>
+                <p>
                   {t(
-                    "We hebben je aanvraag in goede orde ontvangen. Er is zojuist een automatische ontvangstbevestiging per e-mail naar je gestuurd. Ons salesteam bekijkt je gekozen datum en tijdslot, en stuurt je zo snel mogelijk de definitieve bevestiging!",
-                    "We have received your request. An automatic confirmation receipt has been sent to your email. Our sales team is reviewing your requested date and slot, and will send you the final confirmation shortly!"
+                    "Bedankt voor je aanvraag! We gaan nu proberen je boeking op het gekozen tijdslot in te plannen. Je ontvangt spoedig een definitieve bevestiging van ons salesteam.",
+                    "Thank you for your request! We are now scheduling your booking for the selected time slot. You will receive a final confirmation from our sales team shortly."
                   )}
                 </p>
-                <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: "8px", padding: "1rem 1.25rem", borderLeft: "3px solid var(--a-accent, #cda757)" }}>
-                  <div style={{ fontSize: "0.8125rem", color: "#a8a29e", marginBottom: "0.375rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    {t("Status van je aanvraag", "Status of your request")}
-                  </div>
-                  <div style={{ fontSize: "0.875rem", color: "#f7f5f0", display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-                    <span>✓ {t("Ontvangstbevestiging gemaild", "Receipt email dispatched")}</span>
-                    <span>⏳ {t("In behandeling bij salesteam", "Under review by sales team")}</span>
-                    <span>📧 {t("Definitieve bevestiging volgt", "Final confirmation to follow")}</span>
-                  </div>
+                <div className="tastings-success-contact">
+                  <span>{t("Vragen of meer informatie?", "Questions or more information?")}</span>
+                  <a href="mailto:sales@chateau.amsterdam">sales@chateau.amsterdam</a>
                 </div>
               </div>
             ) : (
@@ -218,8 +202,8 @@ export function ToursTastingsContent({
                       <span className="fn">03</span>
                       <span className="fl">{t(C.fieldPeriod.nl, C.fieldPeriod.en)}</span>
                     </label>
-                    <select id="preferredPeriod" name="preferredPeriod" defaultValue={PREFERRED_PERIODS[0].nl} className="tastings-input">
-                      {PREFERRED_PERIODS.map((period) => {
+                    <select id="preferredPeriod" name="preferredPeriod" defaultValue={availablePeriods[0]?.nl} className="tastings-input" key={selectedDateIso}>
+                      {availablePeriods.map((period) => {
                         const isBlocked = currentBlockedSlots.some((label) =>
                           label.toLowerCase().includes(period.nl.slice(0, 5).toLowerCase())
                         );
@@ -232,14 +216,14 @@ export function ToursTastingsContent({
                     </select>
                   </div>
                   <div className="tastings-field">
-                    <label htmlFor="occasion">
+                    <label htmlFor="preferredLanguage">
                       <span className="fn">04</span>
-                      <span className="fl">{t(C.fieldOccasion.nl, C.fieldOccasion.en)}</span>
+                      <span className="fl">{t(C.fieldLanguage.nl, C.fieldLanguage.en)}</span>
                     </label>
-                    <select id="occasion" name="occasion" defaultValue={OCCASIONS[0].nl} className="tastings-input">
-                      {OCCASIONS.map((occasion) => (
-                        <option key={occasion.key} value={occasion.nl}>
-                          {t(occasion.nl, occasion.en)}
+                    <select id="preferredLanguage" name="preferredLanguage" defaultValue={lang === "en" ? "Engels" : "Nederlands"} className="tastings-input">
+                      {TOUR_LANGUAGES.map((item) => (
+                        <option key={item.key} value={item.nl}>
+                          {t(item.nl, item.en)}
                         </option>
                       ))}
                     </select>
@@ -277,23 +261,38 @@ export function ToursTastingsContent({
                     />
                   </div>
                 </div>
-                <div className="tastings-field">
-                  <label htmlFor="phone">
-                    <span className="fn">07</span>
-                    <span className="fl">{t(C.fieldPhone.nl, C.fieldPhone.en)}</span>
-                  </label>
-                  <input
-                    id="phone"
-                    type="tel"
-                    name="phone"
-                    maxLength={40}
-                    placeholder={t(C.fieldPhonePlaceholder.nl, C.fieldPhonePlaceholder.en)}
-                    className="tastings-input"
-                  />
+                <div className="tastings-form-row">
+                  <div className="tastings-field">
+                    <label htmlFor="phone">
+                      <span className="fn">07</span>
+                      <span className="fl">{t(C.fieldPhone.nl, C.fieldPhone.en)}</span>
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      name="phone"
+                      maxLength={40}
+                      placeholder={t(C.fieldPhonePlaceholder.nl, C.fieldPhonePlaceholder.en)}
+                      className="tastings-input"
+                    />
+                  </div>
+                  <div className="tastings-field">
+                    <label htmlFor="occasion">
+                      <span className="fn">08</span>
+                      <span className="fl">{t(C.fieldOccasion.nl, C.fieldOccasion.en)}</span>
+                    </label>
+                    <select id="occasion" name="occasion" defaultValue={OCCASIONS[0].nl} className="tastings-input">
+                      {OCCASIONS.map((occasion) => (
+                        <option key={occasion.key} value={occasion.nl}>
+                          {t(occasion.nl, occasion.en)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="tastings-field">
                   <label htmlFor="notes">
-                    <span className="fn">08</span>
+                    <span className="fn">09</span>
                     <span className="fl">{t(C.fieldNotes.nl, C.fieldNotes.en)}</span>
                   </label>
                   <textarea
@@ -310,7 +309,25 @@ export function ToursTastingsContent({
                 </button>
               </form>
             )}
-            <p className="tastings-note">{t(C.note.nl, C.note.en)}</p>
+            <p className="tastings-note">
+              {lang === "nl" ? (
+                <>
+                  Met een groep groter dan 20 personen, neem dan contact op met{" "}
+                  <a href="mailto:sales@chateau.amsterdam" style={{ textDecoration: "underline", color: "inherit", fontWeight: 500 }}>
+                    Sales
+                  </a>{" "}
+                  voor een groepsaanbod.
+                </>
+              ) : (
+                <>
+                  For groups larger than 20 guests, please contact{" "}
+                  <a href="mailto:sales@chateau.amsterdam" style={{ textDecoration: "underline", color: "inherit", fontWeight: 500 }}>
+                    Sales
+                  </a>{" "}
+                  for a custom group offer.
+                </>
+              )}
+            </p>
           </div>
         </div>
       </section>

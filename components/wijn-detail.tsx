@@ -5,28 +5,27 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { WineCard, type WineCardData } from "@/components/wine-card";
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import type { ShopifyMoney } from "@/lib/shopify/types";
 
 export type WijnDetailWine = {
   name: string;
   metaNl: string;
   metaEn: string;
-  tagNl: string;
-  tagEn: string;
+  tagNl: string | null;
+  tagEn: string | null;
   descriptionNl: string | null;
   descriptionEn: string | null;
-  vintage: string | null;
-  grapes: string | null;
-  abv: number | null;
+  grapesNl: string | null;
+  grapesEn: string | null;
+  abvNl: string | null;
+  abvEn: string | null;
   wineTypeNl: string | null;
   wineTypeEn: string | null;
   regionNl: string | null;
   regionEn: string | null;
-  farmingMethodNl: string | null;
-  farmingMethodEn: string | null;
-  vinificationNl: string | null;
-  vinificationEn: string | null;
   foodPairingNl: string | null;
   foodPairingEn: string | null;
+  price: ShopifyMoney | null;
   shopifyHandle: string;
 };
 
@@ -52,11 +51,18 @@ export function WijnDetail({
   const foodPairing = lang === "nl" ? wine.foodPairingNl : wine.foodPairingEn || wine.foodPairingNl;
   const wineType = lang === "nl" ? wine.wineTypeNl : wine.wineTypeEn || wine.wineTypeNl;
   const region = lang === "nl" ? wine.regionNl : wine.regionEn || wine.regionNl;
-  const farmingMethod = lang === "nl" ? wine.farmingMethodNl : wine.farmingMethodEn || wine.farmingMethodNl;
-  const vinification = lang === "nl" ? wine.vinificationNl : wine.vinificationEn || wine.vinificationNl;
+  const grapes = lang === "nl" ? wine.grapesNl : wine.grapesEn || wine.grapesNl;
+  const abv = lang === "nl" ? wine.abvNl : wine.abvEn || wine.abvNl;
+  const tag = lang === "nl" ? wine.tagNl : wine.tagEn || wine.tagNl;
 
-  const hasFacts = wine.vintage || wine.grapes || wine.abv !== null;
-  const hasDetails = wineType || region || farmingMethod || vinification;
+  const hasFacts = Boolean(grapes || abv);
+  const hasDetails = Boolean(wineType || region);
+
+  const formattedPrice = wine.price
+    ? lang === "nl"
+      ? `€ ${wine.price.amount.replace(".", ",")}`
+      : `€ ${wine.price.amount}`
+    : null;
 
   return (
     <>
@@ -92,7 +98,7 @@ export function WijnDetail({
         <div className="wijn-detail-info">
           <span className="meta">{lang === "nl" ? wine.metaNl : wine.metaEn}</span>
           <h1>{wine.name}</h1>
-          <span className="tag">{lang === "nl" ? wine.tagNl : wine.tagEn}</span>
+          {tag ? <span className="tag">{tag}</span> : null}
 
           {description
             ? (() => {
@@ -118,22 +124,16 @@ export function WijnDetail({
               <div className="wijn-profile-body">
                 {hasFacts ? (
                   <div className="wijn-profile-facts">
-                    {wine.vintage ? (
+                    {grapes ? (
                       <div className="wijn-profile-item">
-                        <span className="k">{t("Jaargang", "Vintage")}</span>
-                        <span className="v">{wine.vintage}</span>
+                        <span className="k">{t("Druif", "Grape variety")}</span>
+                        <span className="v">{grapes}</span>
                       </div>
                     ) : null}
-                    {wine.grapes ? (
+                    {abv ? (
                       <div className="wijn-profile-item">
-                        <span className="k">{t("Druif", "Grape")}</span>
-                        <span className="v">{wine.grapes}</span>
-                      </div>
-                    ) : null}
-                    {wine.abv !== null ? (
-                      <div className="wijn-profile-item">
-                        <span className="k">{t("Alcoholpercentage", "ABV")}</span>
-                        <span className="v">{wine.abv}% vol</span>
+                        <span className="k">{t("Alcoholpercentage", "Alcohol percentage")}</span>
+                        <span className="v">{abv}</span>
                       </div>
                     ) : null}
                   </div>
@@ -152,37 +152,23 @@ export function WijnDetail({
                         <span className="v">{region}</span>
                       </div>
                     ) : null}
-                    {farmingMethod ? (
-                      <div className="wijn-profile-item">
-                        <span className="k">{t("Landbouwtechniek", "Farming method")}</span>
-                        <span className="v">{farmingMethod}</span>
-                      </div>
-                    ) : null}
-                    {vinification ? (
-                      <div className="wijn-profile-item">
-                        <span className="k">{t("Vinificatie", "Vinification")}</span>
-                        <span className="v">{vinification}</span>
-                      </div>
-                    ) : null}
                   </div>
                 ) : null}
               </div>
             </div>
           ) : null}
 
-          {/*
-            Shopify Storefront API phase (this component, live once
-            SHOPIFY_STORE_DOMAIN/SHOPIFY_STOREFRONT_TOKEN are set): adds the
-            item to a Cart (Storefront API Cart object) and opens the
-            slide-in drawer (components/cart-drawer.tsx). The customer
-            adds/removes wines and stays on this site throughout; only the
-            final payment step redirects once to Shopify's hosted checkout
-            (cart.checkoutUrl). If the API call fails — including "not
-            configured yet" while the token is still pending — AddToCartButton
-            falls back to a direct link to this wine's Shopify product page,
-            so the page never breaks even before the token is wired up.
-          */}
-          <AddToCartButton shopifyHandle={wine.shopifyHandle} />
+          <div className="wijn-purchase-row">
+            {formattedPrice ? (
+              <div className="wijn-price">
+                <span className="wijn-price-amount">{formattedPrice}</span>
+                <span className="wijn-price-vat">{t("incl. btw", "incl. VAT")}</span>
+              </div>
+            ) : null}
+            <div className="wijn-buy-action">
+              <AddToCartButton shopifyHandle={wine.shopifyHandle} />
+            </div>
+          </div>
         </div>
       </div>
 

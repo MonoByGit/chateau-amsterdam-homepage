@@ -81,3 +81,12 @@ export const availabilityBlocks = pgTable("availability_blocks", {
   label: text("label"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  locale: text("locale").notNull().default("nl"),
+  source: text("source").notNull().default("modal"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+

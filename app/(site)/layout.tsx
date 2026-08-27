@@ -47,7 +47,7 @@ const structuredData = {
   telephone: "+31200000000",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Johan van Hasseltweg",
+    streetAddress: "Johan van Hasseltweg 51",
     addressLocality: "Amsterdam-Noord",
     addressRegion: "Noord-Holland",
     postalCode: "1021",
@@ -60,10 +60,11 @@ const structuredData = {
     opens: "12:00",
     closes: "18:30",
   },
-  sameAs: ["https://www.instagram.com/chateauamsterdam/", "https://www.linkedin.com/company/chateau-amsterdam/"],
+  sameAs: ["https://www.instagram.com/chateauamsterdam/", "https://www.linkedin.com/company/chateauamsterdam/"],
 };
 
 import { MobileBookingCta } from "@/components/mobile-booking-cta";
+import { NewsletterModal } from "@/components/newsletter-modal";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headerContent = await getContent("home", "header", HEADER_DEFAULTS);
@@ -89,6 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <MobileBookingCta />
                 <AgeGate />
                 <CookieBanner />
+                <NewsletterModal />
                 <AnalyticsScript />
               </MobileNavProvider>
             </CartProvider>

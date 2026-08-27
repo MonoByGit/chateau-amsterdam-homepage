@@ -70,7 +70,7 @@ export default async function AvailabilityPage({
     <div>
       <h1 className="a-h1">Beschikbaarheid</h1>
       <p className="a-subtitle" style={{ marginBottom: "1.5rem" }}>
-        Standaard zijn de tours en tastings geopend op donderdag, vrijdag en zaterdag (vaste slots: 15:00, 17:00 en 19:00 uur). Klik op een dag om uitzonderingen, extra openingen of sluitingen in te stellen.
+        Standaard zijn de tours en tastings geopend op donderdag &amp; vrijdag (14:00, 16:00, 18:00) en zaterdag (12:00, 14:00, 16:00, 18:00). Klik op een dag om uitzonderingen, extra openingen of sluitingen in te stellen.
       </p>
 
       <SyncCard initialIcalUrl={icalUrl} />

@@ -12,6 +12,7 @@ export async function saveDayAvailability(date: string, formData: FormData): Pro
     String(formData.get("slot2") ?? ""),
     String(formData.get("slot3") ?? ""),
     String(formData.get("slot4") ?? ""),
+    String(formData.get("slot5") ?? ""),
   ];
 
   await saveDayBlocks(date, { isFullDay, slots });

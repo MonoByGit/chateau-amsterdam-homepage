@@ -53,14 +53,14 @@ describe("availability repository", () => {
       expect(blocks.every((b) => b.isFullDay === false)).toBe(true);
     });
 
-    it("caps slots at 4 even if more are passed", async () => {
+    it("caps slots at 5 even if more are passed", async () => {
       await saveDayBlocks("2026-08-10", {
         isFullDay: false,
-        slots: ["slot 1", "slot 2", "slot 3", "slot 4", "slot 5"],
+        slots: ["slot 1", "slot 2", "slot 3", "slot 4", "slot 5", "slot 6"],
       });
 
       const blocks = await getDayBlocks("2026-08-10");
-      expect(blocks).toHaveLength(4);
+      expect(blocks).toHaveLength(5);
     });
 
     it("clears the date entirely when saved with nothing set", async () => {

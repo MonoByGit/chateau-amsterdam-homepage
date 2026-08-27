@@ -6,7 +6,7 @@ import { availabilityBlocks } from "@/lib/db/schema";
 
 export type AvailabilityBlock = InferSelectModel<typeof availabilityBlocks>;
 
-export const MAX_SLOTS_PER_DAY = 4;
+export const MAX_SLOTS_PER_DAY = 5;
 
 function pad(n: number): string {
   return n.toString().padStart(2, "0");

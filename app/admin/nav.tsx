@@ -63,6 +63,16 @@ export const PRIMARY_ITEMS: NavItem[] = [
 // promoted alongside the daily-use sections.
 export const SECONDARY_ITEMS: NavItem[] = [
   {
+    href: "/admin/emails",
+    label: "E-mailtemplates",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 7l9 6 9-6" />
+      </svg>
+    ),
+  },
+  {
     href: "/admin/media",
     label: "Media",
     icon: (

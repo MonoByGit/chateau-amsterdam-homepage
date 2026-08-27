@@ -55,8 +55,8 @@ export const SERVICES: Service[] = [
     alt: { nl: "Groothandel levering", en: "Wholesale delivery" },
     title: { nl: "Groothandel voor horeca", en: "Wholesale for hospitality" },
     body: {
-      nl: "Vaste plek op de kaart. Staffelkorting vanaf de eerste doos, altijd op voorraad.",
-      en: "A permanent spot on the menu. Volume discount from the first case, always in stock.",
+      nl: "Steeds meer horeca schenkt onze wijn, niet alleen in Amsterdam. Wij leveren, waar jij zit. Een betrouwbare partner, zonder tussenpartijen.",
+      en: "More and more hospitality venues pour our wine, not just in Amsterdam. We deliver, wherever you are. A reliable partner, without middlemen.",
     },
     occasion: { key: "wholesale", nl: "Groothandel voor horeca", en: "Wholesale for hospitality" },
   },

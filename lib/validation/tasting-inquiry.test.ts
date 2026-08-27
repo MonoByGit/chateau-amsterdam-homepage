@@ -7,7 +7,7 @@ function validInput() {
     email: "sanne@example.com",
     phone: "",
     partySize: "2",
-    requestedDate: "2026-08-14",
+    requestedDate: "2026-08-25",
     preferredPeriod: "Geen voorkeur",
     occasion: "Geen speciale gelegenheid",
     notes: "",
@@ -43,7 +43,8 @@ describe("validateTastingInquiry", () => {
     expect(validateTastingInquiry({ ...validInput(), partySize: "" })).toBe("party_size_invalid");
   });
 
-  it("rejects a party size of zero or less", () => {
+  it("rejects a party size of less than 2", () => {
+    expect(validateTastingInquiry({ ...validInput(), partySize: "1" })).toBe("party_size_invalid");
     expect(validateTastingInquiry({ ...validInput(), partySize: "0" })).toBe("party_size_invalid");
   });
 

@@ -79,7 +79,7 @@ export function PrivacyPolicyContent() {
           <p>
             Under the GDPR you can ask to see, correct, or delete the personal data we hold about you, or object to
             how we use it. Contact us at{" "}
-            <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>. You can also file a complaint with
+            <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>. You can also file a complaint with
             the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).
           </p>
         </section>
@@ -96,7 +96,7 @@ export function PrivacyPolicyContent() {
           <h2>Changes to this policy</h2>
           <p>
             We may update this policy from time to time. The date above shows when it was last changed. Questions?
-            Reach us at <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>.
+            Reach us at <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>.
           </p>
         </section>
 
@@ -179,7 +179,7 @@ export function PrivacyPolicyContent() {
         <p>
           Onder de AVG kun je vragen om inzage, correctie of verwijdering van de persoonsgegevens die we van je
           hebben, of bezwaar maken tegen hoe we ze gebruiken. Neem contact op via{" "}
-          <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>. Je kunt ook een klacht indienen bij de
+          <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>. Je kunt ook een klacht indienen bij de
           Autoriteit Persoonsgegevens.
         </p>
       </section>
@@ -197,7 +197,7 @@ export function PrivacyPolicyContent() {
         <p>
           We kunnen dit beleid van tijd tot tijd bijwerken. De datum hierboven laat zien wanneer het voor het laatst
           is gewijzigd. Vragen? Neem contact op via{" "}
-          <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>.
+          <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>.
         </p>
       </section>
 

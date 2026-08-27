@@ -16,7 +16,7 @@ export function TermsContent() {
         <section>
           <h2>Who these terms apply to</h2>
           <p>
-            These terms apply to your use of chateau.amsterdam, run by Chateau Amsterdam, Johan van Hasseltweg,
+            These terms apply to your use of chateau.amsterdam, run by Chateau Amsterdam, Johan van Hasseltweg 51,
             Amsterdam-Noord. By using this site, requesting a tour or tasting, sending a business enquiry, or buying
             wine through our shop, you accept these terms.
           </p>
@@ -78,7 +78,7 @@ export function TermsContent() {
         <section>
           <h2>Contact</h2>
           <p>
-            Questions about these terms? Reach us at <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>.
+            Questions about these terms? Reach us at <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>.
           </p>
         </section>
 
@@ -98,7 +98,7 @@ export function TermsContent() {
         <h2>Voor wie deze voorwaarden gelden</h2>
         <p>
           Deze voorwaarden gelden voor het gebruik van chateau.amsterdam, beheerd door Chateau Amsterdam, Johan van
-          Hasseltweg, Amsterdam-Noord. Door deze site te gebruiken, een tour of tasting aan te vragen, een zakelijke
+          Hasseltweg 51, Amsterdam-Noord. Door deze site te gebruiken, een tour of tasting aan te vragen, een zakelijke
           aanvraag te sturen, of wijn te kopen via onze shop, ga je akkoord met deze voorwaarden.
         </p>
       </section>
@@ -160,7 +160,7 @@ export function TermsContent() {
         <h2>Contact</h2>
         <p>
           Vragen over deze voorwaarden? Neem contact op via{" "}
-          <a href="mailto:info@chateau.amsterdam">info@chateau.amsterdam</a>.
+          <a href="mailto:administratie@chateau.amsterdam">administratie@chateau.amsterdam</a>.
         </p>
       </section>
 
