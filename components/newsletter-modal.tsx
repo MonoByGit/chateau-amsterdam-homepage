@@ -4,12 +4,19 @@
 import { useEffect, useState, useRef, useTransition } from "react";
 import { useLanguage } from "@/lib/language";
 import { subscribeNewsletter } from "@/lib/newsletter/actions";
+import {
+  NEWSLETTER_POPUP_DEFAULTS,
+  type NewsletterPopupContent,
+} from "@/lib/content/popup-defaults";
 
 const STORAGE_KEY_SUBSCRIBED = "chateau-newsletter-subscribed";
 const STORAGE_KEY_DISMISSED = "chateau-newsletter-dismissed-at";
-const DISMISS_SUPPRESSION_DAYS = 14;
 
-export function NewsletterModal() {
+export function NewsletterModal({
+  content = NEWSLETTER_POPUP_DEFAULTS,
+}: {
+  content?: NewsletterPopupContent;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -19,6 +26,10 @@ export function NewsletterModal() {
   const modalRef = useRef<HTMLDivElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const { t, lang } = useLanguage();
+
+  const dismissDays = parseInt(content.dismiss_days?.[lang] || "14", 10) || 14;
+  const triggerScroll = parseInt(content.trigger_scroll?.[lang] || "50", 10) || 50;
+  const triggerTimer = parseInt(content.trigger_timer?.[lang] || "30", 10) || 30;
 
   function isSuppressed(): boolean {
     if (typeof window === "undefined") return true;
@@ -30,7 +41,7 @@ export function NewsletterModal() {
     const dismissedAt = window.localStorage.getItem(STORAGE_KEY_DISMISSED);
     if (dismissedAt) {
       const daysSinceDismiss = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
-      if (daysSinceDismiss < DISMISS_SUPPRESSION_DAYS) return true;
+      if (daysSinceDismiss < dismissDays) return true;
     }
     return false;
   }
@@ -70,12 +81,12 @@ export function NewsletterModal() {
       handleOpen();
     }
 
-    // 2. Scroll depth trigger (after 50% scroll)
+    // 2. Scroll depth trigger
     function handleScroll() {
       const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollTotal > 600) {
+      if (scrollTotal > 500) {
         const scrollPercent = (window.scrollY / scrollTotal) * 100;
-        if (scrollPercent >= 50) {
+        if (scrollPercent >= triggerScroll) {
           triggerAutoOpen();
         }
       }
@@ -88,10 +99,10 @@ export function NewsletterModal() {
       }
     }
 
-    // 4. Timer trigger (after 30 seconds of active browsing)
+    // 4. Timer trigger (after configured seconds of active browsing)
     const timer = setTimeout(() => {
       triggerAutoOpen();
-    }, 30000);
+    }, triggerTimer * 1000);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
@@ -102,7 +113,7 @@ export function NewsletterModal() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       clearTimeout(timer);
     };
-  }, []);
+  }, [triggerScroll, triggerTimer, dismissDays]);
 
   // Handle ESC key to close
   useEffect(() => {
@@ -111,31 +122,51 @@ export function NewsletterModal() {
         handleClose();
       }
     }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || isPending) return;
 
+    setStatus("idle");
     setErrorMessage("");
+
     startTransition(async () => {
-      const res = await subscribeNewsletter(email, lang, "popup");
+      const res = await subscribeNewsletter(email, lang);
       if (res.success) {
         setStatus("success");
-        setSuccessMessage(res.message || t("Welkom bij Club Chateau!", "Welcome to Club Chateau!"));
+        setSuccessMessage(res.message || "");
         if (typeof window !== "undefined") {
           window.localStorage.setItem(STORAGE_KEY_SUBSCRIBED, "true");
         }
       } else {
         setStatus("error");
-        setErrorMessage(res.error || t("Er is iets misgegaan.", "Something went wrong."));
+        setErrorMessage(res.message || "");
       }
     });
   }
 
   if (!isOpen) return null;
+
+  const badgeText = content.badge?.[lang] || "CLUB CHATEAU · NIEUWS UIT DE WINERY";
+  const headingText = content.heading?.[lang] || "Als eerste op de hoogte.";
+  const descriptionText = content.description?.[lang] || "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ.";
+  const placeholderText = content.placeholder?.[lang] || "Jouw e-mailadres";
+  const buttonText = content.button_label?.[lang] || "Aanmelden →";
+  const disclaimerText = content.disclaimer?.[lang] || "Uitschrijven kan op elk gewenst moment met één klik. Privacy gewaarborgd.";
+  const successHeadingText = content.success_heading?.[lang] || "Je staat op de gastenlijst.";
+  const successDescText = content.success_description?.[lang] || "Dank voor je aanmelding. Je ontvangt binnenkort uitnodigingen voor onze nieuwste bottelingen, proeverijen en events.";
+  const successBtnText = content.success_button?.[lang] || "Terug naar de winery";
 
   return (
     <div
@@ -159,41 +190,31 @@ export function NewsletterModal() {
 
         <div className="newsletter-badge">
           <span className="newsletter-badge-dot" />
-          {t("CLUB CHATEAU · NIEUWS UIT DE WINERY", "CLUB CHATEAU · WINERY DISPATCHES")}
+          {badgeText}
         </div>
 
         {status === "success" ? (
           <div className="newsletter-success-state">
             <div className="newsletter-success-icon">✓</div>
             <h2 id="newsletter-modal-title" className="newsletter-title">
-              {t("Je staat op de gastenlijst.", "You are on the guestlist.")}
+              {successHeadingText}
             </h2>
             <p className="newsletter-description">
-              {successMessage ||
-                t(
-                  "Dank voor je aanmelding. Je ontvangt binnenkort uitnodigingen voor onze nieuwste bottelingen, proeverijen en events.",
-                  "Thank you for joining. You'll receive invitations for new releases, exclusive tastings and winery events."
-                )}
+              {successMessage || successDescText}
             </p>
             <div className="newsletter-actions">
               <button type="button" className="btn btn--primary" onClick={handleClose}>
-                {t("Terug naar de winery", "Back to winery")}
+                {successBtnText}
               </button>
             </div>
           </div>
         ) : (
           <>
             <h2 id="newsletter-modal-title" className="newsletter-title">
-              {t(
-                "Als eerste op de hoogte.",
-                "Be the first to know."
-              )}
+              {headingText}
             </h2>
             <p className="newsletter-description">
-              {t(
-                "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ.",
-                "Receive exclusive discounts, invitations to tastings, and stories & wine facts from our winery on the IJ waterfront."
-              )}
+              {descriptionText}
             </p>
 
             <form onSubmit={handleSubmit} className="newsletter-form">
@@ -202,7 +223,7 @@ export function NewsletterModal() {
                   ref={emailInputRef}
                   type="email"
                   required
-                  placeholder={t("Jouw e-mailadres", "Your email address")}
+                  placeholder={placeholderText}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="newsletter-input"
@@ -215,7 +236,7 @@ export function NewsletterModal() {
                 >
                   {isPending
                     ? t("Aanmelden...", "Subscribing...")
-                    : t("Aanmelden →", "Join Club →")}
+                    : buttonText}
                 </button>
               </div>
 
@@ -224,10 +245,7 @@ export function NewsletterModal() {
               )}
 
               <p className="newsletter-disclaimer">
-                {t(
-                  "Uitschrijven kan op elk gewenst moment met één klik. Privacy gewaarborgd.",
-                  "Unsubscribe anytime with one click. Privacy guaranteed."
-                )}
+                {disclaimerText}
               </p>
             </form>
           </>

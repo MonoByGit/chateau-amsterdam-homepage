@@ -3,8 +3,23 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/lib/language";
+import type {
+  NewsletterPopupContent,
+  AgeGatePopupContent,
+  CookieBannerPopupContent,
+} from "@/lib/content/popup-defaults";
 
-export function PopupsClient() {
+interface Props {
+  newsletterContent: NewsletterPopupContent;
+  ageGateContent: AgeGatePopupContent;
+  cookieBannerContent: CookieBannerPopupContent;
+}
+
+export function PopupsClient({
+  newsletterContent,
+  ageGateContent,
+  cookieBannerContent,
+}: Props) {
   const { lang, setLang, t } = useLanguage();
   const [newsletterTestEmail, setNewsletterTestEmail] = useState("");
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
@@ -25,6 +40,29 @@ export function PopupsClient() {
     }
   }
 
+  const nlBadge = newsletterContent.badge?.[lang] || "CLUB CHATEAU · NIEUWS UIT DE WINERY";
+  const nlHeading = newsletterContent.heading?.[lang] || "Als eerste op de hoogte.";
+  const nlDesc = newsletterContent.description?.[lang] || "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ.";
+  const nlPlaceholder = newsletterContent.placeholder?.[lang] || "Jouw e-mailadres";
+  const nlBtn = newsletterContent.button_label?.[lang] || "Aanmelden →";
+  const nlDisclaimer = newsletterContent.disclaimer?.[lang] || "Uitschrijven kan op elk gewenst moment met één klik.";
+  const nlSuccessHeading = newsletterContent.success_heading?.[lang] || "Je staat op de gastenlijst.";
+  const nlSuccessDesc = newsletterContent.success_description?.[lang] || "Dank voor je aanmelding. Je ontvangt binnenkort uitnodigingen voor onze nieuwste bottelingen, proeverijen en events.";
+
+  const agEyebrow = ageGateContent.eyebrow?.[lang] || "Chateau Amsterdam";
+  const agHeading = ageGateContent.heading?.[lang] || "Ben je 18 jaar of ouder?";
+  const agDesc = ageGateContent.description?.[lang] || "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan.";
+  const agConfirm = ageGateContent.btn_confirm?.[lang] || "Ja, ik ben 18+";
+  const agDeny = ageGateContent.btn_deny?.[lang] || "Nee";
+
+  const cbText = cookieBannerContent.text?.[lang] || "We gebruiken alleen functionele en anonieme analytische cookies om de website soepel te laten werken. Geen tracking door derden.";
+  const cbAccept = cookieBannerContent.btn_accept?.[lang] || "Akkoord";
+  const cbSettings = cookieBannerContent.btn_settings?.[lang] || "Instellingen";
+
+  const dismissDays = newsletterContent.dismiss_days?.[lang] || "14";
+  const triggerScroll = newsletterContent.trigger_scroll?.[lang] || "50";
+  const triggerTimer = newsletterContent.trigger_timer?.[lang] || "30";
+
   return (
     <div className="popups-showcase" style={{ padding: "130px var(--gutter) 100px", maxWidth: "1100px", margin: "0 auto" }}>
       {/* Header */}
@@ -39,8 +77,8 @@ export function PopupsClient() {
             </h1>
             <p style={{ marginTop: "14px", fontSize: "16px", color: "var(--theme-fg-muted)", maxWidth: "68ch", lineHeight: 1.6 }}>
               {t(
-                "Op deze pagina staan alle pop-ups, timing-regels en interacties overzichtelijk naast elkaar. Zo kun je direct de opmaak beoordelen, teksten testen en eenvoudig feedback geven.",
-                "This page provides an overview of all pop-ups, timing rules, and interactions. You can review layouts, test copy, and iterate easily."
+                "Op deze pagina staan alle pop-ups, timing-regels en interacties overzichtelijk naast elkaar. Alle teksten en triggers kunnen rechtstreeks vanuit het CMS worden aangepast.",
+                "This page provides an overview of all pop-ups, timing rules, and interactions. All copy and triggers can be edited directly from the CMS."
               )}
             </p>
           </div>
@@ -126,20 +164,17 @@ export function PopupsClient() {
             <div style={{ background: "var(--theme-bg)", border: "1px solid var(--theme-border)", borderRadius: "4px", padding: "28px", margin: "16px 0 24px", boxShadow: "0 10px 25px rgba(0,0,0,0.06)", position: "relative" }}>
               <div className="newsletter-badge">
                 <span className="newsletter-badge-dot" />
-                {t("CLUB CHATEAU · NIEUWS UIT DE WINERY", "CLUB CHATEAU · WINERY DISPATCHES")}
+                {nlBadge}
               </div>
 
               {newsletterSubmitted ? (
                 <div style={{ textAlign: "center", padding: "12px 0" }}>
                   <div className="newsletter-success-icon" style={{ width: "42px", height: "42px", fontSize: "20px", margin: "0 auto 12px" }}>✓</div>
                   <h3 style={{ fontStretch: "120%", fontWeight: 800, textTransform: "uppercase", fontSize: "20px" }}>
-                    {t("Je staat op de gastenlijst.", "You are on the guestlist.")}
+                    {nlSuccessHeading}
                   </h3>
                   <p style={{ fontSize: "13.5px", color: "var(--theme-fg-muted)", marginTop: "8px" }}>
-                    {t(
-                      "Dank voor je aanmelding. Je ontvangt binnenkort uitnodigingen voor onze nieuwste bottelingen, proeverijen en events.",
-                      "Thank you for joining. You'll receive invitations for new releases, exclusive tastings and winery events."
-                    )}
+                    {nlSuccessDesc}
                   </p>
                   <button
                     type="button"
@@ -152,20 +187,17 @@ export function PopupsClient() {
               ) : (
                 <>
                   <h3 style={{ fontStretch: "120%", fontWeight: 800, textTransform: "uppercase", fontSize: "22px", lineHeight: 1.15 }}>
-                    {t("Als eerste op de hoogte.", "Be the first to know.")}
+                    {nlHeading}
                   </h3>
                   <p style={{ fontSize: "14px", lineHeight: 1.55, color: "var(--theme-fg-muted)", marginTop: "10px" }}>
-                    {t(
-                      "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ.",
-                      "Receive exclusive discounts, invitations to tastings, and stories & wine facts from our winery on the IJ waterfront."
-                    )}
+                    {nlDesc}
                   </p>
 
                   <div style={{ marginTop: "20px" }}>
                     <div className="newsletter-input-wrap">
                       <input
                         type="email"
-                        placeholder={t("Jouw e-mailadres", "Your email address")}
+                        placeholder={nlPlaceholder}
                         value={newsletterTestEmail}
                         onChange={(e) => setNewsletterTestEmail(e.target.value)}
                         className="newsletter-input"
@@ -177,11 +209,11 @@ export function PopupsClient() {
                         onClick={() => setNewsletterSubmitted(true)}
                         style={{ padding: "10px 18px", fontSize: "12px" }}
                       >
-                        {t("Aanmelden →", "Join Club →")}
+                        {nlBtn}
                       </button>
                     </div>
                     <span style={{ display: "block", marginTop: "10px", fontSize: "11px", color: "var(--theme-fg-muted)", fontFamily: "var(--font-mono)" }}>
-                      {t("Uitschrijven kan op elk gewenst moment met één klik.", "Unsubscribe anytime with one click.")}
+                      {nlDisclaimer}
                     </span>
                   </div>
                 </>
@@ -191,13 +223,13 @@ export function PopupsClient() {
             {/* Specifications & Rules */}
             <div style={{ fontSize: "13.5px", lineHeight: 1.6, color: "var(--theme-fg)" }}>
               <strong style={{ display: "block", marginBottom: "6px", fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--theme-fg-muted)" }}>
-                ⚙️ Specificaties &amp; Triggers:
+                ⚙️ Huidige Triggers &amp; Specificaties:
               </strong>
               <ul style={{ paddingLeft: "18px", marginBottom: "16px" }}>
-                <li><strong>Wanneer:</strong> Pas ná goedkeuring 18+ gate; bij <strong>≥ 50% scroll</strong>, <strong>exit-intent</strong> (muis naar boven) of 30 sec tijd.</li>
+                <li><strong>Wanneer:</strong> Pas ná goedkeuring 18+ gate; bij <strong>≥ {triggerScroll}% scroll</strong>, <strong>exit-intent</strong> of <strong>{triggerTimer} sec</strong> timer.</li>
                 <li><strong>Vaste trigger:</strong> Ook op elk moment te openen via de <em>"Club Chateau"</em> link in de footer.</li>
                 <li><strong>Sluiten:</strong> Via kruisje ✕, Escape-toets, of klik buiten de kaart.</li>
-                <li><strong>Bewaartermijn:</strong> <strong>14 dagen</strong> stil na wegklikken; <strong>nooit meer</strong> tonen na inschrijving.</li>
+                <li><strong>Bewaartermijn:</strong> <strong>{dismissDays} dagen</strong> stil na wegklikken; <strong>nooit meer</strong> tonen na inschrijving.</li>
               </ul>
             </div>
           </div>
@@ -229,23 +261,20 @@ export function PopupsClient() {
             {/* Live visual representation */}
             <div style={{ background: "var(--theme-bg)", border: "1px solid var(--theme-border)", borderRadius: "4px", padding: "28px", margin: "16px 0 24px", textAlign: "center", boxShadow: "0 10px 25px rgba(0,0,0,0.06)" }}>
               <span style={{ display: "block", fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--theme-fg-muted)", marginBottom: "12px" }}>
-                Chateau Amsterdam
+                {agEyebrow}
               </span>
               <h3 style={{ fontStretch: "125%", fontWeight: 800, textTransform: "uppercase", fontSize: "22px", lineHeight: 1.15 }}>
-                {t("Ben je 18 jaar of ouder?", "Are you 18 years or older?")}
+                {agHeading}
               </h3>
               <p style={{ marginTop: "10px", fontSize: "14px", lineHeight: 1.55, color: "var(--theme-fg-muted)" }}>
-                {t(
-                  "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan.",
-                  "This site is about wine. Please confirm your age to continue."
-                )}
+                {agDesc}
               </p>
               <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "20px", flexWrap: "wrap" }}>
                 <button type="button" className="btn btn--primary" style={{ padding: "8px 18px", fontSize: "12px" }}>
-                  {t("Ja, ik ben 18+", "Yes, I'm 18+")}
+                  {agConfirm}
                 </button>
                 <button type="button" className="btn" style={{ padding: "8px 18px", fontSize: "12px" }}>
-                  {t("Nee", "No")}
+                  {agDeny}
                 </button>
               </div>
             </div>
@@ -280,17 +309,14 @@ export function PopupsClient() {
             {/* Live visual representation */}
             <div style={{ background: "var(--theme-bg)", border: "1px solid var(--theme-border)", borderRadius: "4px", padding: "20px", margin: "16px 0 24px", boxShadow: "0 10px 25px rgba(0,0,0,0.06)" }}>
               <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--theme-fg-muted)" }}>
-                {t(
-                  "We gebruiken alleen functionele en anonieme analytische cookies om de website soepel te laten werken. Geen tracking door derden.",
-                  "We only use functional and privacy-friendly analytics cookies to ensure a smooth experience. No third-party tracking."
-                )}
+                {cbText}
               </p>
               <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>
                 <button type="button" className="btn btn--primary" style={{ padding: "6px 14px", fontSize: "11px" }}>
-                  {t("Akkoord", "Accept")}
+                  {cbAccept}
                 </button>
                 <button type="button" className="btn" style={{ padding: "6px 14px", fontSize: "11px" }}>
-                  {t("Instellingen", "Settings")}
+                  {cbSettings}
                 </button>
               </div>
             </div>
@@ -313,18 +339,18 @@ export function PopupsClient() {
         <div style={{ background: "var(--theme-bg-dim)", border: "1px dashed var(--theme-accent)", borderRadius: "4px", padding: "32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--theme-accent-text)", fontWeight: 600, display: "block", marginBottom: "12px" }}>
-              💡 Feedback &amp; Iteratie Gids
+              💡 CMS Beheer
             </span>
             <h3 style={{ fontStretch: "120%", fontWeight: 800, textTransform: "uppercase", fontSize: "20px", lineHeight: 1.2 }}>
-              Hoe feedback doorgeven?
+              Teksten of timing aanpassen?
             </h3>
             <p style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--theme-fg)", marginTop: "12px" }}>
-              Wil je iets aanpassen aan de pop-ups? Let bij feedback vooral op:
+              Alle teksten, knoplabels en trigger-instellingen (zoals scrollpercentage en timers) kunnen direct door het team worden aangepast in het CMS onder <strong>Pop-ups &amp; Modals</strong>.
             </p>
             <ul style={{ fontSize: "13.5px", lineHeight: 1.6, color: "var(--theme-fg)", paddingLeft: "18px", marginTop: "10px" }}>
-              <li><strong>Koptekst:</strong> Spreekt <em>"Als eerste op de hoogte"</em> aan, of liever een specifiekere actie (bijv. <em>"Club Chateau"</em> of <em>"Ontvang 10% welkomstkorting"</em>)?</li>
-              <li><strong>Voordelen/Belofte:</strong> Welke voordelen willen we precies benadrukken (korting, wijnweetjes, secret tastings)?</li>
-              <li><strong>Timing:</strong> Vind je 50% scroll prettig of wil je hem sneller / later zien verschijnen?</li>
+              <li>Directe tweetalige bewerking (NL &amp; EN).</li>
+              <li>Live voorbeeld tijdens het typen.</li>
+              <li>Directe synchronisatie met de live website.</li>
             </ul>
           </div>
 

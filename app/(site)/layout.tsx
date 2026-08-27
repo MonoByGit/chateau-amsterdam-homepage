@@ -65,10 +65,19 @@ const structuredData = {
 
 import { MobileBookingCta } from "@/components/mobile-booking-cta";
 import { NewsletterModal } from "@/components/newsletter-modal";
+import {
+  getPopupContent,
+  type NewsletterPopupContent,
+  type AgeGatePopupContent,
+} from "@/lib/content/popups";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headerContent = await getContent("home", "header", HEADER_DEFAULTS);
-  const footerContent = await getContent("home", "footer", FOOTER_DEFAULTS);
+  const [headerContent, footerContent, newsletterContent, ageGateContent] = await Promise.all([
+    getContent("home", "header", HEADER_DEFAULTS),
+    getContent("home", "footer", FOOTER_DEFAULTS),
+    getPopupContent<NewsletterPopupContent>("newsletter"),
+    getPopupContent<AgeGatePopupContent>("age-gate"),
+  ]);
 
   return (
     <html lang="nl" className={`${archivo.variable} ${instrumentSerif.variable} ${ibmPlexMono.variable}`}>
@@ -88,9 +97,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <CartDrawer />
                 <MobileNavPanel content={headerContent} />
                 <MobileBookingCta />
-                <AgeGate />
+                <AgeGate content={ageGateContent} />
                 <CookieBanner />
-                <NewsletterModal />
+                <NewsletterModal content={newsletterContent} />
                 <AnalyticsScript />
               </MobileNavProvider>
             </CartProvider>

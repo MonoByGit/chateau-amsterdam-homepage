@@ -3,19 +3,19 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language";
+import { AGE_GATE_POPUP_DEFAULTS, type AgeGatePopupContent } from "@/lib/content/popup-defaults";
 
 const STORAGE_KEY = "age-verified";
-
-// Where "no" sends a visitor: away from the site, to a real, non-punitive
-// destination rather than a dead wall. The Trimbos-instituut's public NL
-// alcohol-awareness site is the appropriate destination for a wine producer's
-// under-18 gate, rather than an arbitrary redirect.
 const UNDERAGE_REDIRECT_URL = "https://www.alcoholinfo.nl/";
 
-export function AgeGate() {
+export function AgeGate({
+  content = AGE_GATE_POPUP_DEFAULTS,
+}: {
+  content?: AgeGatePopupContent;
+}) {
   const [isVerified, setIsVerified] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   useEffect(() => {
     setIsVerified(window.localStorage.getItem(STORAGE_KEY) === "yes");
@@ -35,26 +35,28 @@ export function AgeGate() {
   // flash of the gate for repeat visitors) and nothing renders once verified.
   if (!hasMounted || isVerified) return null;
 
+  const eyebrowText = content.eyebrow?.[lang] || "Chateau Amsterdam";
+  const headingText = content.heading?.[lang] || "Ben je 18 jaar of ouder?";
+  const descText = content.description?.[lang] || "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan.";
+  const confirmText = content.btn_confirm?.[lang] || "Ja, ik ben 18+";
+  const denyText = content.btn_deny?.[lang] || "Nee";
+
   return (
     <div className="age-gate" role="dialog" aria-modal="true" aria-label={t("Leeftijdscontrole", "Age verification")}>
       <div className="age-gate-card">
-        <span className="label">Chateau Amsterdam</span>
-        <h2>{t("Ben je 18 jaar of ouder?", "Are you 18 years or older?")}</h2>
-        <p>
-          {t(
-            "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan.",
-            "This site is about wine. Please confirm your age to continue."
-          )}
-        </p>
+        <span className="label">{eyebrowText}</span>
+        <h2>{headingText}</h2>
+        <p>{descText}</p>
         <div className="age-gate-actions">
           <button type="button" className="btn btn--primary" onClick={confirmAge}>
-            {t("Ja, ik ben 18+", "Yes, I'm 18+")}
+            {confirmText}
           </button>
           <button type="button" className="btn" onClick={declineAge}>
-            {t("Nee", "No")}
+            {denyText}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
