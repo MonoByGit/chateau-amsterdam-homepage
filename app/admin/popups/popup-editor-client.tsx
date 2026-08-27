@@ -608,13 +608,14 @@ export function PopupEditorClient({
                 style={{
                   width: "100%",
                   minHeight: "600px",
-                  background: "#17140e url('/assets/grain.png') repeat",
+                  background: "#17140E",
                   position: "relative",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: viewport === "mobile" ? "16px" : "32px",
+                  padding: viewport === "mobile" ? "20px 12px" : "36px 24px",
                   flexGrow: 1,
+                  boxSizing: "border-box",
                 }}
               >
                 {/* Backdrop effect */}
@@ -622,87 +623,260 @@ export function PopupEditorClient({
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "rgba(23, 20, 14, 0.75)",
-                    backdropFilter: "blur(4px)",
+                    background: "rgba(23, 20, 14, 0.72)",
+                    backdropFilter: "blur(6px)",
                   }}
                 />
 
-                {/* Live Card inside Frame */}
+                {/* Tab 1: Newsletter Card */}
                 {activeTab === "newsletter" && (
                   <div
-                    className="newsletter-card"
                     style={{
                       position: "relative",
                       zIndex: 2,
                       width: "100%",
                       maxWidth: "460px",
-                      margin: "0 auto",
-                      boxShadow: "0 24px 48px rgba(0,0,0,0.45)",
+                      background: "#FAF7F2",
+                      color: "#17140E",
+                      border: "1px solid #E5DFD3",
+                      borderRadius: "4px",
+                      padding: viewport === "mobile" ? "28px 20px" : "36px 32px",
+                      boxShadow: "0 24px 50px rgba(0,0,0,0.45)",
+                      boxSizing: "border-box",
                     }}
                   >
-                    <button type="button" className="newsletter-close" aria-label="Sluiten">
+                    <button
+                      type="button"
+                      style={{
+                        position: "absolute",
+                        top: "14px",
+                        right: "14px",
+                        width: "30px",
+                        height: "30px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: "rgba(23, 20, 14, 0.06)",
+                        border: "none",
+                        borderRadius: "50%",
+                        color: "#78716C",
+                        fontSize: "14px",
+                        cursor: "pointer",
+                      }}
+                      aria-label="Sluiten"
+                    >
                       ✕
                     </button>
-                    <div className="newsletter-badge">
-                      <span className="newsletter-badge-dot" />
+
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        background: "rgba(23, 20, 14, 0.05)",
+                        border: "1px solid rgba(23, 20, 14, 0.1)",
+                        padding: "4px 10px",
+                        borderRadius: "9999px",
+                        fontFamily: "monospace",
+                        fontSize: "10px",
+                        letterSpacing: "0.1em",
+                        fontWeight: 600,
+                        color: "#57534E",
+                        marginBottom: "14px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "6px",
+                          height: "6px",
+                          borderRadius: "50%",
+                          background: "#FFCC00",
+                          display: "inline-block",
+                          boxShadow: "0 0 8px rgba(255, 204, 0, 0.8)",
+                        }}
+                      />
                       {newsletter.badge[activeLang] || "CLUB CHATEAU · NIEUWS UIT DE WINERY"}
                     </div>
-                    <h2 id="preview-nl-title" className="newsletter-title" style={{ fontSize: viewport === "mobile" ? "20px" : "24px" }}>
+
+                    <h2
+                      style={{
+                        fontFamily: "var(--font-archivo, -apple-system, sans-serif)",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        fontSize: viewport === "mobile" ? "20px" : "24px",
+                        lineHeight: 1.15,
+                        color: "#17140E",
+                        margin: "0 0 10px 0",
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
                       {newsletter.heading[activeLang] || "Als eerste op de hoogte."}
                     </h2>
-                    <p className="newsletter-description" style={{ fontSize: viewport === "mobile" ? "13px" : "14px" }}>
+
+                    <p
+                      style={{
+                        fontSize: viewport === "mobile" ? "13px" : "14px",
+                        lineHeight: 1.55,
+                        color: "#57534E",
+                        margin: "0 0 20px 0",
+                      }}
+                    >
                       {newsletter.description[activeLang] || "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ."}
                     </p>
-                    <div className="newsletter-form">
-                      <div className="newsletter-input-wrap">
+
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: viewport === "mobile" ? "column" : "row",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="email"
                           readOnly
                           placeholder={newsletter.placeholder[activeLang] || "Jouw e-mailadres"}
-                          className="newsletter-input"
+                          style={{
+                            flex: 1,
+                            background: "#FFFFFF",
+                            border: "1px solid #D5CEBF",
+                            borderRadius: "3px",
+                            padding: "10px 14px",
+                            fontSize: "13px",
+                            color: "#17140E",
+                            outline: "none",
+                            boxSizing: "border-box",
+                          }}
                         />
-                        <button type="button" className="btn btn--primary newsletter-submit-btn">
+                        <button
+                          type="button"
+                          style={{
+                            background: "#17140E",
+                            color: "#FAF7F2",
+                            border: "none",
+                            borderRadius: "3px",
+                            padding: "10px 18px",
+                            fontWeight: 700,
+                            fontSize: "12px",
+                            letterSpacing: "0.05em",
+                            textTransform: "uppercase",
+                            cursor: "pointer",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
                           {newsletter.button_label[activeLang] || "Aanmelden →"}
                         </button>
                       </div>
-                      <p className="newsletter-disclaimer">
+
+                      <p
+                        style={{
+                          fontSize: "11px",
+                          color: "#78716C",
+                          fontFamily: "monospace",
+                          margin: "12px 0 0 0",
+                          lineHeight: 1.4,
+                        }}
+                      >
                         {newsletter.disclaimer[activeLang] || "Uitschrijven kan op elk gewenst moment met één klik. Privacy gewaarborgd."}
                       </p>
                     </div>
                   </div>
                 )}
 
+                {/* Tab 2: Age Gate Card */}
                 {activeTab === "age-gate" && (
                   <div
-                    className="age-gate-card"
                     style={{
                       position: "relative",
                       zIndex: 2,
                       width: "100%",
                       maxWidth: "420px",
-                      margin: "0 auto",
+                      background: "#FAF7F2",
+                      color: "#17140E",
+                      border: "1px solid #E5DFD3",
+                      borderRadius: "4px",
+                      padding: "36px 32px",
                       textAlign: "center",
-                      boxShadow: "0 24px 48px rgba(0,0,0,0.45)",
+                      boxShadow: "0 24px 50px rgba(0,0,0,0.45)",
+                      boxSizing: "border-box",
                     }}
                   >
-                    <span className="label">{ageGate.eyebrow[activeLang] || "Chateau Amsterdam"}</span>
-                    <h2 style={{ fontSize: viewport === "mobile" ? "20px" : "24px" }}>
+                    <span
+                      style={{
+                        display: "block",
+                        fontFamily: "monospace",
+                        fontSize: "11px",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "#78716C",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {ageGate.eyebrow[activeLang] || "Chateau Amsterdam"}
+                    </span>
+
+                    <h2
+                      style={{
+                        fontFamily: "var(--font-archivo, -apple-system, sans-serif)",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        fontSize: viewport === "mobile" ? "20px" : "24px",
+                        lineHeight: 1.15,
+                        color: "#17140E",
+                        margin: "0 0 10px 0",
+                      }}
+                    >
                       {ageGate.heading[activeLang] || "Ben je 18 jaar of ouder?"}
                     </h2>
-                    <p style={{ fontSize: viewport === "mobile" ? "13px" : "14px" }}>
+
+                    <p
+                      style={{
+                        fontSize: viewport === "mobile" ? "13px" : "14px",
+                        lineHeight: 1.55,
+                        color: "#57534E",
+                        margin: "0 0 22px 0",
+                      }}
+                    >
                       {ageGate.description[activeLang] || "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan."}
                     </p>
-                    <div className="age-gate-actions" style={{ marginTop: "18px" }}>
-                      <button type="button" className="btn btn--primary">
+
+                    <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                      <button
+                        type="button"
+                        style={{
+                          background: "#17140E",
+                          color: "#FAF7F2",
+                          border: "none",
+                          borderRadius: "3px",
+                          padding: "10px 22px",
+                          fontWeight: 700,
+                          fontSize: "12px",
+                          letterSpacing: "0.04em",
+                          cursor: "pointer",
+                        }}
+                      >
                         {ageGate.btn_confirm[activeLang] || "Ja, ik ben 18+"}
                       </button>
-                      <button type="button" className="btn">
+                      <button
+                        type="button"
+                        style={{
+                          background: "transparent",
+                          color: "#17140E",
+                          border: "1px solid #D5CEBF",
+                          borderRadius: "3px",
+                          padding: "10px 22px",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
                         {ageGate.btn_deny[activeLang] || "Nee"}
                       </button>
                     </div>
                   </div>
                 )}
 
+                {/* Tab 3: Cookie Banner */}
                 {activeTab === "cookie-banner" && (
                   <div
                     style={{
@@ -711,21 +885,47 @@ export function PopupEditorClient({
                       left: "20px",
                       right: "20px",
                       zIndex: 2,
-                      background: "var(--theme-bg)",
-                      border: "1px solid var(--theme-border)",
-                      padding: "16px 20px",
+                      background: "#FAF7F2",
+                      color: "#17140E",
+                      border: "1px solid #E5DFD3",
+                      padding: "18px 22px",
                       borderRadius: "4px",
-                      boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
+                      boxShadow: "0 14px 36px rgba(0,0,0,0.45)",
+                      boxSizing: "border-box",
                     }}
                   >
-                    <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--theme-fg-muted)", margin: 0 }}>
+                    <p style={{ fontSize: "13px", lineHeight: 1.5, color: "#57534E", margin: 0 }}>
                       {cookieBanner.text[activeLang] || "We gebruiken alleen functionele en anonieme analytische cookies om de website soepel te laten werken. Geen tracking door derden."}
                     </p>
-                    <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
-                      <button type="button" className="btn btn--primary" style={{ padding: "6px 14px", fontSize: "12px" }}>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>
+                      <button
+                        type="button"
+                        style={{
+                          background: "#17140E",
+                          color: "#FAF7F2",
+                          border: "none",
+                          borderRadius: "3px",
+                          padding: "7px 16px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                        }}
+                      >
                         {cookieBanner.btn_accept[activeLang] || "Akkoord"}
                       </button>
-                      <button type="button" className="btn" style={{ padding: "6px 14px", fontSize: "12px" }}>
+                      <button
+                        type="button"
+                        style={{
+                          background: "transparent",
+                          color: "#17140E",
+                          border: "1px solid #D5CEBF",
+                          borderRadius: "3px",
+                          padding: "7px 16px",
+                          fontSize: "12px",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                        }}
+                      >
                         {cookieBanner.btn_settings[activeLang] || "Instellingen"}
                       </button>
                     </div>
