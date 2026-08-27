@@ -185,14 +185,14 @@ export function NewsletterModal() {
           <>
             <h2 id="newsletter-modal-title" className="newsletter-title">
               {t(
-                "Als eerste aan tafel bij nieuwe bottelingen.",
-                "First in line for exclusive releases & tastings."
+                "Als eerste op de hoogte.",
+                "Be the first to know."
               )}
             </h2>
             <p className="newsletter-description">
               {t(
-                "Geen wekelijkse spam. Wel uitnodigingen voor besloten proeverijen, limited editions en vaten die net geopend worden aan het IJ.",
-                "No weekly spam. Just invitations to private tastings, limited releases and fresh barrels tapped at the IJ waterfront."
+                "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ.",
+                "Receive exclusive discounts, invitations to tastings, and stories & wine facts from our winery on the IJ waterfront."
               )}
             </p>
 
