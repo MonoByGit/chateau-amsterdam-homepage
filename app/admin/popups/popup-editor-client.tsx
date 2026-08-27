@@ -24,9 +24,10 @@ export function PopupEditorClient({
   initialCookieBanner,
 }: Props) {
   const [activeTab, setActiveTab] = useState<PopupTab>("newsletter");
-  const [previewLang, setPreviewLang] = useState<"nl" | "en">("nl");
+  const [activeLang, setActiveLang] = useState<"nl" | "en">("nl");
+  const [viewport, setViewport] = useState<"desktop" | "mobile">("desktop");
+  const [feedback, setFeedback] = useState<{ status: "success" | "error"; message: string } | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Form states
   const [newsletter, setNewsletter] = useState<NewsletterPopupContent>(initialNewsletter);
@@ -34,632 +35,707 @@ export function PopupEditorClient({
   const [cookieBanner, setCookieBanner] = useState<CookieBannerPopupContent>(initialCookieBanner);
 
   // Field change helpers
-  function updateNewsletter(field: keyof NewsletterPopupContent, lang: "nl" | "en", value: string) {
+  const handleNewsletterChange = (field: keyof NewsletterPopupContent, value: string) => {
     setNewsletter((prev) => ({
       ...prev,
-      [field]: { ...prev[field], [lang]: value },
+      [field]: { ...prev[field], [activeLang]: value },
     }));
-  }
+  };
 
-  function updateAgeGate(field: keyof AgeGatePopupContent, lang: "nl" | "en", value: string) {
+  const handleAgeGateChange = (field: keyof AgeGatePopupContent, value: string) => {
     setAgeGate((prev) => ({
       ...prev,
-      [field]: { ...prev[field], [lang]: value },
+      [field]: { ...prev[field], [activeLang]: value },
     }));
-  }
+  };
 
-  function updateCookieBanner(field: keyof CookieBannerPopupContent, lang: "nl" | "en", value: string) {
+  const handleCookieBannerChange = (field: keyof CookieBannerPopupContent, value: string) => {
     setCookieBanner((prev) => ({
       ...prev,
-      [field]: { ...prev[field], [lang]: value },
+      [field]: { ...prev[field], [activeLang]: value },
     }));
-  }
+  };
 
-  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatusMessage(null);
+    setFeedback(null);
 
     const formData = new FormData();
 
     if (activeTab === "newsletter") {
       Object.entries(newsletter).forEach(([key, val]) => {
-        formData.append(`${key}_nl`, val.nl);
-        formData.append(`${key}_en`, val.en);
+        formData.set(`${key}_nl`, val.nl);
+        formData.set(`${key}_en`, val.en);
       });
     } else if (activeTab === "age-gate") {
       Object.entries(ageGate).forEach(([key, val]) => {
-        formData.append(`${key}_nl`, val.nl);
-        formData.append(`${key}_en`, val.en);
+        formData.set(`${key}_nl`, val.nl);
+        formData.set(`${key}_en`, val.en);
       });
     } else {
       Object.entries(cookieBanner).forEach(([key, val]) => {
-        formData.append(`${key}_nl`, val.nl);
-        formData.append(`${key}_en`, val.en);
+        formData.set(`${key}_nl`, val.nl);
+        formData.set(`${key}_en`, val.en);
       });
     }
 
     startTransition(async () => {
       const res = await savePopupConfigAction(activeTab, formData);
       if (res.success) {
-        setStatusMessage({ type: "success", text: res.message });
+        setFeedback({ status: "success", message: "✅ Wijzigingen succesvol opgeslagen!" });
       } else {
-        setStatusMessage({ type: "error", text: res.message });
+        setFeedback({ status: "error", message: res.message });
       }
-      setTimeout(() => setStatusMessage(null), 4000);
     });
-  }
+  };
+
+  const tabs: { id: PopupTab; title: string; recipient: string }[] = [
+    {
+      id: "newsletter",
+      title: "1. Club Chateau: Nieuwsbrief Modal",
+      recipient: "Bezoekers bij 50% scroll of exit-intent",
+    },
+    {
+      id: "age-gate",
+      title: "2. 18+ Leeftijdscontrole (Age Gate)",
+      recipient: "Nieuwe bezoekers bij het allereerste bezoek",
+    },
+    {
+      id: "cookie-banner",
+      title: "3. Cookie & Privacy Banner",
+      recipient: "Alle websitebezoekers (onderaan)",
+    },
+  ];
+
+  const currentTabMeta = tabs.find((t) => t.id === activeTab) || tabs[0];
 
   return (
-    <div className="a-content-page" style={{ maxWidth: "1200px", margin: "0 auto" }}>
-      {/* Header */}
-      <div className="a-content-header" style={{ marginBottom: "28px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
-          <div>
-            <div className="a-content-kicker">CMS · Conversie &amp; Compliance</div>
-            <h1 className="a-content-title" style={{ fontSize: "28px", textTransform: "uppercase" }}>
-              Pop-ups &amp; Modals Beheer
-            </h1>
-            <p className="a-content-sub" style={{ marginTop: "6px" }}>
-              Beheer teksten, koppen, knoppen en timing van de Club Chateau nieuwsbrief, de 18+ leeftijdscontrole en de cookie banner.
-            </p>
-          </div>
-
-          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-            <Link
-              href="/popups"
-              target="_blank"
-              className="a-btn a-btn-outline"
-              style={{ display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
-            >
-              <span>🔗 Publieke Showcase</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" /></svg>
-            </Link>
-          </div>
-        </div>
+    <div>
+      {/* Header section */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h1 className="a-h1">Pop-up Studio &amp; Modal Editor</h1>
+        <p className="a-subtitle">
+          Beheer en bewerk alle pop-up teksten, compliance instellingen en triggers van Chateau Amsterdam. Wijzigingen zijn direct actief in productie.
+        </p>
       </div>
 
-      {/* Tabs */}
-      <div className="a-content-tabs" style={{ display: "flex", borderBottom: "1px solid var(--admin-border)", gap: "4px", marginBottom: "32px" }}>
-        <button
-          type="button"
-          onClick={() => setActiveTab("newsletter")}
-          style={{
-            padding: "10px 18px",
-            fontSize: "13px",
-            fontWeight: activeTab === "newsletter" ? 700 : 500,
-            borderBottom: activeTab === "newsletter" ? "2px solid var(--admin-fg)" : "2px solid transparent",
-            color: activeTab === "newsletter" ? "var(--admin-fg)" : "var(--admin-fg-muted)",
-            background: "none",
-            borderTop: "none",
-            borderLeft: "none",
-            borderRight: "none",
-            cursor: "pointer",
-          }}
-        >
-          🍷 1. Club Chateau Nieuwsbrief
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("age-gate")}
-          style={{
-            padding: "10px 18px",
-            fontSize: "13px",
-            fontWeight: activeTab === "age-gate" ? 700 : 500,
-            borderBottom: activeTab === "age-gate" ? "2px solid var(--admin-fg)" : "2px solid transparent",
-            color: activeTab === "age-gate" ? "var(--admin-fg)" : "var(--admin-fg-muted)",
-            background: "none",
-            borderTop: "none",
-            borderLeft: "none",
-            borderRight: "none",
-            cursor: "pointer",
-          }}
-        >
-          🔞 2. 18+ Leeftijdscontrole
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("cookie-banner")}
-          style={{
-            padding: "10px 18px",
-            fontSize: "13px",
-            fontWeight: activeTab === "cookie-banner" ? 700 : 500,
-            borderBottom: activeTab === "cookie-banner" ? "2px solid var(--admin-fg)" : "2px solid transparent",
-            color: activeTab === "cookie-banner" ? "var(--admin-fg)" : "var(--admin-fg-muted)",
-            background: "none",
-            borderTop: "none",
-            borderLeft: "none",
-            borderRight: "none",
-            cursor: "pointer",
-          }}
-        >
-          🍪 3. Cookie Banner
-        </button>
-      </div>
-
-      {statusMessage && (
-        <div
-          style={{
-            padding: "12px 18px",
-            marginBottom: "24px",
-            borderRadius: "4px",
-            fontSize: "13.5px",
-            fontFamily: "var(--font-mono)",
-            background: statusMessage.type === "success" ? "rgba(34, 197, 94, 0.1)" : "rgba(239, 68, 68, 0.1)",
-            border: `1px solid ${statusMessage.type === "success" ? "rgba(34, 197, 94, 0.3)" : "rgba(239, 68, 68, 0.3)"}`,
-            color: statusMessage.type === "success" ? "#166534" : "#991b1b",
-          }}
-        >
-          {statusMessage.text}
-        </div>
-      )}
-
-      {/* Main Grid: Form Left, Live Preview Right */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.15fr 0.85fr", gap: "36px", alignItems: "start" }}>
-        {/* Form Column */}
-        <form onSubmit={handleSave} style={{ background: "var(--admin-card)", border: "1px solid var(--admin-border)", borderRadius: "4px", padding: "28px" }}>
-          {activeTab === "newsletter" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              <div style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "12px", marginBottom: "4px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700 }}>Inschrijf Modal Teksten</h3>
-                <p style={{ fontSize: "12.5px", color: "var(--admin-fg-muted)" }}>Beheer de teksten van de Club Chateau popup.</p>
-              </div>
-
-              {/* Badge */}
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Badge Kicker</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <input
-                    type="text"
-                    value={newsletter.badge.nl}
-                    onChange={(e) => updateNewsletter("badge", "nl", e.target.value)}
-                    className="a-input"
-                    placeholder="NL Badge"
-                  />
-                  <input
-                    type="text"
-                    value={newsletter.badge.en}
-                    onChange={(e) => updateNewsletter("badge", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN Badge"
-                  />
-                </div>
-              </div>
-
-              {/* Heading */}
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Koptekst (Titel)</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <input
-                    type="text"
-                    value={newsletter.heading.nl}
-                    onChange={(e) => updateNewsletter("heading", "nl", e.target.value)}
-                    className="a-input"
-                    placeholder="NL Titel"
-                  />
-                  <input
-                    type="text"
-                    value={newsletter.heading.en}
-                    onChange={(e) => updateNewsletter("heading", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN Title"
-                  />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Beschrijving (Voordelen)</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <textarea
-                    rows={3}
-                    value={newsletter.description.nl}
-                    onChange={(e) => updateNewsletter("description", "nl", e.target.value)}
-                    className="a-input"
-                    placeholder="NL Beschrijving"
-                  />
-                  <textarea
-                    rows={3}
-                    value={newsletter.description.en}
-                    onChange={(e) => updateNewsletter("description", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN Description"
-                  />
-                </div>
-              </div>
-
-              {/* Button & Placeholder */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Knoptekst</label>
-                  <input
-                    type="text"
-                    value={newsletter.button_label.nl}
-                    onChange={(e) => updateNewsletter("button_label", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                    placeholder="NL: Aanmelden →"
-                  />
-                  <input
-                    type="text"
-                    value={newsletter.button_label.en}
-                    onChange={(e) => updateNewsletter("button_label", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN: Join Club →"
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Input Placeholder</label>
-                  <input
-                    type="text"
-                    value={newsletter.placeholder.nl}
-                    onChange={(e) => updateNewsletter("placeholder", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                    placeholder="NL: Jouw e-mailadres"
-                  />
-                  <input
-                    type="text"
-                    value={newsletter.placeholder.en}
-                    onChange={(e) => updateNewsletter("placeholder", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN: Your email address"
-                  />
-                </div>
-              </div>
-
-              {/* Disclaimer */}
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Disclaimer / Uitschrijflink</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <input
-                    type="text"
-                    value={newsletter.disclaimer.nl}
-                    onChange={(e) => updateNewsletter("disclaimer", "nl", e.target.value)}
-                    className="a-input"
-                    placeholder="NL Disclaimer"
-                  />
-                  <input
-                    type="text"
-                    value={newsletter.disclaimer.en}
-                    onChange={(e) => updateNewsletter("disclaimer", "en", e.target.value)}
-                    className="a-input"
-                    placeholder="EN Disclaimer"
-                  />
-                </div>
-              </div>
-
-              {/* Trigger Settings */}
-              <div style={{ borderTop: "1px solid var(--admin-border)", paddingTop: "18px", marginTop: "8px" }}>
-                <h4 style={{ fontSize: "14px", fontWeight: 700, marginBottom: "12px" }}>⚙️ Triggers &amp; Timing</h4>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "var(--admin-fg-muted)", marginBottom: "4px" }}>Scroll Percentage (%)</label>
-                    <input
-                      type="number"
-                      value={newsletter.trigger_scroll.nl}
-                      onChange={(e) => {
-                        updateNewsletter("trigger_scroll", "nl", e.target.value);
-                        updateNewsletter("trigger_scroll", "en", e.target.value);
-                      }}
-                      className="a-input"
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "var(--admin-fg-muted)", marginBottom: "4px" }}>Timer (seconden)</label>
-                    <input
-                      type="number"
-                      value={newsletter.trigger_timer.nl}
-                      onChange={(e) => {
-                        updateNewsletter("trigger_timer", "nl", e.target.value);
-                        updateNewsletter("trigger_timer", "en", e.target.value);
-                      }}
-                      className="a-input"
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "var(--admin-fg-muted)", marginBottom: "4px" }}>Bewaartermijn (dagen)</label>
-                    <input
-                      type="number"
-                      value={newsletter.dismiss_days.nl}
-                      onChange={(e) => {
-                        updateNewsletter("dismiss_days", "nl", e.target.value);
-                        updateNewsletter("dismiss_days", "en", e.target.value);
-                      }}
-                      className="a-input"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "age-gate" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              <div style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "12px", marginBottom: "4px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700 }}>18+ Leeftijdscontrole Teksten</h3>
-                <p style={{ fontSize: "12.5px", color: "var(--admin-fg-muted)" }}>Wettelijke leeftijdsverificatie bij het eerste bezoek.</p>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Kicker Label</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <input
-                    type="text"
-                    value={ageGate.eyebrow.nl}
-                    onChange={(e) => updateAgeGate("eyebrow", "nl", e.target.value)}
-                    className="a-input"
-                  />
-                  <input
-                    type="text"
-                    value={ageGate.eyebrow.en}
-                    onChange={(e) => updateAgeGate("eyebrow", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Vraag / Titel</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <input
-                    type="text"
-                    value={ageGate.heading.nl}
-                    onChange={(e) => updateAgeGate("heading", "nl", e.target.value)}
-                    className="a-input"
-                  />
-                  <input
-                    type="text"
-                    value={ageGate.heading.en}
-                    onChange={(e) => updateAgeGate("heading", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Uitlegtekst</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <textarea
-                    rows={2}
-                    value={ageGate.description.nl}
-                    onChange={(e) => updateAgeGate("description", "nl", e.target.value)}
-                    className="a-input"
-                  />
-                  <textarea
-                    rows={2}
-                    value={ageGate.description.en}
-                    onChange={(e) => updateAgeGate("description", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Bevestigingsknop (Ja)</label>
-                  <input
-                    type="text"
-                    value={ageGate.btn_confirm.nl}
-                    onChange={(e) => updateAgeGate("btn_confirm", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                  />
-                  <input
-                    type="text"
-                    value={ageGate.btn_confirm.en}
-                    onChange={(e) => updateAgeGate("btn_confirm", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Weigerknop (Nee)</label>
-                  <input
-                    type="text"
-                    value={ageGate.btn_deny.nl}
-                    onChange={(e) => updateAgeGate("btn_deny", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                  />
-                  <input
-                    type="text"
-                    value={ageGate.btn_deny.en}
-                    onChange={(e) => updateAgeGate("btn_deny", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "cookie-banner" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              <div style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "12px", marginBottom: "4px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700 }}>Cookie Banner Teksten</h3>
-                <p style={{ fontSize: "12.5px", color: "var(--admin-fg-muted)" }}>Privacy &amp; AVG-vriendelijke cookieverklaring.</p>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Verklaringstekst</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <textarea
-                    rows={3}
-                    value={cookieBanner.text.nl}
-                    onChange={(e) => updateCookieBanner("text", "nl", e.target.value)}
-                    className="a-input"
-                  />
-                  <textarea
-                    rows={3}
-                    value={cookieBanner.text.en}
-                    onChange={(e) => updateCookieBanner("text", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Akkoord Knop</label>
-                  <input
-                    type="text"
-                    value={cookieBanner.btn_accept.nl}
-                    onChange={(e) => updateCookieBanner("btn_accept", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                  />
-                  <input
-                    type="text"
-                    value={cookieBanner.btn_accept.en}
-                    onChange={(e) => updateCookieBanner("btn_accept", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>Instellingen Knop</label>
-                  <input
-                    type="text"
-                    value={cookieBanner.btn_settings.nl}
-                    onChange={(e) => updateCookieBanner("btn_settings", "nl", e.target.value)}
-                    className="a-input"
-                    style={{ marginBottom: "6px" }}
-                  />
-                  <input
-                    type="text"
-                    value={cookieBanner.btn_settings.en}
-                    onChange={(e) => updateCookieBanner("btn_settings", "en", e.target.value)}
-                    className="a-input"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div style={{ marginTop: "28px", paddingTop: "20px", borderTop: "1px solid var(--admin-border)", display: "flex", justifyContent: "flex-end" }}>
+      {/* Pop-up Selector Tabs */}
+      <div className="a-filter-bar" style={{ marginBottom: "1.5rem" }}>
+        <div className="a-chip-group" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+          {tabs.map((tab) => (
             <button
-              type="submit"
-              disabled={isPending}
-              className="a-btn a-btn-primary"
-              style={{ padding: "10px 24px", fontSize: "13px" }}
+              key={tab.id}
+              type="button"
+              className={`a-chip${activeTab === tab.id ? " is-active" : ""}`}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setFeedback(null);
+              }}
+              style={{ cursor: "pointer", fontWeight: activeTab === tab.id ? 600 : 400 }}
             >
-              {isPending ? "Opslaan..." : "💾 Wijzigingen Opslaan"}
+              {tab.title}
             </button>
-          </div>
-        </form>
+          ))}
+        </div>
+      </div>
 
-        {/* Live Preview Column */}
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-            <span style={{ fontSize: "12px", fontWeight: 700, fontFamily: "var(--font-mono)", textTransform: "uppercase", color: "var(--admin-fg-muted)" }}>
-              Live Visueel Voorbeeld
-            </span>
-            <div style={{ display: "inline-flex", background: "var(--admin-card)", border: "1px solid var(--admin-border)", borderRadius: "3px", padding: "2px" }}>
+      {/* Main Two-Column Layout */}
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(340px, 440px) 1fr", gap: "1.5rem", alignItems: "start" }}>
+        
+        {/* Left Column: Form Editor */}
+        <div className="a-card" style={{ padding: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", borderBottom: "1px solid var(--a-border)", paddingBottom: "0.875rem" }}>
+            <div>
+              <h2 className="a-h2" style={{ fontSize: "1.125rem", margin: 0 }}>
+                ✏️ Teksten aanpassen
+              </h2>
+              <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "2px" }}>
+                Doelgroep: <strong>{currentTabMeta.recipient}</strong>
+              </div>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="a-chip-group">
               <button
                 type="button"
-                onClick={() => setPreviewLang("nl")}
-                style={{
-                  padding: "4px 10px",
-                  fontSize: "11px",
-                  fontWeight: previewLang === "nl" ? 700 : 400,
-                  background: previewLang === "nl" ? "var(--admin-fg)" : "transparent",
-                  color: previewLang === "nl" ? "var(--admin-bg)" : "var(--admin-fg-muted)",
-                  border: "none",
-                  borderRadius: "2px",
-                  cursor: "pointer",
-                }}
+                className={`a-chip${activeLang === "nl" ? " is-active" : ""}`}
+                onClick={() => setActiveLang("nl")}
+                style={{ cursor: "pointer", fontSize: "0.75rem", padding: "0.25rem 0.6rem" }}
               >
-                NL
+                🇳🇱 Nederlands
               </button>
               <button
                 type="button"
-                onClick={() => setPreviewLang("en")}
-                style={{
-                  padding: "4px 10px",
-                  fontSize: "11px",
-                  fontWeight: previewLang === "en" ? 700 : 400,
-                  background: previewLang === "en" ? "var(--admin-fg)" : "transparent",
-                  color: previewLang === "en" ? "var(--admin-bg)" : "var(--admin-fg-muted)",
-                  border: "none",
-                  borderRadius: "2px",
-                  cursor: "pointer",
-                }}
+                className={`a-chip${activeLang === "en" ? " is-active" : ""}`}
+                onClick={() => setActiveLang("en")}
+                style={{ cursor: "pointer", fontSize: "0.75rem", padding: "0.25rem 0.6rem" }}
               >
-                EN
+                🇬🇧 English
               </button>
             </div>
           </div>
 
-          {/* Preview Container */}
-          <div style={{ background: "var(--theme-bg)", border: "1px solid var(--admin-border)", borderRadius: "4px", padding: "28px", boxShadow: "0 10px 30px rgba(0,0,0,0.06)", position: "relative" }}>
+          <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "1.125rem" }}>
+            {/* Tab 1: Newsletter */}
             {activeTab === "newsletter" && (
-              <div>
-                <div className="newsletter-badge" style={{ marginBottom: "14px" }}>
-                  <span className="newsletter-badge-dot" />
-                  {newsletter.badge[previewLang]}
+              <>
+                <div>
+                  <label className="a-label" htmlFor="nl-badge" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Badge Kicker
+                  </label>
+                  <input
+                    id="nl-badge"
+                    type="text"
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem" }}
+                    value={newsletter.badge[activeLang] || ""}
+                    onChange={(e) => handleNewsletterChange("badge", e.target.value)}
+                    placeholder="bijv. CLUB CHATEAU · NIEUWS UIT DE WINERY"
+                    required
+                  />
                 </div>
-                <h3 style={{ fontStretch: "120%", fontWeight: 800, textTransform: "uppercase", fontSize: "21px", lineHeight: 1.15 }}>
-                  {newsletter.heading[previewLang]}
-                </h3>
-                <p style={{ fontSize: "13.5px", lineHeight: 1.55, color: "var(--theme-fg-muted)", marginTop: "10px" }}>
-                  {newsletter.description[previewLang]}
-                </p>
-                <div style={{ marginTop: "18px" }}>
-                  <div className="newsletter-input-wrap">
+
+                <div>
+                  <label className="a-label" htmlFor="nl-heading" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Koptekst / Titel (Heading)
+                  </label>
+                  <input
+                    id="nl-heading"
+                    type="text"
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem" }}
+                    value={newsletter.heading[activeLang] || ""}
+                    onChange={(e) => handleNewsletterChange("heading", e.target.value)}
+                    placeholder="Koptekst van de pop-up..."
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="a-label" htmlFor="nl-description" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Beschrijving / Voordelen (Description)
+                  </label>
+                  <textarea
+                    id="nl-description"
+                    rows={3}
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem", fontFamily: "inherit" }}
+                    value={newsletter.description[activeLang] || ""}
+                    onChange={(e) => handleNewsletterChange("description", e.target.value)}
+                    placeholder="Wat ontvangt de bezoeker bij aanmelding..."
+                    required
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                  <div>
+                    <label className="a-label" htmlFor="nl-btn" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Knoptekst
+                    </label>
                     <input
-                      type="email"
-                      readOnly
-                      placeholder={newsletter.placeholder[previewLang]}
-                      className="newsletter-input"
-                      style={{ padding: "8px 12px", fontSize: "13px" }}
+                      id="nl-btn"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={newsletter.button_label[activeLang] || ""}
+                      onChange={(e) => handleNewsletterChange("button_label", e.target.value)}
+                      placeholder="bijv. Aanmelden →"
+                      required
                     />
-                    <button type="button" className="btn btn--primary" style={{ padding: "8px 16px", fontSize: "11.5px" }}>
-                      {newsletter.button_label[previewLang]}
-                    </button>
                   </div>
-                  <span style={{ display: "block", marginTop: "10px", fontSize: "10.5px", color: "var(--theme-fg-muted)", fontFamily: "var(--font-mono)" }}>
-                    {newsletter.disclaimer[previewLang]}
-                  </span>
+                  <div>
+                    <label className="a-label" htmlFor="nl-placeholder" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Input Placeholder
+                    </label>
+                    <input
+                      id="nl-placeholder"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={newsletter.placeholder[activeLang] || ""}
+                      onChange={(e) => handleNewsletterChange("placeholder", e.target.value)}
+                      placeholder="bijv. Jouw e-mailadres"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div>
+                  <label className="a-label" htmlFor="nl-disclaimer" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Disclaimer / Uitschrijflink (Footer)
+                  </label>
+                  <input
+                    id="nl-disclaimer"
+                    type="text"
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem" }}
+                    value={newsletter.disclaimer[activeLang] || ""}
+                    onChange={(e) => handleNewsletterChange("disclaimer", e.target.value)}
+                    placeholder="Uitschrijftekst..."
+                    required
+                  />
+                </div>
+
+                {/* Trigger settings */}
+                <div style={{ borderTop: "1px solid var(--a-border)", paddingTop: "1rem", marginTop: "0.5rem" }}>
+                  <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--a-text-1)", marginBottom: "0.625rem" }}>
+                    ⚙️ Triggers &amp; Timing
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.625rem" }}>
+                    <div>
+                      <label className="a-label" style={{ fontSize: "0.75rem", color: "var(--a-text-2)", display: "block", marginBottom: "0.25rem" }}>
+                        Scroll Diepte
+                      </label>
+                      <input
+                        type="number"
+                        className="a-input"
+                        style={{ width: "100%", padding: "0.4rem", fontSize: "0.8125rem" }}
+                        value={newsletter.trigger_scroll[activeLang] || "50"}
+                        onChange={(e) => {
+                          handleNewsletterChange("trigger_scroll", e.target.value);
+                          setNewsletter((prev) => ({
+                            ...prev,
+                            trigger_scroll: { nl: e.target.value, en: e.target.value },
+                          }));
+                        }}
+                      />
+                      <span style={{ fontSize: "0.6875rem", color: "var(--a-text-3)" }}>% pagina</span>
+                    </div>
+                    <div>
+                      <label className="a-label" style={{ fontSize: "0.75rem", color: "var(--a-text-2)", display: "block", marginBottom: "0.25rem" }}>
+                        Timer Duur
+                      </label>
+                      <input
+                        type="number"
+                        className="a-input"
+                        style={{ width: "100%", padding: "0.4rem", fontSize: "0.8125rem" }}
+                        value={newsletter.trigger_timer[activeLang] || "30"}
+                        onChange={(e) => {
+                          handleNewsletterChange("trigger_timer", e.target.value);
+                          setNewsletter((prev) => ({
+                            ...prev,
+                            trigger_timer: { nl: e.target.value, en: e.target.value },
+                          }));
+                        }}
+                      />
+                      <span style={{ fontSize: "0.6875rem", color: "var(--a-text-3)" }}>seconden</span>
+                    </div>
+                    <div>
+                      <label className="a-label" style={{ fontSize: "0.75rem", color: "var(--a-text-2)", display: "block", marginBottom: "0.25rem" }}>
+                        Onderdrukking
+                      </label>
+                      <input
+                        type="number"
+                        className="a-input"
+                        style={{ width: "100%", padding: "0.4rem", fontSize: "0.8125rem" }}
+                        value={newsletter.dismiss_days[activeLang] || "14"}
+                        onChange={(e) => {
+                          handleNewsletterChange("dismiss_days", e.target.value);
+                          setNewsletter((prev) => ({
+                            ...prev,
+                            dismiss_days: { nl: e.target.value, en: e.target.value },
+                          }));
+                        }}
+                      />
+                      <span style={{ fontSize: "0.6875rem", color: "var(--a-text-3)" }}>dagen stil</span>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
 
+            {/* Tab 2: Age Gate */}
             {activeTab === "age-gate" && (
-              <div style={{ textAlign: "center", padding: "8px 0" }}>
-                <span style={{ display: "block", fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--theme-fg-muted)", marginBottom: "10px" }}>
-                  {ageGate.eyebrow[previewLang]}
-                </span>
-                <h3 style={{ fontStretch: "125%", fontWeight: 800, textTransform: "uppercase", fontSize: "20px", lineHeight: 1.15 }}>
-                  {ageGate.heading[previewLang]}
-                </h3>
-                <p style={{ marginTop: "10px", fontSize: "13.5px", lineHeight: 1.55, color: "var(--theme-fg-muted)" }}>
-                  {ageGate.description[previewLang]}
-                </p>
-                <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "18px" }}>
-                  <button type="button" className="btn btn--primary" style={{ padding: "8px 18px", fontSize: "12px" }}>
-                    {ageGate.btn_confirm[previewLang]}
-                  </button>
-                  <button type="button" className="btn" style={{ padding: "8px 18px", fontSize: "12px" }}>
-                    {ageGate.btn_deny[previewLang]}
-                  </button>
+              <>
+                <div>
+                  <label className="a-label" htmlFor="ag-eyebrow" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Kicker Label
+                  </label>
+                  <input
+                    id="ag-eyebrow"
+                    type="text"
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem" }}
+                    value={ageGate.eyebrow[activeLang] || ""}
+                    onChange={(e) => handleAgeGateChange("eyebrow", e.target.value)}
+                    placeholder="bijv. Chateau Amsterdam"
+                    required
+                  />
                 </div>
-              </div>
+
+                <div>
+                  <label className="a-label" htmlFor="ag-heading" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Vraag / Titel (Heading)
+                  </label>
+                  <input
+                    id="ag-heading"
+                    type="text"
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem" }}
+                    value={ageGate.heading[activeLang] || ""}
+                    onChange={(e) => handleAgeGateChange("heading", e.target.value)}
+                    placeholder="bijv. Ben je 18 jaar of ouder?"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="a-label" htmlFor="ag-desc" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Toelichtingstekst (Description)
+                  </label>
+                  <textarea
+                    id="ag-desc"
+                    rows={3}
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem", fontFamily: "inherit" }}
+                    value={ageGate.description[activeLang] || ""}
+                    onChange={(e) => handleAgeGateChange("description", e.target.value)}
+                    placeholder="Toelichting over wijn en leeftijdsverificatie..."
+                    required
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                  <div>
+                    <label className="a-label" htmlFor="ag-confirm" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Bevestigingsknop (Ja)
+                    </label>
+                    <input
+                      id="ag-confirm"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={ageGate.btn_confirm[activeLang] || ""}
+                      onChange={(e) => handleAgeGateChange("btn_confirm", e.target.value)}
+                      placeholder="bijv. Ja, ik ben 18+"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="a-label" htmlFor="ag-deny" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Weigerknop (Nee)
+                    </label>
+                    <input
+                      id="ag-deny"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={ageGate.btn_deny[activeLang] || ""}
+                      onChange={(e) => handleAgeGateChange("btn_deny", e.target.value)}
+                      placeholder="bijv. Nee"
+                      required
+                    />
+                  </div>
+                </div>
+              </>
             )}
 
+            {/* Tab 3: Cookie Banner */}
             {activeTab === "cookie-banner" && (
-              <div>
-                <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--theme-fg-muted)" }}>
-                  {cookieBanner.text[previewLang]}
-                </p>
-                <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>
-                  <button type="button" className="btn btn--primary" style={{ padding: "6px 14px", fontSize: "11px" }}>
-                    {cookieBanner.btn_accept[previewLang]}
-                  </button>
-                  <button type="button" className="btn" style={{ padding: "6px 14px", fontSize: "11px" }}>
-                    {cookieBanner.btn_settings[previewLang]}
-                  </button>
+              <>
+                <div>
+                  <label className="a-label" htmlFor="cb-text" style={{ display: "block", marginBottom: "0.375rem" }}>
+                    Verklaringstekst (Cookie Policy)
+                  </label>
+                  <textarea
+                    id="cb-text"
+                    rows={4}
+                    className="a-input"
+                    style={{ width: "100%", padding: "0.5rem", fontFamily: "inherit" }}
+                    value={cookieBanner.text[activeLang] || ""}
+                    onChange={(e) => handleCookieBannerChange("text", e.target.value)}
+                    placeholder="Toelichting over privacy-vriendelijke analytics..."
+                    required
+                  />
                 </div>
-              </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                  <div>
+                    <label className="a-label" htmlFor="cb-accept" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Akkoord Knop
+                    </label>
+                    <input
+                      id="cb-accept"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={cookieBanner.btn_accept[activeLang] || ""}
+                      onChange={(e) => handleCookieBannerChange("btn_accept", e.target.value)}
+                      placeholder="bijv. Akkoord"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="a-label" htmlFor="cb-settings" style={{ display: "block", marginBottom: "0.375rem" }}>
+                      Instellingen Knop
+                    </label>
+                    <input
+                      id="cb-settings"
+                      type="text"
+                      className="a-input"
+                      style={{ width: "100%", padding: "0.5rem" }}
+                      value={cookieBanner.btn_settings[activeLang] || ""}
+                      onChange={(e) => handleCookieBannerChange("btn_settings", e.target.value)}
+                      placeholder="bijv. Instellingen"
+                      required
+                    />
+                  </div>
+                </div>
+              </>
             )}
+
+            {/* Feedback notification */}
+            {feedback ? (
+              <div
+                className={`a-alert ${feedback.status === "success" ? "a-alert--success" : "a-alert--danger"}`}
+                style={{ padding: "0.625rem 0.875rem", fontSize: "0.875rem" }}
+              >
+                {feedback.message}
+              </div>
+            ) : null}
+
+            {/* Submit Button */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.5rem" }}>
+              <button
+                type="submit"
+                disabled={isPending}
+                className="a-btn a-btn--primary"
+                style={{ minWidth: "160px" }}
+              >
+                {isPending ? "Opslaan..." : "💾 Wijzigingen opslaan"}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Right Column: Live Viewport Preview */}
+        <div>
+          {/* Viewport & Link Bar */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "0.5rem",
+              marginBottom: "0.75rem",
+            }}
+          >
+            <div className="a-chip-group">
+              <button
+                type="button"
+                className={`a-chip${viewport === "desktop" ? " is-active" : ""}`}
+                onClick={() => setViewport("desktop")}
+                style={{ cursor: "pointer", fontSize: "0.75rem" }}
+              >
+                🖥️ Desktop
+              </button>
+              <button
+                type="button"
+                className={`a-chip${viewport === "mobile" ? " is-active" : ""}`}
+                onClick={() => setViewport("mobile")}
+                style={{ cursor: "pointer", fontSize: "0.75rem" }}
+              >
+                📱 Mobiel (390px)
+              </button>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Link
+                href="/popups"
+                target="_blank"
+                className="a-btn a-btn--secondary"
+                style={{ fontSize: "0.75rem", padding: "0.3rem 0.6rem", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}
+              >
+                <span>🔗 Publieke Showcase</span>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" /></svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Device Frame */}
+          <div
+            style={{
+              background: "#1E1C1A",
+              borderRadius: "8px",
+              padding: viewport === "mobile" ? "1.5rem 0.5rem" : "0.75rem",
+              display: "flex",
+              justifyContent: "center",
+              boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)",
+              minHeight: "680px",
+              overflowX: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: viewport === "mobile" ? "390px" : "100%",
+                maxWidth: viewport === "mobile" ? "390px" : "100%",
+                background: "#ffffff",
+                borderRadius: viewport === "mobile" ? "24px" : "6px",
+                overflow: "hidden",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                transition: "all 0.3s ease",
+                border: viewport === "mobile" ? "6px solid #2B2825" : "1px solid #D5CEBF",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {/* Desktop Window Titlebar */}
+              {viewport === "desktop" ? (
+                <div
+                  style={{
+                    background: "#EBE5D8",
+                    padding: "8px 14px",
+                    borderBottom: "1px solid #D8D0C0",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                  }}
+                >
+                  <div style={{ display: "flex", gap: "6px" }}>
+                    <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#FF5F56", display: "inline-block" }} />
+                    <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#FFBD2E", display: "inline-block" }} />
+                    <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27C93F", display: "inline-block" }} />
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#57534E", fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <strong>Pop-up Preview:</strong> {currentTabMeta.title} ({activeLang.toUpperCase()})
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Simulated Website Canvas with Modal Overlay */}
+              <div
+                style={{
+                  width: "100%",
+                  minHeight: "600px",
+                  background: "#17140e url('/assets/grain.png') repeat",
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: viewport === "mobile" ? "16px" : "32px",
+                  flexGrow: 1,
+                }}
+              >
+                {/* Backdrop effect */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "rgba(23, 20, 14, 0.75)",
+                    backdropFilter: "blur(4px)",
+                  }}
+                />
+
+                {/* Live Card inside Frame */}
+                {activeTab === "newsletter" && (
+                  <div
+                    className="newsletter-card"
+                    style={{
+                      position: "relative",
+                      zIndex: 2,
+                      width: "100%",
+                      maxWidth: "460px",
+                      margin: "0 auto",
+                      boxShadow: "0 24px 48px rgba(0,0,0,0.45)",
+                    }}
+                  >
+                    <button type="button" className="newsletter-close" aria-label="Sluiten">
+                      ✕
+                    </button>
+                    <div className="newsletter-badge">
+                      <span className="newsletter-badge-dot" />
+                      {newsletter.badge[activeLang] || "CLUB CHATEAU · NIEUWS UIT DE WINERY"}
+                    </div>
+                    <h2 id="preview-nl-title" className="newsletter-title" style={{ fontSize: viewport === "mobile" ? "20px" : "24px" }}>
+                      {newsletter.heading[activeLang] || "Als eerste op de hoogte."}
+                    </h2>
+                    <p className="newsletter-description" style={{ fontSize: viewport === "mobile" ? "13px" : "14px" }}>
+                      {newsletter.description[activeLang] || "Ontvang exclusieve kortingen, uitnodigingen voor proeverijen en leuke weetjes en verhalen uit onze winery aan het IJ."}
+                    </p>
+                    <div className="newsletter-form">
+                      <div className="newsletter-input-wrap">
+                        <input
+                          type="email"
+                          readOnly
+                          placeholder={newsletter.placeholder[activeLang] || "Jouw e-mailadres"}
+                          className="newsletter-input"
+                        />
+                        <button type="button" className="btn btn--primary newsletter-submit-btn">
+                          {newsletter.button_label[activeLang] || "Aanmelden →"}
+                        </button>
+                      </div>
+                      <p className="newsletter-disclaimer">
+                        {newsletter.disclaimer[activeLang] || "Uitschrijven kan op elk gewenst moment met één klik. Privacy gewaarborgd."}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "age-gate" && (
+                  <div
+                    className="age-gate-card"
+                    style={{
+                      position: "relative",
+                      zIndex: 2,
+                      width: "100%",
+                      maxWidth: "420px",
+                      margin: "0 auto",
+                      textAlign: "center",
+                      boxShadow: "0 24px 48px rgba(0,0,0,0.45)",
+                    }}
+                  >
+                    <span className="label">{ageGate.eyebrow[activeLang] || "Chateau Amsterdam"}</span>
+                    <h2 style={{ fontSize: viewport === "mobile" ? "20px" : "24px" }}>
+                      {ageGate.heading[activeLang] || "Ben je 18 jaar of ouder?"}
+                    </h2>
+                    <p style={{ fontSize: viewport === "mobile" ? "13px" : "14px" }}>
+                      {ageGate.description[activeLang] || "Deze site gaat over wijn. Bevestig je leeftijd om verder te gaan."}
+                    </p>
+                    <div className="age-gate-actions" style={{ marginTop: "18px" }}>
+                      <button type="button" className="btn btn--primary">
+                        {ageGate.btn_confirm[activeLang] || "Ja, ik ben 18+"}
+                      </button>
+                      <button type="button" className="btn">
+                        {ageGate.btn_deny[activeLang] || "Nee"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "cookie-banner" && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "20px",
+                      left: "20px",
+                      right: "20px",
+                      zIndex: 2,
+                      background: "var(--theme-bg)",
+                      border: "1px solid var(--theme-border)",
+                      padding: "16px 20px",
+                      borderRadius: "4px",
+                      boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
+                    }}
+                  >
+                    <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--theme-fg-muted)", margin: 0 }}>
+                      {cookieBanner.text[activeLang] || "We gebruiken alleen functionele en anonieme analytische cookies om de website soepel te laten werken. Geen tracking door derden."}
+                    </p>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
+                      <button type="button" className="btn btn--primary" style={{ padding: "6px 14px", fontSize: "12px" }}>
+                        {cookieBanner.btn_accept[activeLang] || "Akkoord"}
+                      </button>
+                      <button type="button" className="btn" style={{ padding: "6px 14px", fontSize: "12px" }}>
+                        {cookieBanner.btn_settings[activeLang] || "Instellingen"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
