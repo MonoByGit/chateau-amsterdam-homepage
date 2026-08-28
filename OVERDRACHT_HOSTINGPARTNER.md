@@ -6,7 +6,7 @@ Dit document bevat alle benodigde technische specificaties, build-instructies, d
 
 ## 1. Wat zit er in het overdrachtspakket?
 
-1. **Broncode (Git repository of ZIP):** Complete Next.js 16 applicatie (TypeScript, Tailwind, Drizzle ORM, React 19).
+1. **Broncode (Git repository of ZIP):** Complete Next.js 16 applicatie op `https://github.com/MonoByGit/chateau-amsterdam` (TypeScript, Tailwind, Drizzle ORM, React 19).
 2. **Database Export (`database_export.sql`):** Volledige SQL dump met alle tabellen, 126 geredigeerde contentblokken (NL & EN), initiële team-accounts (`didier@`, `sales@`, `floor@`), reserveringen en beschikbaarheidsblokken.
 3. **Environment Template (`.env.example`):** Alle benodigde variabelen voor Resend, Shopify, S3 Media en Database.
 4. **Dockerfile & .dockerignore:** Voor containerized hosting (Docker, Kubernetes, Coolify, Cloud Run of VPS).
