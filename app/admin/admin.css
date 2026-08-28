@@ -632,19 +632,19 @@ select,
   padding: 2.25rem 2rem;
 }
 
-.a-login-mark {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: var(--a-r-sharp);
-  background: var(--a-accent);
-  color: var(--a-accent-contrast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.125rem;
-  margin: 0 auto 1.25rem;
-  box-shadow: var(--a-shadow-md);
+.a-login-logo {
+  height: 42px;
+  width: auto;
+  max-width: 180px;
+  margin: 0 auto;
+  display: block;
+  filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .a-login-logo {
+    filter: invert(1) brightness(1.25);
+  }
 }
 
 /* OTP Code Input & Login Helpers */
