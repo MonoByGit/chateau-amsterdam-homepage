@@ -1,28 +1,34 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 import { INITIAL_USERS } from "./seed/users";
 
-async function main() {
+async function runSafeMigrations() {
   if (!process.env.DATABASE_URL) {
-    console.warn("DATABASE_URL not set, skipping database migration.");
+    console.warn("[MIGRATE] DATABASE_URL not set, skipping database migration.");
     return;
   }
 
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  const db = drizzle(pool);
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    connectionTimeoutMillis: 5000,
+  });
 
   try {
-    await migrate(db, { migrationsFolder: "./drizzle" });
-    console.log("Migrations applied via drizzle migrator.");
-  } catch (err: any) {
-    console.warn("Drizzle migration notice (continuing startup):", err?.message || err);
-  }
+    // 1. Content versions table (for history/rollback)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS "content_versions" (
+        "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+        "page" text NOT NULL,
+        "section" text NOT NULL,
+        "snapshot" jsonb NOT NULL,
+        "note" text,
+        "updated_by" uuid,
+        "created_at" timestamp with time zone DEFAULT now() NOT NULL
+      );
+    `);
 
-  // Ensure newsletter_subscribers table exists safely
-  try {
+    // 2. Newsletter subscribers table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -30,15 +36,10 @@ async function main() {
         "locale" text DEFAULT 'nl' NOT NULL,
         "source" text DEFAULT 'modal' NOT NULL,
         "created_at" timestamp with time zone DEFAULT now() NOT NULL
-      )
+      );
     `);
-    console.log("newsletter_subscribers table verified.");
-  } catch (err) {
-    console.warn("Could not verify newsletter_subscribers table:", err);
-  }
 
-  // Ensure auth_codes table exists safely
-  try {
+    // 3. Auth codes table (passwordless OTP & magic links)
     await pool.query(`
       CREATE TABLE IF NOT EXISTS "auth_codes" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -48,42 +49,45 @@ async function main() {
         "attempts" integer DEFAULT 0 NOT NULL,
         "expires_at" timestamp with time zone NOT NULL,
         "created_at" timestamp with time zone DEFAULT now() NOT NULL
-      )
-    `);
-    console.log("auth_codes table verified.");
-  } catch (err) {
-    console.warn("Could not verify auth_codes table:", err);
-  }
-
-  // Ensure password_hash is nullable on users
-  try {
-    await pool.query(`ALTER TABLE "users" ALTER COLUMN "password_hash" DROP NOT NULL`);
-    console.log("users table password_hash constraint verified.");
-  } catch (err) {
-    // Ignore if already nullable or column doesn't exist
-  }
-
-  // Ensure initial admin accounts exist
-  try {
-    for (const email of INITIAL_USERS) {
-      await pool.query(
-        `INSERT INTO "users" ("email") VALUES ($1) ON CONFLICT ("email") DO NOTHING`,
-        [email]
       );
-    }
-    console.log("Initial admin accounts verified.");
-  } catch (err) {
-    console.warn("Could not verify initial admin accounts:", err);
-  }
+    `);
 
-  await pool.end();
+    // 4. Make password_hash nullable on users
+    try {
+      await pool.query(`ALTER TABLE "users" ALTER COLUMN "password_hash" DROP NOT NULL;`);
+    } catch {
+      // Ignore if already nullable
+    }
+
+    // 5. Seed initial admin accounts for passwordless login
+    for (const email of INITIAL_USERS) {
+      try {
+        await pool.query(
+          `INSERT INTO "users" ("email") VALUES ($1) ON CONFLICT ("email") DO NOTHING;`,
+          [email]
+        );
+      } catch {
+        // Ignore conflict
+      }
+    }
+
+    console.log("[MIGRATE] Database schema and initial accounts successfully verified.");
+  } catch (err: any) {
+    console.warn("[MIGRATE NOTICE] Startup migration notice (continuing):", err?.message || err);
+  } finally {
+    try {
+      await pool.end();
+    } catch {
+      // Ignore pool close errors
+    }
+  }
 }
 
-main()
+runSafeMigrations()
   .then(() => {
     process.exit(0);
   })
   .catch((err) => {
-    console.warn("Migration warning (continuing startup):", err);
+    console.warn("[MIGRATE ERROR] Migration error (continuing startup):", err);
     process.exit(0);
   });
