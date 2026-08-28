@@ -1,7 +1,12 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { Pool } from "pg";
-import { INITIAL_USERS } from "./seed/users";
+const INITIAL_USERS = [
+  "didier@chateau.amsterdam",
+  "sales@chateau.amsterdam",
+  "floor@chateau.amsterdam",
+  "studio@monobydusty.com",
+] as const;
 
 async function runSafeMigrations() {
   if (!process.env.DATABASE_URL) {

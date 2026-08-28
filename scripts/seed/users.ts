@@ -1,5 +1,5 @@
-import { db } from "@/lib/db/client";
-import { users } from "@/lib/db/schema";
+import { db } from "../../lib/db/client";
+import { users } from "../../lib/db/schema";
 
 export const INITIAL_USERS = [
   "didier@chateau.amsterdam",
