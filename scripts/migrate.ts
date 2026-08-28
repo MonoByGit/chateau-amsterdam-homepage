@@ -3,6 +3,7 @@ config({ path: ".env.local" });
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
+import { INITIAL_USERS } from "./seed/users";
 
 async function main() {
   if (!process.env.DATABASE_URL) {
@@ -29,14 +30,14 @@ async function main() {
         "locale" text DEFAULT 'nl' NOT NULL,
         "source" text DEFAULT 'modal' NOT NULL,
         "created_at" timestamp with time zone DEFAULT now() NOT NULL
-      );
+      )
     `);
     console.log("newsletter_subscribers table verified.");
   } catch (err) {
     console.warn("Could not verify newsletter_subscribers table:", err);
   }
 
-  // Ensure auth_codes table exists safely and password_hash is nullable
+  // Ensure auth_codes table exists safely
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS "auth_codes" (
@@ -47,18 +48,42 @@ async function main() {
         "attempts" integer DEFAULT 0 NOT NULL,
         "expires_at" timestamp with time zone NOT NULL,
         "created_at" timestamp with time zone DEFAULT now() NOT NULL
-      );
-      ALTER TABLE "users" ALTER COLUMN "password_hash" DROP NOT NULL;
+      )
     `);
-    console.log("auth_codes table and users schema verified.");
+    console.log("auth_codes table verified.");
   } catch (err) {
     console.warn("Could not verify auth_codes table:", err);
+  }
+
+  // Ensure password_hash is nullable on users
+  try {
+    await pool.query(`ALTER TABLE "users" ALTER COLUMN "password_hash" DROP NOT NULL`);
+    console.log("users table password_hash constraint verified.");
+  } catch (err) {
+    // Ignore if already nullable or column doesn't exist
+  }
+
+  // Ensure initial admin accounts exist
+  try {
+    for (const email of INITIAL_USERS) {
+      await pool.query(
+        `INSERT INTO "users" ("email") VALUES ($1) ON CONFLICT ("email") DO NOTHING`,
+        [email]
+      );
+    }
+    console.log("Initial admin accounts verified.");
+  } catch (err) {
+    console.warn("Could not verify initial admin accounts:", err);
   }
 
   await pool.end();
 }
 
-main().catch((err) => {
-  console.warn("Migration warning (continuing startup):", err);
-});
-
+main()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.warn("Migration warning (continuing startup):", err);
+    process.exit(0);
+  });
