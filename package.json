@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npm run db:migrate && next start -p $PORT",
+    "start": "npm run db:migrate && next start -p ${PORT:-3000} -H 0.0.0.0",
     "test": "vitest run",
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
