@@ -256,8 +256,9 @@ export function LoginForm() {
       {step === "email" ? (
         /* STEP 1: ENTER EMAIL */
         <form onSubmit={handleRequestCode} className="a-field" style={{ gap: "1.25rem" }}>
-          <div style={{ fontSize: "0.875rem", color: "var(--a-text-2)", lineHeight: 1.5, textAlign: "center" }}>
-            Vul je werk-e-mailadres in. Je ontvangt direct een eenmalige inlogcode.
+          <div style={{ fontSize: "0.875rem", color: "var(--a-text-2)", lineHeight: 1.6, textAlign: "center" }}>
+            <div>Vul je werk e-mailadres in</div>
+            <div>Je ontvangt direct een eenmalige inlogcode</div>
           </div>
 
           <label className="a-field">
