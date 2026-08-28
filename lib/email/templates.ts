@@ -11,8 +11,9 @@ import {
 } from "@/lib/content/defaults";
 
 export function getBaseUrl(): string {
-  if (process.env.PUBLIC_SITE_URL) return process.env.PUBLIC_SITE_URL;
   if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+  if (process.env.RAILWAY_STATIC_URL) return `https://${process.env.RAILWAY_STATIC_URL}`;
+  if (process.env.PUBLIC_SITE_URL) return process.env.PUBLIC_SITE_URL;
   return "https://chateau-amsterdam-homepage-production.up.railway.app";
 }
 
@@ -468,3 +469,76 @@ export function renderReservationUpdateEmail(
     html: emailWrapper(content),
   };
 }
+
+export function renderLoginCodeEmail({
+  code,
+  expiresMinutes = 15,
+  magicLinkUrl,
+}: {
+  code: string;
+  expiresMinutes?: number;
+  magicLinkUrl?: string;
+}): { subject: string; html: string } {
+  const formattedCode = code.length === 6 ? `${code.slice(0, 3)} ${code.slice(3)}` : code;
+
+  const content = `
+    <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #8A8174; margin-bottom: 8px;">
+      Beveiligde Inlogcode &middot; Chateau CMS
+    </div>
+
+    <h1 class="email-title" style="font-family: Georgia, serif; font-size: 26px; font-weight: normal; margin: 0 0 16px 0; color: #17140E;">
+      Inloggen bij Chateau Amsterdam
+    </h1>
+
+    <p style="font-size: 14.5px; line-height: 1.6; color: #44403C; margin: 0 0 24px 0;">
+      Gebruik de onderstaande 6-cijferige code om direct in te loggen in het CMS. Je kunt de code eenvoudig kopiëren en in één keer plakken in het inlogscherm.
+    </p>
+
+    <!-- Highlighted Code Box -->
+    <div style="background-color: #F4F0E8; border: 2px solid #E2DDD2; border-radius: 6px; padding: 24px 20px; margin: 0 0 24px 0; text-align: center;">
+      <div style="font-family: 'Courier New', Courier, monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #8A8174; margin-bottom: 8px;">
+        JOUW EENMALIGE INLOGCODE
+      </div>
+      <div style="font-family: 'Courier New', Courier, monospace; font-size: 36px; font-weight: bold; letter-spacing: 0.22em; color: #17140E; padding: 6px 0; user-select: all; -webkit-user-select: all;">
+        ${formattedCode}
+      </div>
+      <div style="font-size: 12px; color: #767064; margin-top: 10px;">
+        ⏱️ Deze code is <strong>${expiresMinutes} minuten</strong> geldig &middot; Maximaal <strong>3 pogingen</strong>
+      </div>
+    </div>
+
+    ${
+      magicLinkUrl
+        ? `
+    <!-- Direct Login Button -->
+    <div style="text-align: center; margin: 0 0 28px 0;">
+      <a href="${magicLinkUrl}" style="display: inline-block; background-color: #17140E; color: #F1ECE1; font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: bold; padding: 14px 28px; border-radius: 999px; text-decoration: none;">
+        Direct Inloggen via Link &rarr;
+      </a>
+      <div style="font-size: 11.5px; color: #8A8174; margin-top: 8px;">
+        (Of gebruik de 6-cijferige code op het inlogscherm)
+      </div>
+    </div>
+    `
+        : ""
+    }
+
+    <!-- Security Advice Box -->
+    <div style="border-top: 1px dashed #E2DDD2; padding-top: 16px; margin-top: 24px;">
+      <p style="font-size: 12px; line-height: 1.5; color: #767064; margin: 0;">
+        <strong>Beveiligingstip:</strong> Heb je deze inlogcode niet zelf aangevraagd? Dan kun je deze e-mail veilig negeren. Deel deze code nooit met anderen.
+      </p>
+    </div>
+
+    <div style="margin-top: 24px; font-size: 14px; color: #17140E;">
+      Met vriendelijke groet,<br>
+      <em style="font-family: Georgia, serif; font-size: 15px;">Team Chateau Amsterdam</em>
+    </div>
+  `;
+
+  return {
+    subject: `${formattedCode} is je inlogcode voor Chateau Amsterdam`,
+    html: emailWrapper(content),
+  };
+}
+

@@ -36,6 +36,25 @@ async function main() {
     console.warn("Could not verify newsletter_subscribers table:", err);
   }
 
+  // Ensure auth_codes table exists safely and password_hash is nullable
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS "auth_codes" (
+        "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+        "email" text NOT NULL,
+        "code_hash" text NOT NULL,
+        "magic_token_hash" text,
+        "attempts" integer DEFAULT 0 NOT NULL,
+        "expires_at" timestamp with time zone NOT NULL,
+        "created_at" timestamp with time zone DEFAULT now() NOT NULL
+      );
+      ALTER TABLE "users" ALTER COLUMN "password_hash" DROP NOT NULL;
+    `);
+    console.log("auth_codes table and users schema verified.");
+  } catch (err) {
+    console.warn("Could not verify auth_codes table:", err);
+  }
+
   await pool.end();
 }
 

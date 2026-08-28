@@ -6,6 +6,8 @@ import {
   renderSalesNotificationEmail,
   renderSalesConfirmationAlertEmail,
   renderReservationUpdateEmail,
+  renderLoginCodeEmail,
+  getBaseUrl,
 } from "./templates";
 import { getEmailContent } from "@/lib/content/emails";
 import { generateIcsContent } from "./calendar";
@@ -144,5 +146,30 @@ export async function sendReservationUpdateNotification(reservation: Reservation
         content: Buffer.from(ics).toString("base64"),
       },
     ],
+  });
+}
+
+export async function sendLoginCodeEmail({
+  email,
+  code,
+  magicToken,
+}: {
+  email: string;
+  code: string;
+  magicToken?: string;
+}): Promise<boolean> {
+  const baseUrl = getBaseUrl();
+  const magicLinkUrl = magicToken ? `${baseUrl}/api/auth/magic?token=${encodeURIComponent(magicToken)}` : undefined;
+
+  const { subject, html } = renderLoginCodeEmail({
+    code,
+    expiresMinutes: 15,
+    magicLinkUrl,
+  });
+
+  return sendEmail({
+    to: email,
+    subject,
+    html,
   });
 }

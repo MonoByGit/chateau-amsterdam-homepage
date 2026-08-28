@@ -4,9 +4,16 @@ import { users } from "./schema";
 
 export type User = typeof users.$inferSelect;
 
-export async function createUser(email: string, passwordHash: string): Promise<User> {
-  const [user] = await db.insert(users).values({ email, passwordHash }).returning();
+export async function createUser(email: string, passwordHash?: string | null): Promise<User> {
+  const [user] = await db.insert(users).values({ email, passwordHash: passwordHash ?? null }).returning();
   return user;
+}
+
+export async function getOrCreateUserByEmail(email: string): Promise<User> {
+  const normalized = email.trim().toLowerCase();
+  const existing = await findUserByEmail(normalized);
+  if (existing) return existing;
+  return createUser(normalized);
 }
 
 export async function listUsers(): Promise<User[]> {

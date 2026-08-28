@@ -3,70 +3,74 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { listUsers } from "@/lib/db/users";
 import { formatAdminDate } from "@/lib/format-date";
-import { ChangePasswordForm } from "./change-password-form";
 import { addUser, removeUser } from "./actions";
 
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; created?: string; password?: string }>;
+  searchParams: Promise<{ error?: string; created?: string }>;
 }) {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/admin/login");
 
-  const { error, created, password } = await searchParams;
+  const { error, created } = await searchParams;
   const users = await listUsers();
 
   return (
     <div>
-      <h1 className="a-h1">Account</h1>
-      <p className="a-subtitle">Ingelogd als {currentUser.email}.</p>
+      <h1 className="a-h1">Toegangsbeheer</h1>
+      <p className="a-subtitle">Ingelogd als <strong>{currentUser.email}</strong>.</p>
 
-      <div style={{ marginTop: "1.5rem", maxWidth: "24rem" }} className="a-card">
-        <div style={{ padding: "1.25rem" }}>
-          <ChangePasswordForm />
+      {/* Passwordless Info Banner */}
+      <div className="a-card" style={{ marginTop: "1.5rem", padding: "1.25rem", maxWidth: "38rem", background: "var(--a-surface-2)" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+          <div style={{ fontSize: "1.25rem", lineHeight: 1 }}>🔒</div>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: "0.9375rem", color: "var(--a-text)" }}>
+              Wachtwoordloos Inloggen Actief
+            </div>
+            <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.25rem", lineHeight: 1.45 }}>
+              Alle gebruikers loggen in via een eenmalige 6-cijferige verificatiecode per e-mail (15 minuten geldig) of directe inloglink. Niemand hoeft meer een wachtwoord te onthouden of door te geven.
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="a-dashboard-section">
-        <h2>Gebruikers</h2>
+      <div className="a-dashboard-section" style={{ marginTop: "2rem" }}>
+        <h2>Gebruikers met CMS-toegang</h2>
 
         {error ? (
-          <p className="a-alert a-alert--danger" style={{ marginBottom: "1rem" }}>
+          <p className="a-alert a-alert--danger" style={{ marginBottom: "1rem", maxWidth: "38rem" }}>
             {error}
           </p>
         ) : null}
 
-        {created && password ? (
-          <div className="a-alert a-alert--success" style={{ marginBottom: "1rem" }}>
+        {created ? (
+          <div className="a-alert a-alert--success" style={{ marginBottom: "1rem", maxWidth: "38rem" }}>
             <p style={{ margin: 0 }}>
-              Account voor <strong>{created}</strong> aangemaakt. Geef dit tijdelijke wachtwoord door — het wordt
-              hierna niet meer getoond:
-            </p>
-            <p style={{ margin: "0.5rem 0 0", fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: "1rem" }}>
-              {password}
+              Account voor <strong>{created}</strong> toegevoegd! Deze collega kan nu direct naar het inlogscherm gaan en inloggen met een e-mailcode.
             </p>
           </div>
         ) : null}
 
-        <div className="a-card" style={{ padding: "1.25rem" }}>
-          <span className="a-label">Nieuw account toevoegen</span>
+        <div className="a-card" style={{ padding: "1.25rem", maxWidth: "38rem" }}>
+          <span className="a-label">Nieuwe collega toevoegen</span>
           <form action={addUser} style={{ display: "flex", gap: "0.75rem", marginTop: "0.75rem", flexWrap: "wrap" }}>
             <input
               required
               type="email"
               name="email"
-              placeholder="collega@chateau.amsterdam"
+              placeholder="collega@chateauamsterdam.nl"
               className="a-input"
               style={{ flex: "1 1 16rem" }}
             />
             <button type="submit" className="a-btn a-btn--primary">
-              + Account toevoegen
+              + Toegang verlenen
             </button>
           </form>
         </div>
 
-        <div className="a-card" style={{ marginTop: "1rem" }}>
+        <div className="a-card" style={{ marginTop: "1rem", maxWidth: "38rem" }}>
           {users.map((user) => {
             const isSelf = user.id === currentUser.id;
             const isLastUser = users.length <= 1;
@@ -77,11 +81,12 @@ export default async function AccountPage({
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="a-label">
-                    {user.email} {isSelf ? <span className="a-badge a-badge--neutral">Jij</span> : null}
+                  <div className="a-label" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>{user.email}</span>
+                    {isSelf ? <span className="a-badge a-badge--neutral">Jij</span> : null}
                   </div>
                   <div style={{ fontSize: "0.8125rem", color: "var(--a-text-2)", marginTop: "0.125rem" }}>
-                    Sinds {formatAdminDate(user.createdAt.toISOString().slice(0, 10))}
+                    Toegang sinds {formatAdminDate(user.createdAt.toISOString().slice(0, 10))}
                   </div>
                 </div>
 
@@ -97,7 +102,7 @@ export default async function AccountPage({
                         ? "Je kunt je eigen account niet verwijderen"
                         : isLastUser
                           ? "Het laatste account kan niet verwijderd worden"
-                          : "Verwijderen"
+                          : "Toegang intrekken"
                     }
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">

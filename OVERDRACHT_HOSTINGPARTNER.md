@@ -29,7 +29,6 @@ DATABASE_URL="postgresql://<GEBRUIKERSNAAM>:<WACHTWOORD>@<HOST>:<POORT>/<DATABAS
 PUBLIC_SITE_URL="https://chateau.amsterdam"
 SESSION_SECRET="<GENEREER_EEN_VEILIGE_RANDOM_STRING_MIN_32_TEKENS>"
 RESERVATION_ACTION_SECRET="<GENEREER_EEN_VEILIGE_RANDOM_STRING_MIN_32_TEKENS>"
-ADMIN_PASSWORD_HASH=""
 
 # 3. Transactiemails & Reserveringen (Resend API)
 RESEND_API_KEY="re_your_resend_api_key_here"
@@ -62,7 +61,7 @@ SHOPIFY_API_VERSION="2025-10"
    ```bash
    npx drizzle-kit migrate
    ```
-   *(Optioneel om initiële CMS defaults/teksten te laden indien de database leeg is: `npm run db:seed`)*
+   *(Optioneel om initiële CMS defaults/teksten en team-accounts te laden: `npm run db:seed`)*
 3. **Productie Build genereren:**
    ```bash
    npm run build
@@ -100,12 +99,19 @@ Zodra de applicatie draait op de servers van de hostingpartner, moeten de DNS-re
 ## 5. Beheerders & CMS Toegang
 
 * **CMS Inlog URL:** `https://chateau.amsterdam/admin`
+* **Inlogmethode:** Wachtwoordloos via 6-cijferige verificatiecode per e-mail (15 min geldig) of directe inloglink.
+* **Standaard accounts:** 
+  * `didier@chateau.amsterdam`
+  * `sales@chateau.amsterdam`
+  * `floor@chateau.amsterdam`
+  * `studio@monobydusty.com` (technisch beheerder)
 * **Functionaliteiten:**
   * Live overzicht en filteren van Particuliere Tastings en Zakelijke Events.
   * Directe 1-Click acties (*Bevestigen* en *Wijzigen*).
   * Interactief verplaatsingsformulier (datum, tijdslot, gezelschap, notities).
   * Automatische synchronisatie met team- en klantagenda's via `.ics` en Google Calendar.
   * Contentbeheer en foto-upload voor alle pagina's en email-templates.
+  * Gebruikers- en toegangsbeheer via `/admin/account`.
 
 ---
 
